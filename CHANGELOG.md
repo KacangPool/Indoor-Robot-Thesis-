@@ -4,6 +4,60 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-22
 
+### v0.14 — local history, consolidated checks, diagnostics and validated settings
+
+- User approves engineering roadmap and keeping it for future work. Implemented
+  the first four foundations locally; aligned multimodal recordings, formal fusion
+  contracts/experiment metadata, complete robot dependency/restore validation and
+  measured optimization remain staged, not claimed complete. Thesis scope unchanged.
+- Initialized local Git main with source-only allowlist .gitignore/.gitattributes;
+  baseline d987a68 captures v0.13 before functional changes. Separate implementation
+  snapshot records this batch. 131 baseline files reviewed; recordings/private
+  files/vendor archives/PDFs/hosted Sites app excluded, no remote/upload. Snapshot
+  author is non-personal per-command Local project snapshots/local-snapshot@invalid;
+  no global Git config changed. Existing user files remain on disk. Git is not
+  independent backup or installed-robot rollback. Scoped secret-pattern scan and
+  tracked-path exclusion checks completed, not a guarantee of secret detection.
+- Added Tools/quality_check.py, quality_suite.py, Check Project.cmd and checker
+  tests. Fixed offline suites run isolated, JS/Python syntax and config validated,
+  runtime observations/source commit/dirty/hash inventory saved. Reports under
+  ignored tmp/quality_reports; missing runtime/report, malformed/empty tests,
+  timeouts/nonzero exit stay non-passing. No automatic retry, install, ROS/model
+  startup or robot access. Static checks are not a full linter/type checker.
+- Added dashboard configuration.py/dashboard_config.json, six tests and startup
+  integration. Default preview FPS3/port8765 preserved; strict 8KiB schema/type/
+  key/duplicate/range validation. Preview and robot profiles cannot enable ROS or
+  driving, set hosts/topics/commands/credentials or motion/security bounds. Existing
+  CLI overrides remain bounded; bad config fails before adapters/server start.
+  Source/HTML/agent version0.14; agent fixed runtime now 17 files, tests adjusted.
+- Added Hub diagnostics.py, seven tests and existing Save report integration.
+  Cached snapshot age/demo evidence, safe version/bundle/service/sensor metrics,
+  derived stream issue codes and process/runtime numbers only. Raw SSH/command/
+  activity/exception text, tokens and images excluded. Bounded 200 memory events;
+  explicit App startup configures 256KiB JSONL event file/two rotations, memory
+  fallback on setup failure, report states handler configuration. Existing robot
+  service logs remain separate. agent.py adds read-only Python/disk metadata to
+  status without ROS/serial probes or process changes; missing metadata is explicit.
+- Verification final full report: tmp/quality_reports/20261022_211313_3f59ff24.
+  Tools57/57, dashboard261/261, Hub53 pass/one Windows symlink-privilege skip. All
+  JS groups (122 dashboard checks +4 analysis +scoring assertions), static/config,
+  whitespace and runtime inventory checks pass. Earlier retained runs 210804 had
+  one Windows10053 HTTP error; 211209 had two. Both returned failure; final run
+  followed checker changes, no retry/exclusion/weakening used. Host/transport cause
+  remains unresolved. New negative tests prove failures, empty/corrupt results,
+  secret fields and stale/demo observations are handled explicitly. Isolated
+  runtime bundle import/hash checks still pass; motion/control/app.js/joystick
+  files byte-content unchanged from baseline. No real packages installed/upgraded.
+- Observed laptop Python3.12.14/NumPy2.3.5 for tools, Python3.11.9/Paramiko5.1.0
+  for Hub and Python3.11.9 for runner/dashboard; Node24.19.0/Git2.53.0.windows.3.
+  Actual old-Jetson Python2.7/3.6/ROS/native GUI/persistent App log startup and
+  physical behaviour not tested. CMD inspected, Python checker entry exercised.
+  No live movement, sensor capture, robot connection/upload/deploy or website
+  publication. Missing /scan and calibration/TF/time/height association remain open.
+- Documentation: new QUALITY_WORKFLOW.md; updated roadmap, architecture note,
+  Tools/dashboard/Hub READMEs, AGENTS ongoing workflow, PROJECT_CONTEXT and this
+  log. Operational settings, drive caps/guards, vendor/launch/model/data unchanged.
+
 ### Proposed long-term code-quality roadmap — no implementation selected
 
 - User asks what other engineering practices would help long-term code efficiency

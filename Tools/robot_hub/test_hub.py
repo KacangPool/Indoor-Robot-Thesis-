@@ -185,7 +185,7 @@ class ControllerTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError,'external'):self.controller.prepare()
         self.assertEqual([c.args[0] for c in self.connection.rpc.call_args_list].count('start'),1)
     def test_source_bundle_changes_are_detected_not_just_version(self):
-        manifest=connection.local_manifest(SOURCE);self.assertEqual(manifest['version'],'0.13');self.assertEqual(len(manifest['files']),15)
+        manifest=connection.local_manifest(SOURCE);self.assertEqual(manifest['version'],'0.14');self.assertEqual(len(manifest['files']),17)
         changed=dict(manifest['files']);changed['server.py']='f'*64
         self.assertNotEqual(manifest['bundle_id'],agent.bundle_id(changed))
     def test_demo_never_creates_real_ssh_or_tunnel(self):

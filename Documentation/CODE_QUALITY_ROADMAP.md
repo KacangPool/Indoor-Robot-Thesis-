@@ -1,7 +1,11 @@
 # Long-term code quality: proposed next steps
 
-2026-10-22. Recommendation/discussion only, not an approved implementation batch.
-No runtime code, robot settings, dependency versions or hardware changed.
+Update 2026-10-22: user approved this direction and keeping the workflow for
+future project changes. The first four foundations are implemented locally in
+v0.14: local Git history, one-command checks, diagnostic/event reports and strict
+ordinary configuration. See [the operating guide](QUALITY_WORKFLOW.md).
+Lab-data, fusion-contract, full robot inventory/restore and measured-performance
+work remain staged, not completed. No robot deployment or motion occurred.
 
 ## What "efficient" means here
 
@@ -19,7 +23,7 @@ error; a future test runner must report it honestly, not ignore it.
 
 | Practice | What it would do here | Existing foundation / remaining work |
 | --- | --- | --- |
-| Local version control | Save named code snapshots, compare changes, return deliberately to known source | Root workspace is not currently a Git repository. Git can be local/offline; GitHub publication is optional. Scope authored source/docs/tests, excluding credentials, recordings, vendor archives and the separate hosted app. Git is not an independent backup. |
+| Local version control | Save named code snapshots, compare changes, return deliberately to known source | Implemented: local source-only repository, baseline d987a68 and separate implementation snapshot; no remote. Credentials, recordings, vendor archives and separate hosted app excluded. Git is not an independent backup. |
 | One quality-check command | Run the relevant unit tests, import/bundle checks and suitable static checks; produce one readable result | Tests already exist but are invoked separately. Distinguish pass/fail/error/skip and missing runtimes; no robot startup or dependency installs. Add compatible lint/format tooling deliberately, without rewriting every legacy file. |
 | Validated configuration | Keep ordinary tunable settings in one documented place instead of searching many scripts | Fixed settings currently exist in several modules/CLIs. Separate laptop/robot profiles; allowlist fields and reject invalid values. Preserve independent enforced motion/security ceilings; no arbitrary launch commands or secrets in config. |
 | Structured logs and diagnostics | Give each run an ID and report component, time, event and reason; export a bounded support report | Hub service logs and readiness already exist. Extend with process/session identity, recent-message rate/age, disk space and version, not just node registration. Rotate/limit logs and redact credentials/tokens. No automatic motion recovery or service restart. |
@@ -66,7 +70,7 @@ restarts and containerizing the old Jetson are not recommended as prerequisites.
   support explicit units and frame contracts. They do not supply this robot's
   actual calibration or measured transforms.
 
-Verification for this proposal: reviewed local module boundaries, tests, Hub
+Original proposal verification: reviewed local module boundaries, tests, Hub
 manifest/backup/log code, sensor freshness and queue settings, recorder scope,
 Paramiko pin and architecture notes. Consulted the above primary references.
 No new runtime tests or robot checks were needed for this documentation-only

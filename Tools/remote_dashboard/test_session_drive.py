@@ -197,7 +197,7 @@ class HttpTests(base.HttpTests):
         self.clock=base.Clock()
         self.app.control=drive.ManualSession(lambda moving:None,lambda v,w:self.sent.append((v,w)),lambda since:True,self.clock)
     def test_live_mode_is_explicit_in_status(self):
-        state=json.loads(self.fetch('/api/status')[1]);self.assertEqual(state['version'],'0.13');self.assertTrue(state['control']['session_persistent'])
+        state=json.loads(self.fetch('/api/status')[1]);self.assertEqual(state['version'],'0.14');self.assertTrue(state['control']['session_persistent'])
     def test_expired_command_response_includes_backend_fault_without_token(self):
         token=json.loads(self.fetch('/api/drive/arm',{'owner':base.OWNER})[1])['generation']
         self.clock.wait(.36)

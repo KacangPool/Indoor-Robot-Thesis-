@@ -34,6 +34,7 @@ from settings import ASSETS, TOPICS
 from sensor_models import finite, planar_pose, occupancy_summary, scan_summary
 from sensor_state import Dashboard
 from ros_reader import RosReader
+from configuration import load as load_configuration
 
 
 class LocalServer(ThreadingMixIn, HTTPServer):
@@ -195,9 +196,18 @@ def parse_args(argv=None):
     parser = argparse.ArgumentParser(description='Local-only ROS viewer; default motor-free. --ros --drive enables supervised slow car-like controls.')
     parser.add_argument('--ros', action='store_true', help='Read existing camera/scan topics; starts no drivers.')
     parser.add_argument('--drive', action='store_true', help='Explicit live motor capability; page Enable then hold arrows or joystick. No terminal countdown.')
-    parser.add_argument('--port', type=int, default=8765)
-    parser.add_argument('--fps', type=float, default=3.0, help='JPEG refresh cap per source (1-5), not detector FPS.')
+    parser.add_argument('--config', help='Validated ordinary-settings JSON; never enables ROS or driving.')
+    parser.add_argument('--port', type=int, default=None)
+    parser.add_argument('--fps', type=float, default=None, help='JPEG refresh cap per source (1-5), not detector FPS.')
     args = parser.parse_args(argv)
+    try:
+        profile = load_configuration(args.config)['robot' if args.ros else 'preview']
+    except (IOError, OSError, ValueError, TypeError):
+        parser.error('Cannot read valid dashboard configuration; no services were started')
+    if args.port is None:
+        args.port = profile['port']
+    if args.fps is None:
+        args.fps = profile['fps']
     if args.drive and not args.ros:
         parser.error('--drive requires --ros and the existing isolated base; preview is motor-free')
     if not 1024 <= args.port <= 65535:

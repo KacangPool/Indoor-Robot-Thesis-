@@ -1,5 +1,10 @@
 # Reusable project code — v0.13, 2026-10-22
 
+Current follow-up: v0.14 adds validated ordinary configuration, consolidated
+checks, local source history and allowlisted Hub diagnostics. The runtime now
+has 17 files; the 15-file references below describe the original v0.13 extraction.
+See [the current quality workflow](QUALITY_WORKFLOW.md). No robot deployment.
+
 ## What changed, in plain language
 
 Previously, some scripts contained both the calculation and everything needed to

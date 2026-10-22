@@ -2,6 +2,7 @@
 import argparse
 import copy
 import json
+import os
 from pathlib import Path
 import queue
 import threading
@@ -12,6 +13,7 @@ import webbrowser
 
 from agent import VERSION
 from connection import RobotConnection, HubController
+from diagnostics import SessionLog, report as diagnostic_report
 
 SOURCE = Path(__file__).resolve().parent.parent / 'remote_dashboard'
 BG, PANEL, LINE, TEXT, MUTED = '#0b1218', '#14212b', '#2a3b49', '#e7eff5', '#9eb2c3'
@@ -57,6 +59,14 @@ class App:
         self.controller = None
         self.connection = None
         self.last = None
+        self.last_observed = None
+        # Explicit application startup only. No raw activity/password text is persisted.
+        try:
+            log_dir = Path(os.environ.get('LOCALAPPDATA', str(Path.home()))) / 'FahadRobotHub' / 'logs'
+            log_dir.mkdir(parents=True, exist_ok=True)
+            self.session_log = SessionLog(time.monotonic, log_dir / 'events.jsonl')
+        except OSError:
+            self.session_log = SessionLog(time.monotonic)  # Export still has bounded memory events.
         self.busy = False
         self.closing = False
         self.task_started = None
@@ -161,6 +171,7 @@ class App:
 
     def run(self,fn,label='Working',show_progress=True):
         if self.busy or self.closing:return
+        if getattr(self,'session_log',None):self.session_log.record('task_started')
         self.busy=True;self.cancelled.clear();self._buttons()
         self.task_started=time.monotonic();self.task_phase=label;self.show_progress=show_progress
         self.task_generation+=1
@@ -219,6 +230,8 @@ class App:
 
     def _render(self,status):
         self.last=status
+        self.last_observed=time.monotonic()
+        if getattr(self,'session_log',None):self.session_log.record('status_checked')
         self.banner.set('DEMO · NO ROBOT' if self.demo else 'SSH CONNECTED')
         self.cards['ssh'][0].configure(text='SIMULATED' if self.demo else 'CONNECTED',fg=AMBER if self.demo else MINT)
         self.cards['ssh'][1].configure(text='No real connection' if self.demo else 'Verified SSH · loopback tunnel' if self.controller and self.controller.url else 'Verified SSH · tunnel not prepared yet')
@@ -265,9 +278,12 @@ class App:
                     if int(self.output.index('end-1c').split('.')[0])>700:self.output.delete('1.0','200.0')
                     self.output.see('end');self.output.configure(state='disabled')
                 elif kind=='status':self._render(value)
-                elif kind=='error':self.note.set(value);self.log('CHECK REQUIRED: '+value);self.banner.set('CHECK REQUIRED')
+                elif kind=='error':
+                    if getattr(self,'session_log',None):self.session_log.record('task_failed')
+                    self.note.set(value);self.log('CHECK REQUIRED: '+value);self.banner.set('CHECK REQUIRED')
                 elif kind=='phase':self.task_phase=value
                 elif kind=='done':
+                    if getattr(self,'session_log',None):self.session_log.record('task_finished')
                     self.busy=False;self.progress.stop();self.progress.configure(value=0)
                     if self.show_progress:self.progress_text.configure(text='Task finished · see status and activity log')
                     self.show_progress=False;self._buttons()
@@ -300,8 +316,15 @@ class App:
         path=filedialog.asksaveasfilename(title='Save robot status report',defaultextension='.json',initialfile='robot_hub_status.json',filetypes=[('JSON report','*.json')])
         if path:
             try:
-                Path(path).write_text(json.dumps(self.last,indent=2),encoding='utf8')
-                self.note.set('Status report saved. No password or dashboard bootstrap key is included.')
+                observed=getattr(self,'last_observed',None)
+                session=getattr(self,'session_log',None)
+                value=diagnostic_report(self.last,
+                    snapshot_age_s=max(0,time.monotonic()-observed) if observed is not None else None,
+                    run_id=session.run_id if session else None,
+                    events=list(session.events) if session else (), demo=getattr(self,'demo',False))
+                value['event_log_file_configured']=bool(session and session.handler)
+                Path(path).write_text(json.dumps(value,indent=2,allow_nan=False),encoding='utf8')
+                self.note.set('Diagnostic snapshot saved: version, freshness, issues and session events. No raw logs or credentials.')
             except OSError:
                 self.note.set('Report could not be saved. Choose a writable location and retry.')
 
@@ -310,6 +333,8 @@ class App:
         if not self.demo and self.connection and not messagebox.askyesno('Disconnect hub','Release the controls and verify the robot is stationary first. Attempt software Stop and disconnect? Remote sensors/base remain running. This does not shut Ubuntu down.'):
             return
         self.closing=True;self.cancelled.set();self.password.set('')
+        if getattr(self,'session_log',None):
+            self.session_log.record('disconnect');self.session_log.close()
         self.progress.start(12)
         self.progress_text.configure(text='Attempting Stop and disconnecting · please wait')
         connection=self.connection

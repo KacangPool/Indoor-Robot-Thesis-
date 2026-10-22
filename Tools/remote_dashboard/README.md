@@ -1,6 +1,17 @@
 # Fahad robot dashboard — first version
 
-## Latest source v0.13 — reusable modules (2026-10-22)
+## Latest source v0.14 — validated ordinary settings (2026-10-22)
+
+`dashboard_config.json` separates preview/robot JPEG refresh settings; a strict
+size/type/schema/key validator rejects invalid input before ROS/server startup.
+Defaults remain 3 FPS, loopback and port 8765; no settings can enable ROS/driving,
+alter motion limits or provide arbitrary commands. Existing explicit CLI overrides
+remain bounded. Keep all **17** runtime dependencies together through the Hub.
+No robot deployment or live compatibility claim. See
+`Documentation/QUALITY_WORKFLOW.md` for configuration, one-command checks and
+the continuing Windows HTTP-test limitation. Driving logic is unchanged.
+
+## Previous source v0.13 — reusable modules (2026-10-22)
 
 Sensor calculations, state, ROS subscriptions and browser scan/map drawing now
 have separate modules. Existing `server.py` commands/imports and HTTP routes are

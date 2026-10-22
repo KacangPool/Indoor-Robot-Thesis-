@@ -15,6 +15,7 @@ import shutil
 import signal
 import socket
 import subprocess
+import sys
 import time
 import uuid
 try:
@@ -28,14 +29,27 @@ except ImportError:
     from urllib2 import Request, urlopen
     from urlparse import urlsplit
 
-VERSION = '0.13'
+VERSION = '0.14'
 BASE = '/fahad_base_crawl_check'
 COMMAND = '/fahad/crawl_test/cmd_vel'
 RUNTIME_FILES = ('server.py', 'manual_drive.py', 'control.py', 'crawl_test.py',
                  'base_crawl_check.launch', 'dist/index.html', 'dist/app.js',
                  'dist/joystick.js', 'dist/controls.css', 'dist/style.css')
 RUNTIME_FILES += ('settings.py', 'sensor_models.py', 'sensor_state.py',
-                  'ros_reader.py', 'dist/sensor_view.js')
+                  'ros_reader.py', 'dist/sensor_view.js', 'configuration.py',
+                  'dashboard_config.json')
+
+
+def runtime_summary(root):
+    """Local read-only metadata; no package imports, subprocesses or ROS probes."""
+    free = None
+    try:
+        stats = os.statvfs(root)
+        free = stats.f_bavail * stats.f_frsize
+    except (AttributeError, OSError):
+        pass
+    return {'python_major': sys.version_info[0], 'python_minor': sys.version_info[1],
+            'disk_free_bytes': free}
 
 
 class TimeoutTransport(xmlrpc.Transport):
@@ -201,6 +215,7 @@ class Manager(object):
         except (IOError, ValueError):
             installed = None
         return {'agent_version': VERSION, 'services': services, 'graph': graph, 'dashboard': dashboard,
+                'runtime': runtime_summary(self.root),
                 'owned': owned, 'runtime_ok': self.runtime_matches(),
                 'installed_bundle': installed,
                 'device_lidar': os.path.exists('/dev/wheeltec_lidar')}

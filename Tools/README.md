@@ -1,5 +1,12 @@
 # Project code: where to start
 
+Current quality foundations: **v0.14**, local only. Double-click
+`Tools/Check Project.cmd` for the consolidated offline checks. The Hub's existing
+Save report now creates an allowlisted diagnostic snapshot; the dashboard reads
+validated ordinary settings. Local Git history is source-only, with no remote.
+Read [the everyday workflow](../Documentation/QUALITY_WORKFLOW.md) before copying
+updates. No deployment, motion-limit change or live LiDAR fix was performed.
+
 The main user-authored tools now share reusable modules. The original command
 names still work; the pieces underneath them have been separated by purpose.
 This is a local v0.13 source refactor, not a robot installation.
@@ -55,7 +62,7 @@ Existing copies on the robot are unchanged until deliberately updated.
 
 The Hub has its own complete dashboard installer. Keep the **entire** local
 `robot_hub` folder beside `remote_dashboard`; do not copy just its launcher or
-individual runtime files. The Hub's fixed 15-file runtime list includes the new
+individual runtime files. The Hub's fixed 17-file runtime list includes the new
 dashboard modules and browser renderer.
 
 ## Reusing a piece

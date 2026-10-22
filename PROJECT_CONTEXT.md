@@ -6,7 +6,28 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
-- Current local source v0.13 (2026-10-22): user requests reuse-first modular code.
+- Current local source v0.14 (2026-10-22): user approves ongoing quality workflow.
+  Local source-only Git repository initialized with v0.13 baseline d987a68 and a
+  separate quality-foundations implementation snapshot; no remote/publication,
+  private data/vendor/planner excluded, no global identity change. One-command
+  Tools/quality_check.py + Check Project.cmd gives readable/JSON reports, explicit
+  pass/fail/error/skip, isolated suites, syntax checks, dependency observations and
+  source commit/dirty/SHA-256 provenance. No installs/robot/model startup.
+  Strict dashboard_config.json preview/robot profiles retain ordinary defaults;
+  unknown/protected settings fail before ROS startup, no motion/security changes.
+  Hub Save report now allowlists cached diagnostic fields/issues and records age/
+  demo evidence; structured event history is bounded/rotated with no raw activity,
+  SSH/exception/credential payloads. Helper Python/disk metadata is read-only and
+  absent until deployed. Runtime is now complete 17-file v0.14 bundle. No deployment
+  or robot connection performed. AGENTS.md preserves this workflow going forward.
+  Final checker: Tools57/57, dashboard261/261, Hub53 pass/one symlink skip; JS/syntax/
+  inventory pass. Two earlier full runs retain one/two Windows 10053 errors, not
+  fixed or hidden by final pass. Native App/old-Jetson/physical behaviour untested.
+  Later staged: aligned sensor recordings/replay, fusion contracts/provenance,
+  robot dependency/restore validation and measured performance. Missing scan stream
+  and calibration/TF/time/association questions unchanged. Guide:
+  Documentation/QUALITY_WORKFLOW.md; no thesis/detector/training scope change.
+- Previous local source v0.13 (2026-10-22): user requests reuse-first modular code.
   Extracted diagnostic core in Tools/fahad_core; separate dashboard calculations,
   sensor state, ROS reader and browser sensor renderer; separate Hub setup workflow,
   SSH transport and runtime manifest. Existing entry commands/import facades and

@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "preview": {"port": 8765, "fps": 3.0},
+    "robot": {"fps": 3.0}
+  }
+}

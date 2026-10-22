@@ -31,3 +31,31 @@ module, update its callers, tests, runtime/bundle dependency lists and copying
 instructions together. Keep distinct guarded motion profiles separate. Do not
 rewrite vendor packages, historical reports/data or unrelated apps to satisfy a
 blanket modularity request. See Documentation/MODULAR_CODE_ARCHITECTURE.md.
+
+## Ongoing quality workflow
+
+The user approved maintaining this workflow for future work on this project:
+
+- Inspect local Git status before editing. Preserve unrelated changes; use local,
+  source-only snapshots for meaningful task changes. Never add credentials,
+  recordings, vendor archives or the separate hosted app. No remote publication
+  is authorized by this workflow. Local snapshot identity is non-personal and
+  supplied per commit; do not alter the user's global Git identity.
+- Reuse Tools/quality_check.py after material code changes, alongside focused
+  tests appropriate to risk. Report failures, errors, missing dependencies and
+  skips honestly. Never hide the Windows HTTP abort with retries or exclusions.
+- Keep ordinary settings validated and separate from enforced motion/security
+  limits. Configuration must not launch ROS, arm driving or accept shell commands.
+- Use bounded structured events and allowlisted diagnostic exports. Do not log
+  passwords, bootstrap keys, command payloads, images or raw exception/SSH text.
+  Mark cached/demo evidence clearly and preserve snapshot age.
+- Keep runtime bundles, dependency/version records, tests and usage docs aligned.
+  Do not upgrade or claim compatibility with the old Jetson from laptop tests.
+- Before changing live perception/fusion, define units, coordinate frames,
+  timestamps, validity/association rules and experiment provenance. Prefer saved-
+  data regression tests where suitable data exists; never replay motion commands
+  into the live robot. Measure performance before claiming an optimization.
+
+See Documentation/QUALITY_WORKFLOW.md for the implemented foundations and staged
+lab-dependent work. CHANGELOG.md and PROJECT_CONTEXT.md still require updates as
+specified above. Keep code changes separate from robot deployment authority.

@@ -1,6 +1,22 @@
 # Fahad Robot Hub · Windows
 
-## Latest source v0.13 — modular source/runtime (2026-10-22)
+## Latest source v0.14 — diagnostics and quality foundations (2026-10-22)
+
+The existing Save report button now writes a bounded allowlisted diagnostic
+snapshot with explicit age/demo evidence and sensor-stream issue codes. It does
+not probe again, include raw SSH commands/logs/keys, or start/restart anything.
+Bounded structured session events are configured at application startup; no raw
+activity or exception text is persisted. Normal location:
+`%LOCALAPPDATA%\FahadRobotHub\logs\events.jsonl` (256 KiB, two rotated backups).
+
+Robot helper adds read-only Python-version/disk metadata, missing until updated.
+The fixed v0.14 runtime has **17** files, including strict ordinary configuration.
+Existing launch/control/ownership/guards unchanged. No actual GUI/robot deployment
+was performed; offline tests use fake UI/SSH and temporary files. Read
+`Documentation/QUALITY_WORKFLOW.md` for the local-only source history, one-command
+checker, settings rules, report limits and staged lab work.
+
+## Previous source v0.13 — modular source/runtime (2026-10-22)
 
 The setup workflow is now in `hub_controller.py`, transport stays in
 `connection.py`, and checksum preparation is in `runtime_bundle.py`. Keep the
@@ -109,7 +125,7 @@ unknown/changed identities. Existing Windows SSH use may already have saved it.
 
 - Reuses registered camera/YOLO, LiDAR and the expected isolated base when healthy.
 - Starts missing services with fixed launch commands, not arbitrary user commands.
-- Updates the **personal trial dashboard** to v0.13, with checksums and backups.
+- Updates the **personal trial dashboard** to v0.14, with checksums and backups.
 - Opens a private, laptop-loopback SSH tunnel and shows running version/speed.
 - Shows freshness/readiness separately from merely registered ROS nodes.
 - Offers service logs, status-report export, check-only and software Stop.
@@ -172,7 +188,7 @@ or dropped connection requires deliberate recovery; nothing resumes motion.
 Robot writes stay inside `/home/wheeltec/fahad/`:
 
 - `robot_hub/agent.py`, `services.json`, `logs/`, `staging/`, `backups/`;
-- the fifteen allowlisted runtime files and manifest in `remote_dashboard_web_trial/`.
+- the seventeen allowlisted runtime files and manifest in `remote_dashboard_web_trial/`.
 
 Existing matching trial files are backed up before replacement; unrelated files
 are preserved. Interrupted/hash-mismatched updates prevent managed base/dashboard
