@@ -6,6 +6,16 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- GitHub publication setup 2026-10-22: user explicitly authorizes reviewed source
+  upload to public KacangPool/Indoor-Robot-Thesis-. HTTPS origin configured and
+  original README commit fetched; local and remote histories to be retained,
+  README includes user's original description. Public-history auditor + exact
+  synthetic-fixture waiver/test coverage, narrow CI-file allowlist and hosted
+  read-only offline quality workflow added. Wi-Fi deferred; no robot changes.
+  Final audit/push/hosted run/head synchronization still pending verification;
+  avoid declaring successful publication merely from repository access. Local
+  latest full checker preserves one Windows10053 HTTP error, other suites/JS
+  pass. Guide: Documentation/GITHUB_WORKFLOW.md. No public raw data/credentials.
 - GitHub/home-network update 2026-10-22: user created PUBLIC
   KacangPool/Indoor-Robot-Thesis- and explicitly accepts visibility, superseding
   private indoor-sar-robot proposal below. Connector confirms public owner/name;

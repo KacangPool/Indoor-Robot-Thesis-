@@ -59,3 +59,14 @@ The user approved maintaining this workflow for future work on this project:
 See Documentation/QUALITY_WORKFLOW.md for the implemented foundations and staged
 lab-dependent work. CHANGELOG.md and PROJECT_CONTEXT.md still require updates as
 specified above. Keep code changes separate from robot deployment authority.
+
+## Public repository scope
+
+The user explicitly authorized the initial reviewed source upload to
+KacangPool/Indoor-Robot-Thesis- on 2026-10-22. Keep a public-safe source allowlist;
+this is not blanket permission to publish private data or every future edit.
+Before publication, run Tools/publication_audit.py against committed history,
+review any findings and preserve existing remote changes. Never print secret
+values or force-push over unrelated history. GitHub CI is read-only/offline with
+no robot deployment or credentials. Do not claim a push or hosted check succeeded
+until actual remote commit/run state confirms it.

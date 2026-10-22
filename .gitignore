@@ -3,6 +3,11 @@
 !/.gitignore
 !/.gitattributes
 !/*.md
+!/.github/
+/.github/**
+!/.github/workflows/
+!/.github/workflows/*.yml
+!/.github/ci-requirements.txt
 !/Tools/
 /Tools/**
 !/Tools/**/

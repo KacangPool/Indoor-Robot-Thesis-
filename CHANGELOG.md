@@ -4,6 +4,39 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-22
 
+### GitHub publication setup — reviewed source, retained histories and hosted checks
+
+- User explicitly requests completing setup/upload to public
+  KacangPool/Indoor-Robot-Thesis-; Wi-Fi work deferred. Verified connector access,
+  public visibility and original main4ef1d77e. Added credential-free HTTPS origin
+  and fetched initial README commit. Publication is limited to reviewed authored
+  source/docs/tests/configuration, not all workspace files. Existing history and
+  user's original README description are retained; no force-push/robot changes.
+- Added Tools/publication_audit.py + seven unit tests: committed-history source
+  allowlist, binary/size checks, credential-pattern location-only reporting. First
+  historical scan covers5 commits/165 unique blobs; no forbidden paths/high-
+  confidence token/key patterns. Literal-credential scan flags one deliberately
+  synthetic redaction marker in test_diagnostics.py. Reviewed exact file/blob/
+  line/category waiver is explicit in reports, not a blanket tests exclusion.
+  No actual credential finding; pattern audit does not guarantee confidentiality.
+  Final committed-history audit required after merge and before upload.
+- Added .github/workflows/quality.yml + pinned hosted-test NumPy2.3.5/Paramiko5.1.0
+  requirements and narrow .gitignore allowance for CI files. Ubuntu24.04/Python3.11/
+  Node24 job reuses publication audit and quality_check.py for main pushes/PRs/
+  manual dispatch. Read-only contents token, no persistent checkout credentials,
+  no user secrets/robot access/deployment. Official actions pinned to exact v7
+  SHAs read from official repositories; reports retained7 days even on failures.
+  Hosted execution still requires first push and must be verified independently.
+- New Documentation/GITHUB_WORKFLOW.md, README status/entry points and preserved
+  original description; continuity notes updated. Local full checker report
+  tmp/quality_reports/20261022_225423_2467a22e: Tools63/63, Hub53 pass/one Windows
+  symlink skip, dashboard260/261 with Win10053 in existing oversized-request HTTP
+  test. All JS/static/environment checks pass. Added final audit-waiver test gives
+  seven focused passes; no retry/exclusion/guard weakening. Runtime/robot code,
+  limits, datasets/models, old Jetson environment and Wi-Fi unchanged. No packages
+  installed locally. Push authorization/hosted CI/head synchronization pending
+  verification in follow-up entry; external GitHub state must not be assumed.
+
 ### Public repository confirmed; home test versus campus deployment clarified
 
 - User reports repository created public and accepts that choice; actual target

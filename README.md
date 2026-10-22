@@ -1,5 +1,12 @@
 # Indoor search-and-rescue robot perception
 
+## Original project description
+
+Wheeltec Ackerman robot car project for my thesis. Creating the connection and communication between the Camera and 2D Lidar from the robot to visualise and identify objects from the camera then to save them as a map through the Lidar.
+
+The description above is preserved from the original GitHub README. The sections
+below distinguish the intended goal from what has actually been demonstrated.
+
 Bachelor-thesis project: evaluate pretrained camera-based detection of living
 beings on an indoor WHEELTEC robot, then develop and evaluate appropriately
 validated camera–LiDAR association and spatial labels.
@@ -41,9 +48,12 @@ are tracked. Recordings, images, private profiles/keys, model weights, vendor
 archives/manuals, generated reports and the separately hosted planner are excluded.
 Do not add passwords, easyroam certificate/private-key files or diagnostic dumps.
 
-The user created public [KacangPool/Indoor-Robot-Thesis-](https://github.com/KacangPool/Indoor-Robot-Thesis-)
-and accepts that visibility. It currently contains only the user's initial README;
-local remote configuration and first source upload are pending. Preserve that
-remote history and review local files/history for private material before upload.
-The local repository remains independent until the connection is completed.
-No cloud CI/deployment or live robot/network change is configured by this README.
+Public source repository: [KacangPool/Indoor-Robot-Thesis-](https://github.com/KacangPool/Indoor-Robot-Thesis-).
+Its original README commit and local source history are retained, not overwritten.
+See [the GitHub workflow guide](Documentation/GITHUB_WORKFLOW.md) for upload
+verification, everyday synchronization, test results and limitations.
+
+GitHub Actions runs the existing offline checks on pushes/pull requests to main.
+The hosted test job has read-only repository permissions and no robot credentials;
+it does not deploy software or operate hardware. Tests/reports are not a live
+integration claim. Do not treat the intended fusion/map goal as a completed feature.
