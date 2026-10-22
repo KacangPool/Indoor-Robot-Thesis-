@@ -2,7 +2,21 @@
 
 Public repository: [KacangPool/Indoor-Robot-Thesis-](https://github.com/KacangPool/Indoor-Robot-Thesis-).
 
-## Setup checkpoint — 2026-10-22
+## Verified setup complete — 2026-10-22
+
+The user completed Git's browser sign-in and pushed `main`. Local HEAD,
+`origin/main` and GitHub's actual main reference independently matched
+`f9738808104facca710ef67acf285830679a4183` before these completion notes.
+The [first hosted quality run](https://github.com/KacangPool/Indoor-Robot-Thesis-/actions/runs/39855842652)
+for that commit completed successfully, including the history audit, existing
+offline checker and report upload. Both original histories are preserved.
+
+The earlier authentication blocker below is resolved. Passing hosted Linux checks
+does not resolve the recorded local Windows10053 HTTP errors or verify the robot.
+No robot deployment or Wi-Fi changes were performed. Saving a file does not
+automatically upload it: future reviewed changes still need a commit and push.
+
+## Earlier authentication checkpoint — resolved
 
 HTTPS origin is configured and the original GitHub commit is retained in the
 merged local history (merge cc978be). Pre-push committed-history audit passes:

@@ -6,6 +6,16 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- GitHub setup COMPLETE 2026-10-22: user authenticated and pushed main to public
+  KacangPool/Indoor-Robot-Thesis-. Local HEAD, origin/main and actual remote main
+  independently matched f9738808104facca710ef67acf285830679a4183 before the
+  documentation-completion update. Hosted Project quality run39855842652 for
+  that commit completed successfully, including audit, offline checker and report
+  upload. Earlier pending-authentication entries below are historical/resolved.
+  Prior Windows10053 errors remain undiagnosed; Linux CI is not robot validation.
+  Only reviewed source is published, not raw/private data or automatic future
+  edits. Existing histories retained; no robot deployment or Wi-Fi changes.
+  Current guide: Documentation/GITHUB_WORKFLOW.md.
 - GitHub checkpoint 2026-10-22: origin configured and original remote README
   history merged locally atcc978be; original description retained. Committed-
   history audit covers7 commits/175 blobs with no unresolved findings and one

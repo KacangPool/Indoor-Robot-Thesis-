@@ -1,22 +1,22 @@
 # GitHub connection and Hochschule Merseburg Wi-Fi
 
-Update 2026-10-22: user instead created **public**
-`KacangPool/Indoor-Robot-Thesis-` and explicitly accepts that visibility.
-Connector metadata confirms the actual owner/name/public visibility; anonymous
-Git reference lookup finds main at `4ef1d77e0b571cbd85d2e1507079b319e7e1be0b`.
-That initial commit contains only the user's introductory README. Local project
-source has not been uploaded and no local remote is configured. Public code
-hosting does not authorize exposing robot ports or weakening existing guards.
+Update 2026-10-22: the user selected **public**
+`KacangPool/Indoor-Robot-Thesis-` and completed the Git sign-in and source push.
+Local and actual remote main matched `f9738808104facca710ef67acf285830679a4183`
+before documentation completion; hosted quality run39855842652 passed. The user's
+initial README history is retained. Earlier no-upload statements below describe
+previous checkpoints, not current status. Wi-Fi work is explicitly deferred.
+Public code hosting does not authorize exposing robot ports or weakening guards.
 
-## Current GitHub next step
+## Current GitHub workflow
 
 The repository is available at [Indoor-Robot-Thesis-](https://github.com/KacangPool/Indoor-Robot-Thesis-).
-The earlier private-repository name below is superseded. Before any first source
-upload, review all intended files **and existing local commit history** for secrets
-or unsuitable private material. `.gitignore` does not remove already tracked
-history. Preserve and reconcile the user's existing remote README rather than
-overwriting it or force-pushing unrelated local history. GitHub hosting is separate
-from the robot's live network and requires no public ROS/dashboard listener.
+The earlier private-repository name below is superseded. Setup and the first
+hosted checks are verified; see [the current workflow guide](GITHUB_WORKFLOW.md).
+Continue reviewing intended files **and committed history** for private material;
+`.gitignore` does not remove already tracked history. Preserve remote edits,
+never force-push over them. GitHub hosting is separate from the robot's live
+network and requires no public ROS/dashboard listener.
 
 ## Earlier GitHub setup history (superseded by current status above)
 

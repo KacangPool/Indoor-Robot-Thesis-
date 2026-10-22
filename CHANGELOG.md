@@ -4,6 +4,24 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-22
 
+### GitHub publication verified — source synchronized and hosted checks passed
+
+- User completed Git Credential Manager browser sign-in and normal main push.
+  Independently verified local HEAD, origin/main and actual GitHub main all at
+  f9738808104facca710ef67acf285830679a4183, with a clean working tree before
+  these completion notes. Both original histories remain; no force-push.
+- GitHub Actions run39855842652 for that exact commit completed successfully:
+  history audit, existing offline quality checker and report upload all passed.
+  This establishes hosted Linux checks, not a fix for the previously recorded
+  Windows10053 HTTP errors, robot compatibility or live hardware performance.
+- Updated CHANGELOG.md, PROJECT_CONTEXT.md, Documentation/GITHUB_WORKFLOW.md and
+  Documentation/GITHUB_AND_CAMPUS_WIFI.md to resolve the earlier authentication
+  checkpoint. Documentation-only completion: whitespace and publication audit
+  checks; no runtime changes requiring a new local regression run.
+- Source-only public scope remains unchanged. Raw/private data stays excluded;
+  Wi-Fi work remains deferred. No robot connection, deployment, motion, dependency
+  upgrade or credential retrieval. Future edits are not automatically uploaded.
+
 ### GitHub setup checkpoint — history/audit complete, first push needs local sign-in
 
 - Prepared-source commit b701062 merged with remote initial4ef1d77e atcc978be
