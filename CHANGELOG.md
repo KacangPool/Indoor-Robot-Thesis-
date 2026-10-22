@@ -4,6 +4,29 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-22
 
+### GitHub setup checkpoint — history/audit complete, first push needs local sign-in
+
+- Prepared-source commit b701062 merged with remote initial4ef1d77e atcc978be
+  using a normal two-parent merge, retaining both histories and verbatim original
+  README description. Source-only CI and guide are committed; no force-push.
+  Final audit tmp/publication_audit_20261022_cc978be.json:7 commits/175 blobs,
+  zero unresolved issues, one reviewed synthetic fixture pinned to exact file/blob/
+  location. Updated scope checks reject credential filenames as well as data paths.
+- Final full offline checker tmp/quality_reports/20261022_225749_dcb99db1:
+  Tools64/64,Hub53 pass/one Windows symlink skip,dashboard259/261 with two existing
+  Windows10053 HTTP errors; JS/static/runtime checks pass. No retry/exclusions.
+  Local workflow syntax inspected against official GitHub docs; hosted run untested.
+- Authorized normal Git push attempted with prompting disabled; fails before
+  upload because Git Credential Manager has no non-interactive credentials.
+  App connector remains accessible but is not a Git CLI credential. No secrets
+  extracted/printed or authentication protection bypassed. Asked user to run normal
+  laptop PowerShell push and finish GitHub sign-in locally (no token in chat).
+  Remote checkpoint still4ef1d77e; GitHub Actions returns0 runs. Source publication,
+  head match and actual hosted CI verification remain pending operator sign-in.
+- Updated GITHUB_WORKFLOW.md/PROJECT_CONTEXT and this log to avoid presenting
+  prepared files as a completed upload or successful hosted test. No robot/network
+  change, dependency install, remote mutation or raw/private data publication.
+
 ### GitHub publication setup — reviewed source, retained histories and hosted checks
 
 - User explicitly requests completing setup/upload to public

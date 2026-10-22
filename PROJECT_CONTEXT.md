@@ -6,6 +6,15 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- GitHub checkpoint 2026-10-22: origin configured and original remote README
+  history merged locally atcc978be; original description retained. Committed-
+  history audit covers7 commits/175 blobs with no unresolved findings and one
+  exact synthetic-fixture waiver. Initial push fails because non-interactive Git
+  has no credentials despite connector access; no token/password extracted. User
+  given normal laptop Git push command for one-time local sign-in. Remote remains
+  4ef1d77e and Actions has0 runs at checkpoint; no uploaded-source/CI-success claim.
+  Latest checker64 tool passes,Hub53 passes/one skip,dashboard259 passes/two
+  Windows10053 errors; JS/static pass. Upload/hosted verification pending auth.
 - GitHub publication setup 2026-10-22: user explicitly authorizes reviewed source
   upload to public KacangPool/Indoor-Robot-Thesis-. HTTPS origin configured and
   original README commit fetched; local and remote histories to be retained,

@@ -1,6 +1,25 @@
 # GitHub: project source and checks
 
 Public repository: [KacangPool/Indoor-Robot-Thesis-](https://github.com/KacangPool/Indoor-Robot-Thesis-).
+
+## Setup checkpoint — 2026-10-22
+
+HTTPS origin is configured and the original GitHub commit is retained in the
+merged local history (merge cc978be). Pre-push committed-history audit passes:
+seven commits/175 distinct blobs, one exact reviewed synthetic fixture and no
+unresolved findings. Latest local checker has64 tool passes,53 Hub passes/one
+Windows symlink skip, all JS/static checks pass; dashboard has259 passes/two
+Windows10053 errors, retained in report225749_dcb99db1. This is not an all-green
+local run and the old HTTP issue has not been diagnosed or weakened.
+
+The non-interactive Git push could not authenticate: the app's GitHub connection
+is separate from Git Credential Manager. No password/token was retrieved or
+printed. At this checkpoint the remote is still the original README commit and
+there are no hosted workflow runs. The prepared workflow is **not yet a verified
+hosted success**. A normal operator Git push/sign-in is required; verify actual
+remote head and Actions afterward. Do not repeat anonymous/disabled-prompt pushes
+or treat connector access as proof that Git itself can push.
+
 The user explicitly authorized uploading the reviewed project source here on
 2026-10-22. This is not permission to publish credentials, recordings or all future
 private files. Wi-Fi work is deferred; no robot/network changes are part of setup.
