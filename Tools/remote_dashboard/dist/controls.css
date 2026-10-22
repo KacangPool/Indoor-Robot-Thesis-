@@ -1,0 +1,108 @@
+#drive-confirmation{display:block;line-height:1.6}
+.joystick-panel{margin:0 22px 20px;padding:17px 14px;border:1px solid var(--line);border-radius:10px;background:#0e1820;text-align:center}
+.joystick-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;font-size:12px;color:var(--text)}
+.joystick-heading span{font-size:9px;letter-spacing:.1em;color:var(--mint)}
+.joystick-pad{position:relative;display:block;margin:0 auto;width:220px;height:220px;max-width:100%;border:1px solid #476170;border-radius:50%;background:radial-gradient(circle at center,#18322e 0 16%,#15252e 17% 47%,#21323c 48% 49%,#13202a 50%);touch-action:none;user-select:none;cursor:grab;overflow:hidden;color:var(--muted)}
+.joystick-pad:disabled{opacity:.4;cursor:default}.joystick-pad:active{cursor:grabbing}
+.joystick-pad.independent{border-radius:12px}
+.drive-alert{margin:0 22px 14px;padding:10px 12px;background:#38272b;border:1px solid #80525c;border-radius:7px;color:#ffd2d5;font-size:12px;overflow-wrap:anywhere}
+.pedal-controls{margin-bottom:14px;text-align:left;font-size:11px;color:var(--muted)}
+.pedal-controls label{display:flex;justify-content:space-between;gap:10px}.pedal-controls strong{color:var(--mint)}
+.pedal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.travel-pedal,.travel-brake{padding:13px 7px;min-height:64px;border:1px solid #476170;border-radius:8px;color:var(--text);background:#20303d;touch-action:none;user-select:none;font:600 12px system-ui;cursor:pointer}
+.travel-pedal small,.travel-brake small{display:block;font-size:9px;font-weight:400;margin-top:6px}
+.travel-pedal:disabled,.travel-brake:disabled{opacity:.4;cursor:default}
+.travel-brake{grid-column:1/-1;background:#38272b;border-color:#80525c}
+.pedal-controls p{font-size:10px;line-height:1.6;margin:10px 0}
+.joystick-layout{justify-content:center;margin-bottom:12px;flex-wrap:wrap}
+.scan-colour-select{margin:0 22px 14px;flex-wrap:wrap}
+.drive-diagnostics{margin:12px 22px;color:var(--muted);font-size:11px;line-height:1.6}
+.drive-diagnostics summary{cursor:pointer;color:var(--mint)}
+.drive-diagnostics pre{max-height:220px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#0e1820;padding:10px;border-radius:8px}
+.joystick-pad:before,.joystick-pad:after{content:"";position:absolute;background:#35505d;pointer-events:none}
+.joystick-pad:before{height:1px;left:12px;right:12px;top:50%}.joystick-pad:after{width:1px;top:12px;bottom:12px;left:50%}
+.joystick-knob{position:absolute;z-index:2;width:52px;height:52px;left:calc(50% - 26px);top:calc(50% - 26px);border:2px solid #b0efda;border-radius:50%;background:#69bda0;box-shadow:0 4px 20px #0006;transform:translate(var(--stick-x,0px),var(--stick-y,0px));pointer-events:none}
+.joystick-label{position:absolute;font:9px system-ui;letter-spacing:.07em;pointer-events:none;z-index:1}
+.joystick-label.up{top:12px;left:0;right:0}.joystick-label.down{bottom:12px;left:0;right:0}.joystick-label.left{left:9px;top:calc(50% - 7px)}.joystick-label.right{right:9px;top:calc(50% - 7px)}
+.joystick-readout{font:10px ui-monospace,Consolas,monospace;color:var(--mint);margin:12px 0 8px}
+.joystick-help{font-size:11px;line-height:1.6;color:var(--muted);margin:0}
+.joystick-metrics{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin:10px 0 14px;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.joystick-metrics span{display:block;font-size:9px;color:var(--muted)}
+.joystick-metrics strong{display:block;font:13px ui-monospace,Consolas,monospace;color:var(--mint);margin-top:3px}
+.scan-readout dl{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:10px;row-gap:8px}
+.scan-readout dd{margin:0;text-align:right}
+@media(max-width:600px){.lidar-content{grid-template-columns:1fr}}
+
+/* Recording cockpit: the centre is vision, left is telemetry, right is input. */
+.panel-details{margin:8px 16px;font-size:11px;color:var(--muted)}
+details summary{cursor:pointer;color:var(--mint);font-size:11px}
+.ramp-readout span{display:block;font-size:9px;margin-top:3px}
+.scan-readout{margin:0 16px 14px}
+.lidar-panel .panel-head{flex-wrap:wrap}.lidar-panel .scan-colour-select{margin:0}
+@media(min-width:1100px){
+  body{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+  .topbar{padding:9px 18px;min-height:58px}.brand-mark{width:34px;height:34px}
+  main{width:100%;max-width:1920px;flex:1;min-height:0;padding:10px 16px 6px;display:flex;flex-direction:column}
+  .heading{margin-bottom:8px;min-height:30px}.heading h1{font-size:18px;margin:0}.heading .eyebrow{display:none}
+  .mode-tag{padding:4px 9px;font-size:10px}
+  .safety-banner{padding:7px 12px;margin-bottom:10px;font-size:11px;border-radius:6px}
+  .workspace{flex:1;min-height:0;gap:10px;padding:8px;border:1px solid var(--line);border-radius:14px;background:#0a1016;grid-template-columns:170px minmax(0,1fr) 245px;grid-template-rows:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:'readings camera controls' 'readings lidar controls'}
+  .panel{min-height:0;border-radius:9px}
+  .health-panel{grid-area:readings;overflow:auto}
+  .camera-panel{grid-area:camera;display:flex;flex-direction:column}
+  .lidar-panel{grid-area:lidar;display:flex;flex-direction:column}
+  .control-panel{grid-area:controls;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
+  .panel-head{padding:10px 14px;gap:7px}.panel-head h2{font-size:14px}.panel-head .eyebrow{font-size:9px}
+  .camera-stage{flex:1;min-height:0;max-height:none;width:calc(100% - 20px);margin:0 10px;aspect-ratio:auto;border:1px solid #476170;border-radius:6px;overflow:hidden;box-shadow:0 0 0 3px #080e13}
+  .camera-footer{padding:7px 12px;font-size:9px;border:0}.camera-footer code{font-size:9px}
+  .empty-state{padding:12px}.empty-state p{font-size:11px}.viewfinder{margin-bottom:10px}
+  .camera-overlay{top:10px;left:10px;right:10px;font-size:10px}
+  .lidar-content{display:block;flex:1;min-height:0;padding:0 10px 4px}
+  .lidar-content canvas{height:100%;object-fit:contain;background:#0e171e}
+  .scan-colour-select select{padding:4px;font-size:10px;max-width:175px}
+  .lidar-panel .panel-head{padding:8px 12px}.lidar-panel h2{font-size:12px}
+  .lidar-panel>.footnote{margin:3px 12px;padding:0;font-size:9px;line-height:1.35}
+  .lidar-panel>.panel-details{margin:3px 12px 6px}
+  .health-list{padding:0 14px;margin-bottom:12px}.health-list li{padding:8px 0;font-size:10px;gap:8px}
+  .scan-readout>strong{font-size:30px;margin:4px 0 10px}.scan-readout dl{font-size:10px;row-gap:5px}.scan-readout code{font-size:10px}
+  .control-help{margin:8px 14px;font-size:10px}#drive-confirmation{line-height:1.4}
+  .primary,.stop{width:calc(100% - 28px);margin:8px 14px;padding:9px;font-size:11px}
+  .stop{position:sticky;bottom:6px;z-index:5;box-shadow:0 0 0 5px var(--panel)}
+  .drive-alert{margin:8px 14px;font-size:11px}
+  .joystick-panel{margin:8px 14px;padding:10px}.joystick-heading{margin-bottom:7px}
+  .joystick-layout{margin-bottom:6px;gap:5px}.joystick-layout select{padding:5px;font-size:10px;max-width:210px}
+  .joystick-pad{width:160px;height:160px}.joystick-knob{width:42px;height:42px;left:calc(50% - 21px);top:calc(50% - 21px)}
+  .joystick-label{font-size:8px}.joystick-label.up{top:8px}.joystick-label.down{bottom:8px}
+  .pedal-controls{margin-bottom:8px}.pedal-controls p{margin:5px 0}
+  .pedal-grid{gap:5px}.travel-pedal,.travel-brake{min-height:44px;padding:8px 5px;font-size:11px}.travel-pedal small,.travel-brake small{font-size:8px;margin-top:3px}
+  .joystick-metrics{gap:12px;padding:6px 0;margin:5px 0}.joystick-readout{margin:6px 0}.joystick-metrics strong{font-size:12px}
+  .intent{margin:8px 14px 0;padding-top:8px}.control-note{margin:5px 14px;min-height:0;font-size:10px}
+  .drive-diagnostics{margin:8px 14px}.footnote{font-size:10px}
+  footer{font-size:9px;padding:5px 0 0}
+}
+.keyboard-steering{display:flex;justify-content:center;gap:12px;margin-bottom:10px;font-size:11px;color:var(--muted)}
+.keyboard-steering span{padding:8px;border:1px solid var(--line);border-radius:6px}
+.keyboard-steering .active{background:#284f43;color:var(--mint);border-color:var(--mint)}
+#joystick-pad{display:none}
+@media(pointer:coarse){#joystick-pad{display:block}}
+@media(min-width:1100px){.health-list{padding:0 10px}.health-list li{font-size:9px;gap:5px}.scan-readout{margin:0 10px 10px}.scan-readout dl{font-size:9px}.tiny-label{white-space:normal}.panel-head{flex-wrap:wrap}.control-panel .panel-head{gap:4px}.joystick-metrics{gap:8px}.joystick-metrics span{font-size:8px}}
+@media(min-width:1100px) and (max-height:850px){
+  .control-panel .panel-head{padding:8px 12px}.control-panel .panel-head .eyebrow,.joystick-heading{display:none}
+  .control-panel h2{font-size:12px}.control-panel .tiny-label{font-size:8px}
+  .control-panel .panel-details,.drive-diagnostics{margin:4px 12px}
+  .control-help{margin:5px 12px;font-size:9px}
+  .primary,.stop{padding:7px;margin:5px 12px;width:calc(100% - 24px)}
+  .joystick-panel{margin:5px 12px;padding:7px}.joystick-pad{width:120px;height:120px}
+  .joystick-knob{width:32px;height:32px;left:calc(50% - 16px);top:calc(50% - 16px)}
+  .joystick-layout{margin-bottom:3px}.joystick-layout select{padding:4px;max-width:190px;font-size:9px}
+  .pedal-controls{margin-bottom:5px}.pedal-controls p{font-size:9px;margin:4px 0}.ramp-readout span{font-size:8px}
+  .travel-pedal,.travel-brake{min-height:35px;padding:5px;font-size:10px}.travel-pedal small,.travel-brake small{margin-top:1px}
+  .joystick-readout{margin:4px 0;font-size:9px}.joystick-metrics{padding:3px 0;margin:3px 0;gap:10px}.joystick-metrics span{font-size:8px}.joystick-metrics strong{font-size:11px}
+  .intent{padding-top:5px;margin-top:5px}.control-note{font-size:9px;margin:4px 12px}
+}
+@media(max-width:1099px){
+  .workspace{display:flex;flex-direction:column}
+  .camera-panel{order:0}.lidar-panel{order:1}.control-panel{order:2}.health-panel{order:3}
+  .camera-stage{aspect-ratio:4/3;min-height:180px;max-height:60vh}
+  .lidar-content{display:block}.scan-readout{max-width:600px}
+}

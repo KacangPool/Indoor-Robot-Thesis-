@@ -1,0 +1,43 @@
+# Deliberate source-only repository. Everything else stays on disk, untracked.
+/*
+!/.gitignore
+!/.gitattributes
+!/*.md
+!/Tools/
+/Tools/**
+!/Tools/**/
+!/Tools/**/*.py
+!/Tools/**/*.js
+!/Tools/**/*.html
+!/Tools/**/*.css
+!/Tools/**/*.md
+!/Tools/**/*.launch
+!/Tools/**/*.sh
+!/Tools/**/*.cmd
+!/Tools/**/*.json
+!/Tools/**/requirements*.txt
+!/Tools/**/.gitignore
+!/Documentation/
+/Documentation/*
+!/Documentation/*.md
+!/Testing other Models/
+/Testing other Models/*
+!/Testing other Models/DetectorTest/
+/Testing other Models/DetectorTest/*
+!/Testing other Models/DetectorTest/test_detector.py
+!/Testing other Models/DetectorTest/detector_model.py
+
+# Never track local runtimes, generated reports or credentials.
+**/__pycache__/
+**/*.py[cod]
+**/node_modules/
+**/.venv/
+**/.env*
+**/*credentials*
+**/*secrets*
+**/*.pem
+**/*.key
+**/quality_reports/
+**/diagnostic_reports/
+**/logs/
+**/.git/

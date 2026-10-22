@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Opens the physical controller. No motion publisher, sensors or navigation.
+       The remap isolates ordinary /cmd_vel, but is NOT a hardware motor inhibit. -->
+  <node pkg="turn_on_wheeltec_robot" type="wheeltec_robot_node"
+        name="fahad_base_crawl_check" output="screen" respawn="false">
+    <param name="usart_port_name" value="/dev/wheeltec_controller"/>
+    <param name="serial_baud_rate" type="int" value="115200"/>
+    <param name="odom_frame_id" value="odom_combined"/>
+    <param name="robot_frame_id" value="base_footprint"/>
+    <param name="gyro_frame_id" value="gyro_link"/>
+    <remap from="cmd_vel" to="/fahad/crawl_test/cmd_vel"/>
+  </node>
+</launch>

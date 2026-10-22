@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fahad · One supervised forward trial</title>
+  <link rel="stylesheet" href="/style.css"><script src="/web_crawl.js" defer></script>
+</head>
+<body>
+  <header class="topbar"><div class="brand"><span class="brand-mark">F</span><div>FAHAD / SUPERVISED TRIAL<small>One forward action · no continuous driving</small></div></div><span id="connection" class="pill">Connecting</span></header>
+  <main>
+    <section class="heading"><div><p class="eyebrow">EXPLICIT ROBOT-SIDE OPT-IN</p><h1>One small step forward.</h1><p class="subtitle">Keep the robot directly in sight and its normal power-off reachable.</p></div><span class="mode-tag">LIVE MOTOR CAPABILITY</span></section>
+    <div class="safety-banner"><span class="safety-dot"></span><div><strong>This page CAN request physical movement.</strong><span> Forward only: 0.03 m/s request, at most 0.4 seconds, then repeated zero requests. Actual speed and stopping are not guaranteed. No obstacle avoidance or verified hardware watchdog.</span></div></div>
+    <div class="workspace">
+      <section class="panel camera-panel">
+        <div class="panel-head"><h2>Camera preview</h2><label class="select-label">View <select id="source"><option value="rgb">Colour camera</option><option value="yolo">YOLO labels</option></select></label></div>
+        <div class="camera-stage"><img id="camera" alt="Latest robot camera preview" hidden><div id="camera-empty" class="empty-state"><strong>Waiting for an image</strong><p>Not validated for video-only driving. Watch the robot directly.</p></div></div>
+        <p class="control-note" id="camera-note">Waiting for recent messages.</p>
+        <p class="footnote">Preview capped at 3 Hz. Message arrival age is not exposure latency. YOLO boxes are existing detections, not obstacle avoidance.</p>
+      </section>
+      <section class="panel control-panel">
+        <div class="panel-head"><h2>Single forward trial</h2><span class="tiny-label">ONE USE</span></div>
+        <p class="control-help">Clear level floor, wheels/steering clear, robot stationary, normal power-off immediately reachable. Prepare only when ready, then hold Forward within five seconds.</p>
+        <button id="prepare" class="primary" disabled>Prepare one trial</button>
+        <button id="forward" class="primary direction" disabled>Hold Forward · maximum 0.4 s</button>
+        <button id="stop" class="stop">Stop / cancel permit <kbd>Space</kbd></button>
+        <div class="intent"><span>Trial state</span><strong id="state">DISABLED</strong></div>
+        <p id="note" class="control-note" role="status" aria-live="polite">Controls start disabled. Waiting for the backend.</p>
+        <p class="footnote">Releasing, hiding this page or losing its heartbeat requests software cancellation. A stopped/crashed Jetson or broken serial link may prevent zero commands. Use physical power-off if abnormal; do not lift a moving robot.</p>
+        <p class="footnote">One attempt per terminal launch, including cancellation/expiry. Reloading or reconnecting cannot rearm it. Reverse, steering, speed controls and automatic retry are unavailable.</p>
+      </section>
+    </div>
+    <footer>LOCAL LOOPBACK + SSH · Separate from the normal read-only viewer.<span>Research prototype, not a safety system.</span></footer>
+  </main>
+</body>
+</html>

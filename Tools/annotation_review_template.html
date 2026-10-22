@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Robot detection — annotation review</title>
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#f3f5f8,#151a22);--panel:light-dark(#fff,#202734);--text:light-dark(#18212d,#e9edf5);--muted:light-dark(#4c596b,#b4bfd0);--border:light-dark(#c9d1dd,#495466);--active:light-dark(#1b4b84,#aacdff)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,sans-serif}main{max-width:1150px;margin:auto;padding:24px}h1{font-size:25px;margin:0 0 8px}h2{font-size:19px}p{margin:8px 0}.muted{color:var(--muted)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.workspace{display:grid;grid-template-columns:minmax(0,2fr) minmax(240px,1fr);gap:20px;margin:18px 0}.panel{background:var(--panel);padding:16px;border:1px solid var(--border);border-radius:9px}button,select,input,textarea{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--border);border-radius:5px;padding:7px 10px}button{cursor:pointer}button[aria-pressed=true]{outline:2px solid var(--active)}button:disabled{opacity:.5;cursor:default}.primary{background:var(--active);color:light-dark(#fff,#12233c)}textarea{width:100%;min-height:60px}canvas{display:block;width:100%;height:auto;touch-action:none;background:#333;border:1px solid var(--border);margin:10px 0}.objects{padding:0;list-style:none}.objects button{width:100%;text-align:left;margin:3px 0}.badge{font-size:14px;font-weight:600}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px;text-align:left;border-bottom:1px solid var(--border)}label{display:inline-flex;gap:6px;align-items:center}.notice{color:var(--muted)}#message{min-height:24px}details{margin:14px 0}summary{cursor:pointer}.coordinates{display:grid;grid-template-columns:1fr 1fr;gap:6px}.coordinates input{width:100%}@media(max-width:760px){main{padding:12px}.workspace{grid-template-columns:1fr}}
+.panel,.row>*{min-width:0}.row>*,label{max-width:100%}input[type=file]{width:100%;min-width:0}select{max-width:100%}.tablewrap{max-width:100%}
+</style></head><body><main>
+<h1>Mark what the camera actually sees</h1>
+<p>31 pilot images: 30 regularly spaced examples and one known difficult case. Work on your Windows computer; everything stays in this page.</p>
+<details open><summary>How to mark an image</summary>
+<ol><li>Choose <b>Person</b> or <b>Chair</b> and drag a box around each visible object. Include all its visible parts; stop at the image edge. Do not guess hidden limbs or chair parts.</li>
+<li>For partly hidden objects, tick <b>Partly hidden</b>. A seated person and the visible chair are two separate objects. Use <b>Ignore region</b> when an area cannot be judged confidently.</li>
+<li>You may use <b>Add YOLO suggestions</b> as a starting point. Correct wrong labels and sizes, delete duplicate/wrong boxes, and add missed objects.</li>
+<li>When every visible person and chair is checked, click <b>Confirm reviewed & next</b>. An image with no target objects can be confirmed with zero boxes.</li>
+<li>Click <b>Export labels</b> regularly. This downloads your work; the original recording files stay untouched.</li></ol>
+<p class="muted">Suggestions can bias judgement. Inspect the raw image before using them. Ignore regions are excluded from scoring; use them only for actual uncertainty.</p></details>
+<div class="row"><button id="previous">Previous</button><select id="framePicker" aria-label="Choose image"></select><button id="next">Next</button><span id="progress" aria-live="polite"></span></div>
+<div class="workspace"><section class="panel">
+<h2 id="imageTitle"></h2><p id="imageInfo" class="muted"></p>
+<div class="row"><button id="person" aria-pressed="true">Person</button><button id="chair" aria-pressed="false">Chair</button><button id="ignore" aria-pressed="false">Ignore region</button><button id="move" aria-pressed="false">Select / move / resize</button></div>
+<canvas id="imageCanvas" width="640" height="480" aria-label="Draw annotation rectangles on the camera image"></canvas>
+<p class="muted">Move mode: click a box to select it, drag inside to move it, or drag its lower-right square to resize. Coordinates below also allow exact editing.</p>
+<div class="row"><button id="suggestions">Add YOLO suggestions</button><label><input type="checkbox" id="showPredictions">Show original YOLO boxes</label></div>
+<p id="message" role="status" aria-live="polite"></p>
+</section><aside class="panel"><p id="reviewState" class="badge"></p><h2>Your boxes</h2><ul id="objects" class="objects"></ul>
+<div id="editor" hidden><label>Label <select id="objectClass"><option value="person">Person</option><option value="chair">Chair</option><option value="ignore">Ignore region</option></select></label>
+<p><label><input id="occluded" type="checkbox">Partly hidden</label></p><div class="coordinates"><label>Left <input id="xmin" type="number"></label><label>Top <input id="ymin" type="number"></label><label>Right <input id="xmax" type="number"></label><label>Bottom <input id="ymax" type="number"></label></div>
+<div class="row"><button id="applyCoordinates">Apply coordinates</button><button id="deleteBox">Delete selected box</button></div></div>
+<p><label for="notes">Notes for this image</label><textarea id="notes" placeholder="For example: face visible, legs hidden by chair"></textarea></p>
+<div class="row"><button id="undo">Undo edit</button><button id="clear">Clear boxes</button></div>
+<p><button id="confirm" class="primary">Confirm reviewed & next</button></p>
+<div class="row"><button id="exportLabels">Export labels</button><label>Load saved labels <input id="importLabels" type="file" accept=".json,application/json"></label></div>
+<p class="muted" id="storageStatus">Export a JSON backup before closing the page.</p>
+</aside></div>
+<section class="panel"><h2>Compare the detector with your reviewed boxes</h2>
+<p>Only confirmed images count. Person and chair are scored separately. One correct box can match one real object; extra boxes count as false detections. Matching requires at least 50% box overlap (IoU).</p>
+<label>Image group <select id="cohort"><option value="regular">Regular pilot sample</option><option value="challenge">Known difficult case only</option></select></label>
+<p id="metricStatus"></p><div class="tablewrap"><table><thead><tr><th>Score cutoff</th><th>Duplicate removal</th><th>Class</th><th>Correct</th><th>False</th><th>Missed</th><th>Precision</th><th>Recall</th></tr></thead><tbody id="metrics"></tbody></table></div>
+<p class="muted">Precision: how many predicted target boxes are correct. Recall: how many marked target objects were found. Other model labels, such as traffic light, are outside this two-class score. These nearby frames from one room are a development pilot; collect separate sessions for final thesis evaluation. Changing a filter here does not change the robot.</p>
+</section></main>
+<script>
+__CORE_SCRIPT__
+const DATA = __DATA_JSON__;
+const $ = id => document.getElementById(id);
+const canvas = $('imageCanvas'), ctx = canvas.getContext('2d');
+const image = new Image(), storageKey = 'robot-annotation-' + DATA.dataset_id;
+let states = {}, index = 0, selected = -1, mode = 'person', gesture = null, undoStacks = {}, storageOkay = true, loadedFrameId = null;
+const clone = value => JSON.parse(JSON.stringify(value));
+function frame() { return DATA.frames[index]; }
+function state() { if (!states[frame().id]) states[frame().id] = {reviewed:false, boxes:[], notes:''}; return states[frame().id]; }
+function validState(value, f) {
+  if (!value || typeof value.reviewed !== 'boolean' || !Array.isArray(value.boxes) || typeof value.notes !== 'string') throw Error('Invalid image annotation.');
+  for (const b of value.boxes) if (!['person','chair','ignore'].includes(b.class) ||
+    !['xmin','ymin','xmax','ymax'].every(k => Number.isFinite(b[k])) || b.xmin < 0 || b.ymin < 0 ||
+    b.xmax > f.width || b.ymax > f.height || b.xmax <= b.xmin || b.ymax <= b.ymin) throw Error('Invalid box coordinates.');
+  return clone(value);
+}
+function validatedStates(incoming) { const result = {}; for (const f of DATA.frames) if (incoming[f.id]) result[f.id] = validState(incoming[f.id], f); return result; }
+try { const saved = localStorage.getItem(storageKey); if (saved) states = validatedStates(JSON.parse(saved)); } catch(e) { storageOkay = false; }
+function persist() {
+  try { localStorage.setItem(storageKey, JSON.stringify(states)); storageOkay = true; } catch(e) { storageOkay = false; }
+  $('storageStatus').textContent = storageOkay ? 'Saved in this browser. Export labels for a portable backup and to share your work.' : 'Browser storage is unavailable. Export labels before closing to keep your work.';
+}
+function checkpoint() { const id = frame().id; if (!undoStacks[id]) undoStacks[id] = []; undoStacks[id].push(clone(state())); if (undoStacks[id].length > 30) undoStacks[id].shift(); }
+function changed() { state().reviewed = false; persist(); refreshSide(); draw(); showMetrics(); }
+function setMode(value) { mode = value; for (const id of ['person','chair','ignore','move']) $(id).setAttribute('aria-pressed', String(id === value)); }
+function rectangle(b, color, dashed=false, label='') {
+  ctx.save(); ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=2;ctx.setLineDash(dashed?[6,4]:[]);
+  ctx.strokeRect(b.xmin,b.ymin,b.xmax-b.xmin,b.ymax-b.ymin);ctx.font='14px system-ui';
+  if(label){ctx.fillStyle='rgba(0,0,0,.75)'; const size=ctx.measureText(label).width+8;ctx.fillRect(b.xmin,Math.max(0,b.ymin-20),size,20);ctx.fillStyle=color;ctx.fillText(label,b.xmin+4,Math.max(15,b.ymin-5));}ctx.restore();
+}
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if (loadedFrameId === frame().id) ctx.drawImage(image,0,0,canvas.width,canvas.height);
+  if ($('showPredictions').checked) for(const b of frame().predictions) rectangle(b,'#f5f5f5',true,b.class+' '+b.score.toFixed(2));
+  state().boxes.forEach((b,i)=>{ rectangle(b,{person:'#72ff95',chair:'#77c8ff',ignore:'#ffcb6b'}[b.class],false,(i+1)+': '+b.class); if(i===selected){ctx.fillStyle='#ffe15a';ctx.fillRect(b.xmax-7,b.ymax-7,14,14);} });
+  if(gesture && gesture.type==='draw'){const p=gesture.current,a=gesture.start;rectangle({xmin:Math.min(a.x,p.x),ymin:Math.min(a.y,p.y),xmax:Math.max(a.x,p.x),ymax:Math.max(a.y,p.y)},'#ffe15a');}
+}
+function refreshSide() {
+  $('reviewState').textContent=state().reviewed?'Reviewed — included in calculations':'Draft — excluded until you confirm';
+  $('progress').textContent=Object.values(states).filter(s=>s.reviewed).length+' / '+DATA.frames.length+' reviewed';
+  $('objects').replaceChildren();
+  state().boxes.forEach((b,i)=>{const li=document.createElement('li'),button=document.createElement('button');button.textContent=(i+1)+'. '+b.class+(b.occluded?' — partly hidden':'')+(b.source==='suggestion'?' — suggestion':'');button.setAttribute('aria-pressed',String(selected===i));button.onclick=()=>{selected=i;setMode('move');refreshSide();draw();};li.append(button);$('objects').append(li);});
+  const b=state().boxes[selected];$('editor').hidden=!b;
+  if(b){$('objectClass').value=b.class;$('occluded').checked=!!b.occluded;for(const k of ['xmin','ymin','xmax','ymax']) $(k).value=b[k];}
+  $('notes').value=state().notes;$('undo').disabled=!(undoStacks[frame().id]||[]).length;
+}
+function loadFrame() {
+  selected=-1;gesture=null;loadedFrameId=null;
+  canvas.width=frame().width;canvas.height=frame().height;
+  $('framePicker').value=String(index);$('imageTitle').textContent=frame().scene+' · image '+frame().sample;
+  $('imageInfo').textContent=frame().elapsed_s.toFixed(1)+' seconds into the run · '+(frame().cohort==='challenge'?'additional known difficult case':'regular sample')+' · '+frame().width+' × '+frame().height;
+  $('previous').disabled=index===0;$('next').disabled=index===DATA.frames.length-1;
+  $('message').textContent='';image.onload=()=>{loadedFrameId=frame().id;draw();};image.src=frame().image;
+  refreshSide();draw();showMetrics();
+}
+function point(event){const r=canvas.getBoundingClientRect();return{x:Math.max(0,Math.min(canvas.width,(event.clientX-r.left)*canvas.width/r.width)),y:Math.max(0,Math.min(canvas.height,(event.clientY-r.top)*canvas.height/r.height))};}
+canvas.addEventListener('pointerdown',event=>{
+  if(loadedFrameId!==frame().id)return; const p=point(event);canvas.setPointerCapture(event.pointerId);
+  if(mode==='move'){
+    const selectedBox=state().boxes[selected];
+    if(selectedBox && Math.abs(p.x-selectedBox.xmax)<14 && Math.abs(p.y-selectedBox.ymax)<14){checkpoint();gesture={type:'resize',start:p,original:clone(selectedBox)};}
+    else{selected=-1;for(let i=state().boxes.length-1;i>=0;i--){const b=state().boxes[i];if(p.x>=b.xmin&&p.x<=b.xmax&&p.y>=b.ymin&&p.y<=b.ymax){selected=i;break;}}
+      if(selected>=0){checkpoint();gesture={type:'move',start:p,original:clone(state().boxes[selected])};}}
+    refreshSide();draw();
+  } else gesture={type:'draw',start:p,current:p};
+});
+canvas.addEventListener('pointermove',event=>{
+  if(!gesture)return; const p=point(event);gesture.current=p;
+  if(gesture.type==='move') {const b=state().boxes[selected],o=gesture.original;const dx=Math.max(-o.xmin,Math.min(canvas.width-o.xmax,p.x-gesture.start.x)),dy=Math.max(-o.ymin,Math.min(canvas.height-o.ymax,p.y-gesture.start.y));b.xmin=o.xmin+dx;b.xmax=o.xmax+dx;b.ymin=o.ymin+dy;b.ymax=o.ymax+dy;}
+  if(gesture.type==='resize'){const b=state().boxes[selected];b.xmax=Math.min(canvas.width,Math.max(b.xmin+1,p.x));b.ymax=Math.min(canvas.height,Math.max(b.ymin+1,p.y));}
+  draw();
+});
+function finishGesture(event){if(!gesture)return;
+  if(gesture.type==='draw'){const p=point(event),a=gesture.start;if(Math.abs(p.x-a.x)>=3&&Math.abs(p.y-a.y)>=3){checkpoint();state().boxes.push({class:mode,xmin:Math.min(a.x,p.x),ymin:Math.min(a.y,p.y),xmax:Math.max(a.x,p.x),ymax:Math.max(a.y,p.y),occluded:false,source:'manual'});selected=state().boxes.length-1;}}
+  gesture=null;changed();}
+canvas.addEventListener('pointerup',finishGesture);
+canvas.addEventListener('pointercancel',()=>{if(gesture&&gesture.original&&selected>=0)state().boxes[selected]=gesture.original;gesture=null;draw();});
+for(const value of ['person','chair','ignore','move']) $(value).onclick=()=>setMode(value);
+$('previous').onclick=()=>{index=Math.max(0,index-1);loadFrame();};$('next').onclick=()=>{index=Math.min(DATA.frames.length-1,index+1);loadFrame();};
+$('framePicker').onchange=()=>{index=Number($('framePicker').value);loadFrame();};$('showPredictions').onchange=draw;
+$('suggestions').onclick=()=>{if(state().boxes.length&&!confirm('Append suggestions? Check for duplicates with your existing boxes.'))return;checkpoint();
+  for(const p of frame().predictions.filter(b=>['person','chair'].includes(b.class))) {const b={class:p.class,xmin:Math.max(0,p.xmin),ymin:Math.max(0,p.ymin),xmax:Math.min(frame().width,p.xmax),ymax:Math.min(frame().height,p.ymax),occluded:false,source:'suggestion'};if(b.xmax>b.xmin&&b.ymax>b.ymin)state().boxes.push(b);}
+  selected=-1;changed();$('message').textContent='Suggestions added as drafts. Delete false/duplicate boxes, adjust sizes, and add missed objects before confirming.';};
+$('deleteBox').onclick=()=>{if(selected<0)return;checkpoint();state().boxes.splice(selected,1);selected=-1;changed();};
+$('objectClass').onchange=()=>{if(selected<0)return;checkpoint();state().boxes[selected].class=$('objectClass').value;changed();};
+$('occluded').onchange=()=>{if(selected<0)return;checkpoint();state().boxes[selected].occluded=$('occluded').checked;changed();};
+$('applyCoordinates').onclick=()=>{if(selected<0)return;const b={...state().boxes[selected]};for(const k of ['xmin','ymin','xmax','ymax'])b[k]=Number($(k).value);try{validState({reviewed:false,boxes:[b],notes:''},frame());checkpoint();state().boxes[selected]=b;changed();}catch(e){$('message').textContent=e.message;}};
+$('notes').onchange=()=>{checkpoint();state().notes=$('notes').value;changed();};
+$('clear').onclick=()=>{if(!state().boxes.length)return;if(!confirm('Clear your boxes on this image? Undo is available.'))return;checkpoint();state().boxes=[];selected=-1;changed();};
+$('undo').onclick=()=>{const stack=undoStacks[frame().id]||[];if(stack.length){states[frame().id]=stack.pop();selected=-1;persist();refreshSide();draw();showMetrics();}};
+$('confirm').onclick=()=>{state().notes=$('notes').value;try{validState(state(),frame());checkpoint();state().reviewed=true;persist();if(index<DATA.frames.length-1){index++;loadFrame();}else{refreshSide();showMetrics();$('message').textContent='Last image confirmed. Export your labels now.';}}catch(e){$('message').textContent=e.message;}};
+function saveDownload(name,data){const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+$('exportLabels').onclick=()=>{state().notes=$('notes').value;persist();const report=[];for(const cohort of ['regular','challenge'])for(const cutoff of [.3,.5,.7])for(const nms of [false,true])report.push({cohort,score_cutoff:cutoff,duplicate_removal:nms,...evaluateReviewed(DATA.frames,states,cutoff,nms,cohort)});
+  saveDownload('pilot_annotations.json',{schema_version:1,dataset_id:DATA.dataset_id,policy:DATA.policy,exported_at:new Date().toISOString(),annotations:states,frames:DATA.frames.map(({image,...rest})=>rest),evaluation:report});};
+$('importLabels').onchange=async event=>{const f=event.target.files[0];if(!f)return;try{const incoming=JSON.parse(await f.text());if(incoming.dataset_id!==DATA.dataset_id)throw Error('This file belongs to a different image set.');const validated=validatedStates(incoming.annotations||{});if(Object.keys(states).length&&!confirm('Replace the current browser annotations with this backup? Export current work first if needed.'))return;states=validated;undoStacks={};persist();loadFrame();$('message').textContent='Saved annotations loaded.';}catch(e){$('message').textContent='Could not load labels: '+e.message;}finally{event.target.value='';}};
+function showMetrics(){const cohort=$('cohort').value;$('metrics').replaceChildren();let reviewed=0;
+  for(const cutoff of [.3,.5,.7])for(const nms of [false,true]){const result=evaluateReviewed(DATA.frames,states,cutoff,nms,cohort);reviewed=result.reviewed;if(!reviewed)continue;for(const label of ['person','chair']){const value=result.totals[label],tr=document.createElement('tr');for(const text of [cutoff.toFixed(1),nms?'On':'Off',label,value.tp,value.fp,value.fn,value.precision===null?'—':(value.precision*100).toFixed(1)+'%',value.recall===null?'—':(value.recall*100).toFixed(1)+'%']){const td=document.createElement('td');td.textContent=String(text);tr.append(td);}$('metrics').append(tr);}}
+  $('metricStatus').textContent=reviewed?reviewed+' reviewed images in this group. Counts depend on your markings; check all target objects.':'No reviewed images in this group yet. Draw/check boxes and confirm an image to calculate results.';
+}
+$('cohort').onchange=showMetrics;
+DATA.frames.forEach((f,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent=(i+1)+'. '+f.scene+' / '+f.sample+(f.cohort==='challenge'?' (difficult case)':'');$('framePicker').append(option);});
+loadFrame();$('storageStatus').textContent=storageOkay?'Export labels regularly; browser storage is a convenience, not your portable backup.':'Browser storage unavailable. Use Export labels to save your work.';
+</script></body></html>
