@@ -4,6 +4,37 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-22
 
+### GitHub destination approved; Hochschule Merseburg campus-network feasibility
+
+- User wants GitHub/ChatGPT integration and shared campus Wi-Fi instead of direct
+  robot hotspot. Read official OpenAI documentation with openai-docs skill; local
+  Git clean at711874f/no remote. GitHub connector returns login KacangPool; target
+  lookup404 only establishes not accessible. User explicitly chooses creation of
+  private KacangPool/indoor-sar-robot. No public visibility or broad repo access.
+- Creation pending: connector exposes no create-repository action, gh is absent,
+  controlled browser github.com/new redirects to login even after user reports
+  signing in and refresh. Only in-app browser is available; usual browser session
+  may differ. Opened sign-in tab for user, no credentials/token fetched or entered.
+  Requested empty private repo creation in user's signed-in browser. No repository
+  created, remote configured, code pushed, permissions changed or external message
+  sent. Do not confuse connector account access with browser/private-repo scope.
+- User identifies Hochschule Merseburg and accepts temporary thesis networking.
+  Official campus WLAN guidance supports easyroam Linux/manual certificate setup;
+  public guidance does not confirm peer SSH access or old Jetson package support.
+  Explained infrastructure coverage versus direct RF range; same SSID is not
+  proof of peer routing or roaming reliability. Trust preference cannot make
+  blocked peer traffic work. Existing SSH/loopback/host-identity/motion guards stay.
+- Stationary lab plan: keep local fallback before changing AP/client mode, inspect
+  OS/architecture/interfaces, approved profile, assigned campus address, TCP22,
+  SSH identity/tunnel/read-only stream. Hub's private-IPv4 gate may need scoped
+  review if campus assigns other address space; no blind removal/public binding.
+  Campus network team contact located, not messaged; no policy bypass proposed.
+- Files: root README.md, Documentation/GITHUB_AND_CAMPUS_WIFI.md, continuity note
+  in PROJECT_CONTEXT.md and this log. Verification: connector/browser/local source
+  checks and primary OpenAI/university/eduroam/NetworkManager sources. Docs only,
+  no code/runtime tests, robot/network changes, installs, physical measurements
+  or Wi-Fi success inferred. Actual creation/push/access and lab reachability open.
+
 ### v0.14 — local history, consolidated checks, diagnostics and validated settings
 
 - User approves engineering roadmap and keeping it for future work. Implemented

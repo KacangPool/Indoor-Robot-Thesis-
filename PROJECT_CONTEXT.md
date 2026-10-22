@@ -6,6 +6,19 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- GitHub/campus follow-up 2026-10-22: user explicitly approves private destination
+  KacangPool/indoor-sar-robot; no public publication. Connector login KacangPool is
+  confirmed, target lookup404 is inaccessible/not proof of absence. Controlled
+  browser remains signed out even after user reports sign-in; no repository-create
+  connector tool/installed gh. Private creation/authenticated first push pending;
+  no remote/upload yet. User's university: Hochschule Merseburg. Official Linux/
+  manual WLAN guidance uses easyroam/certificates; campus peer SSH permission and
+  old-Jetson compatibility unconfirmed. Same infrastructure could extend useful
+  coverage beyond direct robot hotspot range, not guaranteed routing/roaming or
+  out-of-sight readiness. Keep SSH/loopback and existing motion guards. First
+  network switch needs local fallback; inspect assigned address/port22 while
+  stationary. Hub currently accepts private IPv4 only. No network/robot changes.
+  Notes: Documentation/GITHUB_AND_CAMPUS_WIFI.md and new root README.md.
 - Current local source v0.14 (2026-10-22): user approves ongoing quality workflow.
   Local source-only Git repository initialized with v0.13 baseline d987a68 and a
   separate quality-foundations implementation snapshot; no remote/publication,
