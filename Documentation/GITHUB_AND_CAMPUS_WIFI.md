@@ -1,10 +1,24 @@
 # GitHub connection and Hochschule Merseburg Wi-Fi
 
-2026-10-22. User approved creating **private** `KacangPool/indoor-sar-robot` and
-identified Hochschule Merseburg as the campus. This does not authorize public
-hosting, exposing robot ports or disabling existing connection/motion guards.
+Update 2026-10-22: user instead created **public**
+`KacangPool/Indoor-Robot-Thesis-` and explicitly accepts that visibility.
+Connector metadata confirms the actual owner/name/public visibility; anonymous
+Git reference lookup finds main at `4ef1d77e0b571cbd85d2e1507079b319e7e1be0b`.
+That initial commit contains only the user's introductory README. Local project
+source has not been uploaded and no local remote is configured. Public code
+hosting does not authorize exposing robot ports or weakening existing guards.
 
-## GitHub: what is connected and what is pending
+## Current GitHub next step
+
+The repository is available at [Indoor-Robot-Thesis-](https://github.com/KacangPool/Indoor-Robot-Thesis-).
+The earlier private-repository name below is superseded. Before any first source
+upload, review all intended files **and existing local commit history** for secrets
+or unsuitable private material. `.gitignore` does not remove already tracked
+history. Preserve and reconcile the user's existing remote README rather than
+overwriting it or force-pushing unrelated local history. GitHub hosting is separate
+from the robot's live network and requires no public ROS/dashboard listener.
+
+## Earlier GitHub setup history (superseded by current status above)
 
 - Local Git already has source-only history. Working tree was clean before this
   documentation update; no remote is configured.
@@ -21,7 +35,7 @@ hosting, exposing robot ports or disabling existing connection/motion guards.
 - No repository has been created by this assistant, no code pushed, no permissions
   expanded, and no authentication token/password retrieved or requested in chat.
 
-### Complete the private repository setup
+### Earlier proposed private repository setup (not the selected destination now)
 
 In the user's already signed-in browser, visit [GitHub's new-repository page](https://github.com/new):
 
@@ -99,6 +113,45 @@ network or a permitted routed connection. Do not try to bypass institutional
 network isolation. Network registration/WLAN/eduroam contact is published at
 [ITZ service overview](https://www.hs-merseburg.de/hochschule/einrichtungen/it-servicezentrum/service/serviceuebersicht/).
 No university email was sent and no policy/permission is assumed.
+
+## Home testing: optional demonstration versus actual deployment evidence
+
+The user has a home PC and laptop on the same connection; robot presence at home
+has not been established. Device-to-device communication through a router is a
+standard networking mechanism, not an unproven project algorithm. We still need
+to verify the actual robot/network configuration rather than infer deployment
+success from that general fact.
+
+- **PC to laptop at home:** optional basic connectivity demonstration. Use their
+  normal home LAN, not separate guest/client-isolated networks. `ipconfig` on the
+  destination shows the active adapter IPv4; a bounded `ping -n 4 LAPTOP_IP` from
+  the other device can check ICMP after replacing LAPTOP_IP with that address.
+  Success is evidence of basic IP/ICMP reachability, not SSH/camera throughput.
+  Failure can reflect a blocked ping, not a broken Wi-Fi connection. No need to
+  install an SSH server or disable the Windows firewall just for this exercise.
+  [Microsoft ipconfig](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig),
+  [Microsoft ping](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ping).
+- **Robot to laptop on a home router:** useful if the robot is actually present.
+  With a local recovery path and robot stationary, join the router, identify the
+  new robot address, test TCP22, verify SSH identity, then the existing tunnel and
+  read-only camera view. This validates that home deployment, not easyroam or
+  campus peer policies. No movement is needed to establish connectivity.
+- **Robot to laptop on campus:** still required even after either home test. Check
+  easyroam authentication, real assigned address, permitted TCP22, tunnel/camera
+  freshness and stationary stability. Public Merseburg guidance does not establish
+  peer reachability; AP roaming/range/motion reliability is a later separate test.
+
+TCP tests should target a service known to be running. Port22 failure on an
+ordinary Windows laptop without an SSH server is not evidence that the router
+blocks device-to-device traffic. Do not open a listener to the internet or alter
+firewalls for an unnecessary demonstration.
+[Microsoft Test-NetConnection](https://learn.microsoft.com/en-us/powershell/module/nettcpip/test-netconnection).
+
+Recommended priority: skip elaborate PC-to-PC setup if the robot is still at the
+lab; do the actual stationary robot-to-campus test next time. No home/campus
+connectivity result was obtained in this documentation session. A read-only local
+adapter query returned no usable address, so no local IP or routing success is
+inferred from it.
 
 Verification: read local Git/configuration/tunnel source, connector login and
 repository lookup, controlled browser state, official OpenAI and university/network

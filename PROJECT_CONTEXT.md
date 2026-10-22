@@ -6,6 +6,17 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- GitHub/home-network update 2026-10-22: user created PUBLIC
+  KacangPool/Indoor-Robot-Thesis- and explicitly accepts visibility, superseding
+  private indoor-sar-robot proposal below. Connector confirms public owner/name;
+  anonymous ls-remote finds main4ef1d77e0b571cbd85d2e1507079b319e7e1be0b,
+  commit fetch shows only user's introductory README. No local origin, source
+  upload or remote mutation yet. Before publication review full local history
+  and reconcile/preserve remote README, not force-push over it. Home PC/laptop
+  connectivity demonstration is optional, not proof of robot/easyroam/campus peer
+  access. Robot presence at home unknown. Recommend actual stationary robot SSH/
+  tunnel/camera test on target network; campus routing and old OS/certificate
+  support remain unverified. No new network/hardware measurements or settings.
 - GitHub/campus follow-up 2026-10-22: user explicitly approves private destination
   KacangPool/indoor-sar-robot; no public publication. Connector login KacangPool is
   confirmed, target lookup404 is inaccessible/not proof of absence. Controlled

@@ -4,6 +4,32 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-22
 
+### Public repository confirmed; home test versus campus deployment clarified
+
+- User reports repository created public and accepts that choice; actual target
+  KacangPool/Indoor-Robot-Thesis- supersedes private indoor-sar-robot proposal.
+  Read-only connector metadata confirms public visibility/owner; anonymous Git
+  ls-remote main is4ef1d77e0b571cbd85d2e1507079b319e7e1be0b. Commit fetch shows
+  only user's two-line introductory README. Local Git remains clean/no remote
+  before docs update; no upload, remote mutation, credentials or permission changes.
+  Next source publication requires full history/private-material review and
+  preserving/reconciling remote README, no blind force-push.
+- User asks whether home PC/laptop on same Wi-Fi can test robot campus-network
+  idea. Distinguished standard infrastructure communication from actual deployment
+  evidence: optional PC-to-PC ICMP proves only that home path, not robot/camera/
+  SSH or eduroam client routing. Robot presence at home unknown. Robot+home-router
+  test would validate that configuration; stationary campus TCP22/SSH/tunnel/camera
+  test still required. No unnecessary SSH-server installation, public listener or
+  firewall disable for a generic demonstration. Ping failure alone not decisive.
+- Verification: GitHub metadata/ref/commit reads, local Git/command availability,
+  official Merseburg WLAN and Microsoft ipconfig/ping/Test-NetConnection docs.
+  Local adapter query yielded no usable IP, no inference of connectivity. No
+  home/campus/robot test, motion, Wi-Fi change, actual measurement or code change.
+  Files: README.md, Documentation/GITHUB_AND_CAMPUS_WIFI.md, PROJECT_CONTEXT.md
+  and this log. Documentation-only check: diff whitespace; runtime suites not
+  rerun. Peer policies, robot compatibility, source upload and physical behaviour
+  remain open; this does not resolve missing live LiDAR scans.
+
 ### GitHub destination approved; Hochschule Merseburg campus-network feasibility
 
 - User wants GitHub/ChatGPT integration and shared campus Wi-Fi instead of direct

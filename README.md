@@ -41,7 +41,9 @@ are tracked. Recordings, images, private profiles/keys, model weights, vendor
 archives/manuals, generated reports and the separately hosted planner are excluded.
 Do not add passwords, easyroam certificate/private-key files or diagnostic dumps.
 
-The user approved a private GitHub destination `KacangPool/indoor-sar-robot`.
-Creation, remote configuration and first push are pending authenticated setup;
-the local repository remains independent of GitHub until those steps complete.
+The user created public [KacangPool/Indoor-Robot-Thesis-](https://github.com/KacangPool/Indoor-Robot-Thesis-)
+and accepts that visibility. It currently contains only the user's initial README;
+local remote configuration and first source upload are pending. Preserve that
+remote history and review local files/history for private material before upload.
+The local repository remains independent until the connection is completed.
 No cloud CI/deployment or live robot/network change is configured by this README.
