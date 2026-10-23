@@ -6,6 +6,29 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- Main fusion work resumed2026-10-23: primary software/paper review confirms
+  existing2Dlaser/camera people-fusion approaches, but no inspected package is a
+  verified drop-in for this Melodic/low-camera robot. Keep existing YOLO; no new
+  trained detector, custom training or third-party package installed. SPENCER/
+  DR-SPAAM optional references; lightweight bearing/height-prior examples require
+  caution. Research: Documentation/CAMERA_LIDAR_RESEARCH_2026-10-23.md.
+- Offline fusion v0.1 now source-tested: pure3Dprojection/planar-cluster/evidence
+  core; exact detector source-image keys, stationary/calibration/acquisition-age
+  gates; geometric candidates stay unconfirmed, ambiguities rejected; optional
+  independently confirmed registered object-depth patch can corroborate geometry.
+  Marker is temporary surface observation only with timed laser-to-map TF, not
+  occupancy/footprint/person persistence/SLAM or proven identity. Eight synthetic
+  scenes,25fusion tests; full Tools97/dashboard261/Hub53+one skip pass. No real
+  aligned recording, Jetson execution, sensor benchmark or live fusion yet.
+  Existing raw-image YOLO versus rectified prototype inputs must be resolved by
+  a validated later adapter, not assumed compatible. Contract/run guide:
+  Documentation/FUSION_PROTOTYPE_V01.md. Existing motor/driver code unchanged.
+- Current private planner source d125c32e9d9773b4b7db2c905789b9c8c17da8ba deployed
+  successfully23 October (appgdep_6adb2fe627e48191b8cc6679cef03ea3); signed-in view
+  confirms research/prototype progress while physical fusion remains blocked.
+  Personal D1 records untouched. Shared-Wi-Fi testing remains a future lab task;
+  Gazebo deferred. Occupancy-map grey is unknown, not confirmed traversable;
+  existing-map geometry and separate semantic observation layer remain distinct.
 - Follow-up 2026-10-23: Gazebo explicitly deferred, retained as optional future
   tool; campus Wi-Fi still parked. Copied-source inventory finds75 manifests and
   273 launch declarations (not confirmed installed/working capabilities). New

@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Camera × planar LiDAR — offline prototype</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#10191d;color:#e9f1eb}*{box-sizing:border-box}body{margin:0;padding:30px;max-width:1550px;margin-inline:auto}header{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}h1{font-size:clamp(25px,3vw,40px);font-weight:600;letter-spacing:-1px;margin:12px 0}p{line-height:1.7;color:#bccdc6}small,.eyebrow{color:#91c2b0}.badge{border:1px solid #ba9651;background:#302a1e;color:#ffe0a1;padding:10px 14px;border-radius:6px;font-size:12px;white-space:nowrap}select{background:#1c3035;color:#ecf6ee;border:1px solid #648b7d;padding:12px;border-radius:7px;max-width:100%;font-size:15px;width:100%}.scenario{margin:20px 0;padding:18px 22px;background:#18272b;border-radius:10px}.scenario p{margin-bottom:0}.panels{display:grid;grid-template-columns:1.15fr 1fr;gap:20px}section.panel{background:#152226;border:1px solid #314c4a;border-radius:12px;padding:20px;min-width:0}h2{font-size:18px;margin:0 0 15px}svg{display:block;width:100%;height:auto;border:1px solid #314744;background:#091317;border-radius:8px}.legend{font-size:12px;margin-top:12px;line-height:1.8;color:#bbc9c2}.results{display:grid;gap:10px;margin:20px 0}.record{border-left:4px solid #d6b66e;padding:12px 18px;background:#1a2b2d;border-radius:6px;overflow-wrap:anywhere}.record strong{display:block;margin-bottom:6px}.record span{font-size:13px;color:#b7ccc2}.gate{color:#abd9c4;font-size:13px}footer{border-top:1px solid #39504c;margin-top:25px;padding-top:15px;color:#9eb4ab;font-size:12px;line-height:1.8}.good{border-color:#7dd4b1}.bad{border-color:#e79287}@media(max-width:850px){body{padding:18px}header{display:block}.badge{display:inline-block}.panels{grid-template-columns:1fr}}@media(prefers-reduced-motion:no-preference){.panel{animation:in .3s ease-out}@keyframes in{from{opacity:0;translate:0 5px}to{opacity:1;translate:0 0}}}
+body{overflow-wrap:anywhere}header>div{min-width:0}.badge{max-width:100%;white-space:normal}.panels{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}@media(max-width:850px){.panels{grid-template-columns:minmax(0,1fr)}}
+</style></head><body>
+<header><div><span class="eyebrow">FAHAD / PERCEPTION WORKBENCH · v0.1</span><h1>Labels need evidence.</h1><p>A stationary camera–2D LiDAR association prototype. Explore why a projected point is not automatically the detected object.</p></div><span class="badge" id="mode">OFFLINE · SYNTHETIC TEST SCENES</span></header>
+<div class="scenario"><label for="scene">Choose a regression case</label><select id="scene"></select><p id="explanation"></p><p class="gate" id="gate"></p></div>
+<div class="panels"><section class="panel"><h2>Camera geometry · not a real camera image</h2><svg id="camera" viewBox="0 0 640 480" role="img" aria-label="Detection rectangles and projected laser points"></svg><div class="legend">Rectangles = supplied detector boxes. Dots = actual planar-ray coordinates projected through the toy calibration. Green = depth-supported; amber = unconfirmed; red = unsupported/blocked.</div></section>
+<section class="panel"><h2 id="map-title">Separate map observation layer</h2><svg id="map" viewBox="0 0 600 500" role="img" aria-label="Synthetic occupancy grid and separate observation markers"></svg><div class="legend">Hand-authored demo map: white/free · black/occupied · grey/unknown. Grey is not confirmed safe to drive. Dots are temporary surface observations, not object centres, footprints or modified map cells.</div></section></div>
+<div class="results" id="results" aria-live="polite"></div><footer id="footer"></footer>
+<script id="report" type="application/json">__FUSION_REPORT_JSON__</script>
+<script>
+'use strict';
+const report=JSON.parse(document.getElementById('report').textContent),select=document.getElementById('scene');
+const ns='http://www.w3.org/2000/svg';
+function svgNode(parent,tag,attrs,text){const e=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,String(v));if(text!==undefined)e.textContent=text;parent.append(e);return e;}
+report.scenarios.forEach((scene,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=scene.name;select.append(o);});
+function draw(){const s=report.scenarios[Number(select.value)],r=s.result;
+ document.getElementById('explanation').textContent=s.explanation;
+ document.getElementById('mode').textContent=r.mode==='synthetic'?'OFFLINE · SYNTHETIC TEST SCENES':'OFFLINE · RECORDED INPUT / NOT LIVE';
+ document.getElementById('gate').textContent='Input gate: '+r.gate+' — '+r.reason+(r.mapping_issue?' · Mapping: '+r.mapping_issue:'');
+ const camera=document.getElementById('camera');camera.replaceChildren();camera.setAttribute('viewBox',`0 0 ${s.image.width} ${s.image.height}`);
+ svgNode(camera,'text',{x:18,y:28,fill:'#8da79a','font-size':15},'SCHEMATIC / NOT YOLO INFERENCE');
+ for(const p of r.projected_points)svgNode(camera,'circle',{cx:p.pixel[0],cy:p.pixel[1],r:4,fill:'#a5d8f5'});
+ for(const o of r.observations){const b=o.bbox,c=o.status==='depth_supported'?'#7dd4b1':o.status==='candidate_only'||o.status==='ambiguous'?'#e9c875':'#ed9d92';svgNode(camera,'rect',{x:b.xmin,y:b.ymin,width:b.xmax-b.xmin,height:b.ymax-b.ymin,fill:'none',stroke:c,'stroke-width':2});svgNode(camera,'text',{x:b.xmin,y:Math.max(45,b.ymin-8),fill:c,'font-size':15},o.class+' · '+o.status);}
+ const map=document.getElementById('map');map.replaceChildren();const grid=report.toy_map;
+ document.getElementById('map-title').textContent=grid?'Synthetic occupancy + separate observation layer':'Map-frame observation points · no occupancy map supplied';
+ if(grid){for(let y=0;y<grid.height;y++)for(let x=0;x<grid.width;x++){const v=grid.cells[y*grid.width+x];svgNode(map,'rect',{x:x*10,y:(grid.height-1-y)*10,width:10,height:10,fill:v<0?'#7f8b8e':v>=65?'#11191c':'#e1e7df'});}}
+ else svgNode(map,'text',{x:25,y:35,fill:'#afc3bb','font-size':16},'No occupancy grid: no invented free-space shading');
+ const point=(p)=>[p[0]*100,500-p[1]*100];
+ for(const p of s.map_scan_points){const [x,y]=point(p);svgNode(map,'circle',{cx:x,cy:y,r:3,fill:'#456c94'});}
+ for(const m of r.map_markers){const [x,y]=point(m.surface_xyz_m);svgNode(map,'circle',{cx:x,cy:y,r:8,fill:'#277957',stroke:'#d8ffe4','stroke-width':2});svgNode(map,'text',{x:x+12,y:y-12,fill:'#17452d','font-size':15},m.class+' (surface)');}
+ if(!r.map_markers.length)svgNode(map,'text',{x:30,y:475,fill:grid?'#172c22':'#c7d8ce','font-size':16},'No semantic marker emitted for this case');
+ const rows=document.getElementById('results');rows.replaceChildren();for(const o of r.observations){const div=document.createElement('div');div.className='record '+(o.status==='depth_supported'?'good':o.status==='camera_only'||o.status==='unavailable'?'bad':'');const title=document.createElement('strong');title.textContent=o.class+' — '+o.status;const detail=document.createElement('span');detail.textContent=o.reason+' · candidate clusters: '+o.candidates.length+(o.object_depth_m?' · independently supported optical depth: '+o.object_depth_m.toFixed(2)+'m':'')+(o.map_point_m?' · map surface XYZ: '+o.map_point_m.map(v=>v.toFixed(2)).join(', ')+'m':'');div.append(title,detail);rows.append(div);}
+ document.getElementById('footer').textContent=report.limits+' Input SHA-256: '+report.input_sha256+'. Thresholds are prototype settings, not measured sensor accuracy. A person label is not evidence of physiological life.';
+}
+select.addEventListener('change',draw);draw();
+</script></body></html>

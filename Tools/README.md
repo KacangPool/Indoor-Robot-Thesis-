@@ -1,9 +1,10 @@
 # Project code: where to start
 
-Current quality foundations: **v0.14**, local only. Double-click
+Current quality foundations: **v0.14**, not yet deployed to the robot. Double-click
 `Tools/Check Project.cmd` for the consolidated offline checks. The Hub's existing
 Save report now creates an allowlisted diagnostic snapshot; the dashboard reads
-validated ordinary settings. Local Git history is source-only, with no remote.
+validated ordinary settings. Reviewed source was published to GitHub on22 October;
+later local commits are not automatically uploaded. Raw/private data remains excluded.
 Read [the everyday workflow](../Documentation/QUALITY_WORKFLOW.md) before copying
 updates. No deployment, motion-limit change or live LiDAR fix was performed.
 
@@ -17,6 +18,7 @@ for the complete layout, verification results and deployment limits.
 | Folder or file | Responsibility |
 | --- | --- |
 | `fahad_core/` | Shared depth, detection, recording, message and camera-summary functions |
+| `fusion_prototype.py`, `fusion_fixtures.py`, `fusion_demo_template.html` | Explicit offline camera–planar-LiDAR regression report; no live inference or robot connection |
 | `box_depth_viewer.py`, `camera_diagnostics_ros1.py` | ROS/camera adapters using those shared functions |
 | `person_detection_filter.py`, `record_detection_test.py` | ROS detection filtering and recording entry points |
 | `ros_message_sample.py`, `ros_topic_report.sh` | Bounded ROS inspection entry points |
@@ -81,6 +83,12 @@ start/main function is still required. The depth/camera numeric modules need
 the existing NumPy installation; this refactor does not install dependencies.
 
 ## Offline checks
+
+Camera–LiDAR research shortlist: [reviewed sources](../Documentation/CAMERA_LIDAR_RESEARCH_2026-10-23.md).
+The new [offline fusion prototype](../Documentation/FUSION_PROTOTYPE_V01.md) reuses
+the shared code and keeps geometric candidates separate from supported labels.
+It does not implement live ROS fusion or create the room map. Use a new output
+directory with `python Tools/fusion_prototype.py --demo --output tmp/fusion_new`.
 
 New read-only feature discovery: `robot_inventory.py` uses the sibling
 `fahad_core/inventory.py` to catalogue explicit source trees. `--robot` adds fixed,

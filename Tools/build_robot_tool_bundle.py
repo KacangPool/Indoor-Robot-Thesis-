@@ -13,6 +13,7 @@ ENTRY_POINTS = (
     'box_depth_viewer.py', 'camera_diagnostics_ros1.py',
     'person_detection_filter.py', 'record_detection_test.py',
     'ros_message_sample.py', 'ros_topic_report.sh', 'robot_inventory.py',
+    'fusion_prototype.py', 'fusion_fixtures.py', 'fusion_demo_template.html',
 )
 
 

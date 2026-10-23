@@ -66,6 +66,10 @@ class ModularTests(unittest.TestCase):
                 self.assertIn('fahad_core/camera_metrics.py',names)
                 self.assertIn('robot_inventory.py',names)
                 self.assertIn('fahad_core/inventory.py',names)
+                self.assertIn('fahad_core/fusion.py',names)
+                self.assertIn('fahad_core/fusion_geometry.py',names)
+                self.assertIn('fusion_prototype.py',names)
+                self.assertIn('fusion_demo_template.html',names)
                 self.assertEqual(names,set(manifest['files'])|{'tool_bundle_manifest.json'})
                 for name,digest in manifest['files'].items():self.assertEqual(hashlib.sha256(bundle.read(name)).hexdigest(),digest)
                 bundle.extractall(Path(folder)/'isolated')  # our own fixed-name bundle, not an untrusted ZIP

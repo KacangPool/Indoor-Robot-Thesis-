@@ -4,6 +4,76 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-23
 
+### Main fusion work resumed — primary research and offline prototype v0.1
+
+- User requests an internet search for reusable2D LiDAR/camera fusion, explicit
+  handling of scan-plane/height ambiguity and a first detection/label/map
+  prototype from home. Shared-Wi-Fi peer testing is a future lab check, not
+  completed; Gazebo remains deferred. No physical robot operations authorized
+  or performed by this work.
+- Reviewed primary repositories/papers: SPENCER, RWTH DROW3/DR-SPAAM and its
+  self-supervised calibrated-camera paper, Li/Stevenson indoor-layout paper,
+  lightweight scan_detection_fusion and warehouse ROS2 examples, calibration
+  tooling and publisher semantic-mapping abstract. Inspected exact source
+  revisions for bearing-only fusion and configurable-height centroid projection;
+  no reviewed project established drop-in compatibility or solved unobservable
+  height/foreground ambiguity for this car. Some publisher pages blocked full
+  retrieval and remain reading leads only. No third-party implementation copied,
+  installed, executed or benchmarked; no detector/model/training change.
+  Research and citations: Documentation/CAMERA_LIDAR_RESEARCH_2026-10-23.md.
+- Added pure fahad_core/fusion_geometry.py and fusion.py: bounded strict headers,
+  full3D rigid transforms/rectified projection, adjacent planar scan clusters,
+  acquisition/whole-scan/time/age/motion/calibration gates, shared-cluster and
+  multi-cluster ambiguity. Projection alone is candidate_only, never a mapped
+  label. Optional independently confirmed registered object-depth patch reuses
+  existing depth_metres/patch_stats; optical-Z disagreement rejects background.
+  Depth-supported means conditional evidence, not identity/accuracy ground truth.
+  Input image keys reuse recording.frame_key; finite-number helper reused.
+- Map output is a short-lived timestamped surface observation from a real ray
+  and timed T_map_laser, not object centroid/footprint, occupancy update, SLAM,
+  robot controller or permanent person map. Missing map TF retains local evidence
+  without fake origin/map coordinates. Default thresholds explicitly provisional.
+  Existing YOLO uses raw images; v0.1 expects rectified coordinates, so a validated
+  raw/rectified projection adapter remains lab-dependent, not silently assumed.
+- New fusion_prototype.py explicit offline JSON/report adapter, fusion_fixtures.py
+  eight toy cases and fusion_demo_template.html standalone no-network schematic.
+  All inputs/maps/transforms explicitly synthetic in demo; no actual YOLO
+  inference, real recordings, calibrated hardware or live ROS fusion. JSON limits,
+  exclusive output directory, input SHA-256, detailed rejection/provenance and
+  HTML script-label escaping. Bundle now19 source files with all dependencies;
+  robot-targeted3.6 grammar/static checks include new scripts. Usage/contract:
+  Documentation/FUSION_PROTOTYPE_V01.md; Tools README updated with current Git
+  status and prototype entry. No vendor/runtime/driving settings changed.
+- Tests: initial focused22-test attempt hit WinError5 temp-folder sandbox denial;
+  rerun with appropriate temp permissions passed, without exclusions. Added final
+  malformed-input/empty-return cases:25 fusion tests pass. Full final checker
+  tmp/quality_reports/20261023_115506_9cd03745 passes Tools97, dashboard261,
+  Hub53/one Windows symlink skip plus JS/static/config tests. Earlier full
+  115131_d1411a95 also passes95 Tools before two new tests. No automatic retries
+  hide historical HTTP10053 issues; their cause remains unresolved.
+- Generated final ignored report tmp/fusion_prototype_20261023_v01_final/index.html
+  plus report.json and19-file bundle. Browser exercises all8visible results;
+  fixed unbroken-hash narrow-pane overflow, DOM viewport/content both319px after
+  repair. Inline JS syntax and final report/escaping tests pass. Screenshot
+  tmp/fusion-prototype-verified.png. No desktop-wide/physical phone or real-data
+  accuracy/performance measurement; eight examples are regression evidence only.
+- Updated private Fieldnotes summary/evidence/calendar (lib/project-progress.ts),
+  source d125c32e9d9773b4b7db2c905789b9c8c17da8ba.25planner tests, TypeScript and
+  existing-dependency build pass. Supported helper opens/commits/pushes/packages;
+  first terminal had a location error and credential input was refused: stopped,
+  independently verified correct clean source directory and restarted safely.
+  Fresh short-lived credential kept only in memory/hidden stdin; no bypass.
+  Native owner-private deployment appgdep_6adb2fe627e48191b8cc6679cef03ea3 SUCCEEDED,
+  version appgprj_6ad732b9b9448191ba4fba48d8f1b80f~appgver_d5993add84e48191b3a0d9cb1546c7b8,
+  same live URL. Refreshed signed-in browser confirms new prototype/research
+  evidence and daily goal. No D1 user edits, access change or new automation.
+- PROJECT_CONTEXT updated. Open: fresh physical scans; actual Wi-Fi topology,
+  intrinsics/distortion/registration, full extrinsic/time/TF checks, aligned
+  stationary recording, independently reviewed correspondences, real false-
+  association/position/latency evaluation and later subscribe-only ROS adapter.
+  No robot connection, motor command, occupancy overwrite, installed dependency
+  change, Gazebo setup or public GitHub push. Local source snapshots only.
+
 ### Signed-in hosted Fieldnotes verification completed
 
 - User confirms sign-in. Refresh of the existing hosted tab now loads the private
