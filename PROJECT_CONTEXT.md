@@ -19,7 +19,9 @@ Develop and evaluate a camera-based machine-learning system for detecting living
   already implemented locally, not confirmed installed on robot. Planner source
   4626cdb38231df379d77d47b228caa88517a914b privately deployed successfully
   2026-10-23 (deployment appgdep_6adb1c2f768c8191bb578bce7a4cf187); URL unchanged.
-  Hosted browser sign-in required; no authenticated hosted view check yet.
+  User sign-in followed by read-only hosted-browser verification23 October:
+  progress panel/calendar/notes load; next-lab goal and prerequisites expand.
+  No user data edited or production test record created. Phone untested.
   Daily local thread heartbeat keep-fieldnotes-progress-current ACTIVE18:00 Berlin;
   needs running laptop/app and permissions, no unattended-run success assumed.
   Maintenance rules: Documentation/PLANNER_MAINTENANCE.md and AGENTS.md. No live

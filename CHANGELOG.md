@@ -4,6 +4,21 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-23
 
+### Signed-in hosted Fieldnotes verification completed
+
+- User confirms sign-in. Refresh of the existing hosted tab now loads the private
+  planner successfully: reviewed23 October progress panel, evidence categories,
+  updated calendar, two source-work milestones done out of47 displayed goals,
+  existing mission note and the managed handoff note are visible.
+- Selected26 October and expanded the planned read-only inventory/LiDAR diagnosis
+  goal; tentative date and prerequisites render correctly. Observed saved-state
+  indicator. Read-only UI verification only: no goal/note edits, save requests,
+  production test records, new publication or robot connection requested.
+- Recorded screenshot tmp/fieldnotes-hosted-verified-20261023.png and updated
+  PROJECT_CONTEXT.md to resolve the earlier unverified hosted-view checkpoint.
+  Verification is this desktop browser session, not a phone test or successful
+  unattended automation run. Documentation-only whitespace check/local snapshot.
+
 ### Robot software catalogue and private assistant-maintained planner published
 
 - User defers Gazebo; requests dormant-software discovery, a future read-only
