@@ -39,6 +39,10 @@ This file records material changes, research findings, decisions, and experiment
   exclusions; earlier Windows10053 cause remains unresolved. Planner25 tests,
   TypeScript,11 localhost API checks and final portable build pass. Browser preview
   displays evidence panel/revised calendar, no physical or phone-device test.
+  Preview HMR/server output emitted multiple-renderer context warnings while the
+  build/preview ran; no UI failure observed, cause not diagnosed. Do not describe
+  preview logs as warning-free. Owned preview stopped after QA; hosted Site stays
+  deployed. Final Site version2 confirms matching source/archive provenance.
 - Publishing safety initially refused hidden credential input; user explicitly
   approves supported private flow, then source opens normally. Expired source
   credential refreshed without printing/persisting secret. Supported helper pushes
