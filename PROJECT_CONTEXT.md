@@ -6,6 +6,15 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- Gazebo feasibility discussed 2026-10-23, not an approved installation or new
+  thesis requirement. Useful candidate for repeatable camera/planar-LiDAR height,
+  occlusion and spatial-association tests in a separate PC environment. Existing
+  copied simulation/Xacro and Ackermann-named URDF assets are not a verified car
+  simulation. Physical ROS1 Melodic stays unchanged; modern ROS2/Gazebo integration
+  requires explicit adapters/porting and cannot run the current Hub unchanged by
+  assumption. Classic reached EOL January2025. PC/GPU/resources, version choice,
+  model calibration and setup effort unassessed; real sensor/YOLO/Jetson/hardware
+  validation remains necessary. No software installed, simulation run or deployment.
 - GitHub setup COMPLETE 2026-10-22: user authenticated and pushed main to public
   KacangPool/Indoor-Robot-Thesis-. Local HEAD, origin/main and actual remote main
   independently matched f9738808104facca710ef67acf285830679a4183 before the

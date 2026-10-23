@@ -2,6 +2,32 @@
 
 This file records material changes, research findings, decisions, and experiments so the project can continue reliably across different chats.
 
+## 2026-10-23
+
+### Gazebo feasibility assessed — optional isolated simulation, not installed
+
+- User asks whether Gazebo could help future development. Official Gazebo sensor,
+  ROS integration and installation documentation supports simulated sensors and
+  topic adapters. Proposed benefit: repeatable planar-LiDAR/camera height and
+  occlusion cases, spatial association and later mapping/controller tests at home.
+  Rendered images and idealized scans cannot establish real Astra/laser accuracy,
+  real YOLO performance, Jetson timing or physical driving/stopping behaviour.
+- Existing copied assets include meca_wheel camera/lidar Xacros and a diff-drive
+  Gazebo plugin, plus several wheeltec Ackermann-named URDFs. These are candidates,
+  not a verified matching or runnable model of the physical car. No complete
+  asset/dependency/geometry/controller audit or simulator execution performed.
+- Compatibility constraint: physical stack remains ROS1 Melodic; Classic ROS1
+  integration is legacy and Gazebo Classic reached EOL January2025. Official
+  supported modern pairing includes Ubuntu24.04/ROS2 Jazzy/Gazebo Harmonic;
+  ros_gz_bridge is ROS2/Gazebo transport, not a direct Melodic adapter. Recommend
+  evaluating an isolated PC environment, not upgrading the robot or assuming the
+  current ROS1 Hub will connect unchanged. Version/PC resources/adapters undecided.
+- Sources checked 2026-10-23: gazebosim.org/docs/harmonic/{sensors,
+  ros_installation,ros2_integration}/ and classic.gazebosim.org ROS1 installation
+  tutorial. Recorded feasibility in PROJECT_CONTEXT.md; no installation, code,
+  model/physical tests, robot/network changes or GitHub publication authorized.
+  Documentation-only verification: local asset reads and git diff --check.
+
 ## 2026-10-22
 
 ### GitHub publication verified — source synchronized and hosted checks passed
