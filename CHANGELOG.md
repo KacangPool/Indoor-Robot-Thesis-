@@ -4,6 +4,64 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-23
 
+### Robot software catalogue and private assistant-maintained planner published
+
+- User defers Gazebo; requests dormant-software discovery, a future read-only
+  robot inventory, ongoing automatic notes/calendar maintenance and yesterday's
+  modular/clean-code updates. v0.13/v0.14 code foundations were already implemented;
+  no redundant rewrite, new model choice or Jetson deployment performed.
+- New reusable fahad_core/inventory.py and explicit robot_inventory.py index
+  bounded package/launch XML without imports/execution; fixed optional --robot
+  commands inspect sourced package discovery, registered nodes/topics/services,
+  OS/ROS and selected installed package versions. Eight-second command deadlines,
+  bounded output/XML/traversal, explicit unavailable/failure/timeout statuses,
+  no sudo/parameter dump/raw message echoes/launches. Reports refuse overwrite.
+  Existing diagnostic bundle and Python3.6 grammar checks include the new entry.
+- Offline copied-source index finds75 package manifests/273 launch declarations,
+  no XML issues. Catalogue groups vision/tracking, mapping/navigation, streaming,
+  speech and arm candidates; v3 launch selects v3-tiny, v4 launch references
+  v4-tiny config. Source presence never proves installed dependencies, hardware
+  or operation. No robot connection/full physical-machine scan from home.
+  Private report tmp/robot_inventory/copied_source_20261023.json, guide
+  Documentation/ROBOT_SOFTWARE_CATALOGUE.md includes next-lab transfer/run/readback.
+- Private Fieldnotes adds pure lib/project-progress.ts view composition and
+  components/project-progress.tsx: dated evidence/status panel, next-lab blockers,
+  revised calendar and project handoff note. Replaces only untouched old defaults
+  in the VIEW; preserves personal edits/deletions/notes and D1 records/revisions.
+  Managed records read-only; calendar export matches view, personal JSON backup
+  remains original stored data. Guide's stale rehearsal-only claim corrected;
+  guide commands cannot complete/move managed goals. No live AI/telemetry claim.
+  Removed generated tsconfig.tsbuildinfo from Site tracking only; local cache
+  retained and ignored, previous committed version remains recoverable in history.
+- Verification: eight new inventory tests; full quality report
+  tmp/quality_reports/20261023_102622_1d624a69 passes: Tools72, dashboard261,
+  Hub53 pass/one Windows symlink skip, JS/static/config checks pass. No retries or
+  exclusions; earlier Windows10053 cause remains unresolved. Planner25 tests,
+  TypeScript,11 localhost API checks and final portable build pass. Browser preview
+  displays evidence panel/revised calendar, no physical or phone-device test.
+- Publishing safety initially refused hidden credential input; user explicitly
+  approves supported private flow, then source opens normally. Expired source
+  credential refreshed without printing/persisting secret. Supported helper pushes
+  Site commit4626cdb38231df379d77d47b228caa88517a914b and packages matching archive
+  tmp/fieldnotes_20261023_progress.tar.gz. Native private deployment
+  appgdep_6adb1c2f768c8191bb578bce7a4cf187 SUCCEEDED, saved version
+  appgprj_6ad732b9b9448191ba4fba48d8f1b80f~appgver_e9f5314947a88191b149e0e89fc0e1a9.
+  Live URL https://fahad-robot-fieldnotes.crispswift256.chatgpt.site preserved.
+  Hosted browser reaches normal sign-in gate; authenticated hosted view not yet
+  checked. No access weakening or production user-data write used for verification.
+- Local thread heartbeat keep-fieldnotes-progress-current created ACTIVE for
+  daily18:00 Europe/Berlin, saved rule/target verified. Reads verified continuity
+  and maintains private planner only when material changes; quiet otherwise.
+  Needs laptop/app/project/permissions; not an always-on cloud writer or proof an
+  unattended publish ran. Native legacy tool alias unavailable; supported MCP
+  automation tool succeeds, no duplicate. Instructions persisted in AGENTS.md and
+  Documentation/PLANNER_MAINTENANCE.md; PROJECT_CONTEXT/Tools README/quality guide
+  updated. Sites skill preserves audience/source history and source-before-deploy.
+  Official scheduled-task documentation checked for local execution constraints.
+- Open: actual installed/active software, fresh physical /scan, calibration/TF/
+  timing and association remain unverified. No robot motion/runtime/vendor/network
+  change, dependency upgrade, custom training or public GitHub push this session.
+
 ### Gazebo feasibility assessed — optional isolated simulation, not installed
 
 - User asks whether Gazebo could help future development. Official Gazebo sensor,

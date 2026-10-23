@@ -1,5 +1,12 @@
 # Everyday project workflow — v0.14
 
+Follow-up: reviewed source is now published to the user-selected public GitHub
+repository and hosted checks passed on 22 October. The local-only/no-remote
+paragraph below records the original foundation checkpoint, not current status.
+See [the current GitHub workflow](GITHUB_WORKFLOW.md). No robot deployment follows
+from source publication. Assistant-maintained private progress/calendar workflow:
+[Fieldnotes maintenance](PLANNER_MAINTENANCE.md).
+
 Implemented locally on 2026-10-22. No robot connection, update or motion request.
 These additions support the existing tools; they are not a new framework or a
 claim that the unresolved LiDAR issue has been fixed.

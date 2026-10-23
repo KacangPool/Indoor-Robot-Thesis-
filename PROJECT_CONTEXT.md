@@ -6,6 +6,25 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- Follow-up 2026-10-23: Gazebo explicitly deferred, retained as optional future
+  tool; campus Wi-Fi still parked. Copied-source inventory finds75 manifests and
+  273 launch declarations (not confirmed installed/working capabilities). New
+  bounded read-only robot inventory tool + shared parser and bundled-copy guide
+  prepared; physical execution still pending next lab. Prioritise fresh /scan,
+  sensor calibration/TF/time and validated camera–LiDAR association over demos.
+- User authorizes ongoing private Fieldnotes maintenance from this chat, not robot
+  control or public publication. Source-backed reviewed progress/calendar overlay
+  preserves edited personal goals/notes and D1 data; new evidence panel distinguishes
+  source-tested, user-observed and blocked work. Yesterday's modular/quality work
+  already implemented locally, not confirmed installed on robot. Planner source
+  4626cdb38231df379d77d47b228caa88517a914b privately deployed successfully
+  2026-10-23 (deployment appgdep_6adb1c2f768c8191bb578bce7a4cf187); URL unchanged.
+  Hosted browser sign-in required; no authenticated hosted view check yet.
+  Daily local thread heartbeat keep-fieldnotes-progress-current ACTIVE18:00 Berlin;
+  needs running laptop/app and permissions, no unattended-run success assumed.
+  Maintenance rules: Documentation/PLANNER_MAINTENANCE.md and AGENTS.md. No live
+  AI/robot access. Source checks: Tools72/dashboard261/Hub53+one skip; planner25,
+  TypeScript/build/API11 pass. No robot deployment or physical test from home.
 - Gazebo feasibility discussed 2026-10-23, not an approved installation or new
   thesis requirement. Useful candidate for repeatable camera/planar-LiDAR height,
   occlusion and spatial-association tests in a separate PC environment. Existing

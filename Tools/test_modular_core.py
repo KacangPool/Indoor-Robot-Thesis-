@@ -64,6 +64,8 @@ class ModularTests(unittest.TestCase):
             with zipfile.ZipFile(archive) as bundle:
                 names=set(bundle.namelist());self.assertIn('fahad_core/__init__.py',names)
                 self.assertIn('fahad_core/camera_metrics.py',names)
+                self.assertIn('robot_inventory.py',names)
+                self.assertIn('fahad_core/inventory.py',names)
                 self.assertEqual(names,set(manifest['files'])|{'tool_bundle_manifest.json'})
                 for name,digest in manifest['files'].items():self.assertEqual(hashlib.sha256(bundle.read(name)).hexdigest(),digest)
                 bundle.extractall(Path(folder)/'isolated')  # our own fixed-name bundle, not an untrusted ZIP

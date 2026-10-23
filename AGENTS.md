@@ -60,6 +60,21 @@ See Documentation/QUALITY_WORKFLOW.md for the implemented foundations and staged
 lab-dependent work. CHANGELOG.md and PROJECT_CONTEXT.md still require updates as
 specified above. Keep code changes separate from robot deployment authority.
 
+## Assistant-maintained planning website
+
+The user requested ongoing progress/calendar maintenance on 2026-10-23. After
+material work, update the private Fieldnotes project summary and dated roadmap
+using verified project records, in addition to CHANGELOG/PROJECT_CONTEXT. Reuse
+Sites/fieldnotes/lib/project-progress.ts and the Sites skill; preserve private
+access, personal notes/goals and source history. Separate source-tested,
+user-observed, blocked and planned states. Do not mark hardware work complete
+from elapsed dates or code tests. No robot telemetry or live chatbot is implied.
+Publish through supported Sites tools and verify deployment before claiming live
+updates; disclose blockers. Never expose source credentials or raw/private data,
+or treat planner maintenance as robot/deployment/public-GitHub authorization.
+See Documentation/PLANNER_MAINTENANCE.md. A local daily review supplements active
+work; it does not guarantee updates while the laptop/app are off.
+
 ## Public repository scope
 
 The user explicitly authorized the initial reviewed source upload to

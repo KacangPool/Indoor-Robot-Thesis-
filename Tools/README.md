@@ -82,6 +82,12 @@ the existing NumPy installation; this refactor does not install dependencies.
 
 ## Offline checks
 
+New read-only feature discovery: `robot_inventory.py` uses the sibling
+`fahad_core/inventory.py` to catalogue explicit source trees. `--robot` adds fixed,
+bounded installed/registered observations; no launch, echo payload, sudo or motion.
+See [the software catalogue and next-lab commands](../Documentation/ROBOT_SOFTWARE_CATALOGUE.md).
+The diagnostic bundle includes both files. Source presence is not working hardware.
+
 Use an existing Python environment with NumPy for the root tools suite, the
 existing Hub environment for its SSH tests, and Node for JavaScript tests:
 
