@@ -2,6 +2,11 @@
 
 ## Working topic
 
+Continuity snapshot: Documentation/PROJECT_HANDOVER.md (reviewed 2026-10-24)
+summarizes scope, evidence levels, modules, verified results, blockers and the
+next-lab checklist without credentials/private data. It is documentation, not
+new hardware validation; use CHANGELOG.md for subsequent changes.
+
 Develop and evaluate a camera-based machine-learning system for detecting living beings during indoor search-and-rescue missions. The available robot is the deployment/test platform. User decision on 2026-10-14: use the working pretrained YOLO detector without custom training and focus implementation on camera-LiDAR association, spatial labels and evaluation, rather than a new detector architecture. Final thesis contribution/evaluation requirements still need lecturer alignment.
 
 ## Agreed implementation direction (2026-10-14)
@@ -23,9 +28,10 @@ Develop and evaluate a camera-based machine-learning system for detecting living
   Existing raw-image YOLO versus rectified prototype inputs must be resolved by
   a validated later adapter, not assumed compatible. Contract/run guide:
   Documentation/FUSION_PROTOTYPE_V01.md. Existing motor/driver code unchanged.
-- Current private planner source d125c32e9d9773b4b7db2c905789b9c8c17da8ba deployed
-  successfully23 October (appgdep_6adb2fe627e48191b8cc6679cef03ea3); signed-in view
-  confirms research/prototype progress while physical fusion remains blocked.
+- Current private planner source 26af85d2655721409c40c1bc18e0382881626909 deployed
+  successfully24 October with a documentation-only handover status addition.
+  Signed-in hosted read verification was23 October, not repeated24 October;
+  physical fusion remains blocked, not completed by this planner update.
   Personal D1 records untouched. Shared-Wi-Fi testing remains a future lab task;
   Gazebo deferred. Occupancy-map grey is unknown, not confirmed traversable;
   existing-map geometry and separate semantic observation layer remain distinct.

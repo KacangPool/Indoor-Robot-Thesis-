@@ -2,6 +2,38 @@
 
 This file records material changes, research findings, decisions, and experiments so the project can continue reliably across different chats.
 
+## 2026-10-24
+
+### Detailed privacy-safe project handover
+
+- Added Documentation/PROJECT_HANDOVER.md at the user's request: goals and
+  pretrained-detector scope, evidence-qualified hardware, decisions, completed
+  work, module/document map, offline fusion contract, historical verification,
+  unresolved problems and dependency-ordered lab/at-home next steps.
+- Makes missing fresh /scan messages, absent /map publisher, unvalidated
+  calibration/timing and raw-versus-rectified input the immediate blockers.
+  Source-tested/synthetic/user-observed/planned states remain distinct. No new
+  experiment, robot deployment, speed change or public GitHub push.
+- Reviewed source records, relevant experiment reports, latest offline summary
+  and actual local/cached remote commits. The handover excludes credentials,
+  personal notes, raw participant data, device identifiers, private network
+  addresses and private hosting identifiers. Added PROJECT_CONTEXT pointer.
+- Verification: all 18 Markdown file links resolve; read-only pattern checks
+  find no URLs, IP addresses, local absolute user paths or credential/hosting
+  identifier patterns in the handover. This is not a guarantee from a secret
+  detector. Documentation diff whitespace check passed. Existing code-suite
+  results are dated 23 October, not presented as a new run.
+- Private planner: lib/project-progress.ts reviewed date/revision and one
+  documentation-status evidence item updated; report timestamp follows reviewed
+  date. No personal database writes or planned experiment completion changes.
+  All 25 core tests, TypeScript and production build passed; build emitted plugin
+  timing warnings, not errors. No new browser/UI or production API test this
+  session. Supported source/package workflow pushed private planner commit
+  26af85d2655721409c40c1bc18e0382881626909; native owner-private deployment
+  returned succeeded on 24 October. No private audience change. Public robot
+  repository was not pushed. Robot suites were not rerun for this documentation
+  and planner-metadata-only change; their dated historical results are retained.
+
 ## 2026-10-23
 
 ### Main fusion work resumed — primary research and offline prototype v0.1
