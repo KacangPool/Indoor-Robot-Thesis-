@@ -4,6 +4,26 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-24
 
+### Authorized public-source synchronization
+
+- User explicitly requested pushing the saved handover to GitHub. Reviewed the
+  six pending commits through 7199c61: handover, earlier offline fusion/inventory
+  source and continuity documentation (22 source files), not raw experiments,
+  recordings, vendor archives or the separate private Fieldnotes repository.
+- Fetched origin before publication: no remote-only commits; local main was six
+  commits ahead of origin/main. Preserve history with an ordinary fast-forward
+  push, never force-push. No robot deployment, physical test, code modification
+  or motion-limit change is included in this synchronization.
+- Pre-push committed-history audit passed: 15 reachable commits, 217 distinct
+  blobs, no unresolved issues; one exact previously reviewed synthetic
+  redaction-test marker. Reviewed outgoing context changes and whitespace check
+  passed. The audit is best-effort, not a confidentiality guarantee. This entry
+  records publication preparation; actual remote head and any new Actions run
+  must be checked after pushing, not inferred from these local checks.
+- Existing hardware/planner progress is unchanged; no roadmap experiment is
+  marked complete by Git publication. Historical offline results remain dated
+  23 October; new hosted checks are not claimed successful before observation.
+
 ### Detailed privacy-safe project handover
 
 - Added Documentation/PROJECT_HANDOVER.md at the user's request: goals and
