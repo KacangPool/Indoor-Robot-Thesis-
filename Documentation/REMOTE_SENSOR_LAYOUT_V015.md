@@ -123,6 +123,18 @@ still needs independent RGB/depth edge correspondence checks. The copied float
 conversion divides raw millimetres by1000 (1575), supporting expected metres for
 that implementation;32FC1 alone specifies representation, not accuracy/units.
 
+Runtime parameter follow-up: user reads depth_registration=true,
+depth_ir_offset_x=5.0 and depth_ir_offset_y=4.0. These match the copied driver's
+configuration and strengthen the metadata-path explanation, without proving
+binary identity, correct pixel registration or depth accuracy. Leave parameters
+unchanged. Next experiment is a stationary RGB/depth edge comparison using a
+plain box at about1m, centre and off-centre, with farther background. The existing
+box_depth_viewer provides side-by-side/overlay inspection but requires the robot's
+graphical desktop and its shared module; plain SSH does not provide that window.
+Choose a working GUI or a separate read-only browser inspection path before
+issuing launch commands. Do not switch coordinate models or correct offsets by
+hand based solely on parameter equality. No new experiment result yet.
+
 Next, in the sourced robot SSH terminal while stationary:
 
 ```bash

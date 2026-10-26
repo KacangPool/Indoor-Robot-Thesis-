@@ -11,6 +11,12 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- Runtime camera parameters supplied26October: depth_registration=true,
+  depth_ir_offset_x=5.0, depth_ir_offset_y=4.0. Consistent with copied-driver
+  metadata explanation, not proof of binary identity/registration accuracy.
+  Parameters unchanged. Next: stationary RGB/depth edge comparison (plain box
+  near1m and off-centre), not more guessed TF or pixel adjustments. Existing
+  GUI helper needs graphical desktop; choose available display before running.
 - Depth image follow-up26October:32FC1, RGB optical frame, nodelet-manager
   publisher; separate registered CameraInfo sample uses depth optical frame.
   Copied Astra code changes image frame when depth_registration is enabled but

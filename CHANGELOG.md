@@ -4,6 +4,20 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-26
 
+### Runtime registration defaults confirmed; next step is visual correspondence
+
+- User supplies depth_registration=true and depth_ir_offset_x/y=5.0/4.0. This
+  supports the copied Astra metadata-path explanation; does not prove installed
+  binary identity or pixel/depth accuracy. No ROS parameter or vendor code edited.
+- Updated context/v0.15 lab notes. Reviewed existing box_depth_viewer source and
+  prior lab result: shared-module GUI with optional overlay and50ms approximate
+  pairing, no motion writes. It requires a robot graphical desktop, not plain
+  SSH. Need available display path before guiding a stationary near1m box-edge
+  correspondence test. No new visual/alignment result, map, calibration or motion.
+- Documentation-only verification: whitespace check before local snapshot. No code
+  suite rerun or public push; planner's high-level calibration/TF-pending status
+  remains current, while incremental parameter evidence stays in local records.
+
 ### Depth image versus CameraInfo: copied-driver explanation candidate
 
 - User reports actual registered depth image32FC1/RGB optical frame and a
