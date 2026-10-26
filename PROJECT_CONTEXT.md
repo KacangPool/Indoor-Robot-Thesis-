@@ -11,6 +11,14 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- Corrected metadata follow-up26October: depth_registered/camera_info publishes
+  640x480 in camera_depth_optical_frame; principal points in K/P differ from RGB
+  by5pixelsX/4pixelsY (same supplied focal lengths/distortion). This flags an
+  unvalidated registration/publisher convention, not a confirmed device fault or
+  authorization to shift pixels manually. Need actual depth image header/encoding
+  and publisher/driver evidence. date -u confirms robot15October2026; robot epochs
+  agree with that date, while client date26October. Internal ROS relative timing
+  may still work; cross-host synchronization/provenance remains unverified.
 - Live sensor update2026-10-26: user terminal output confirms one /lsn10
   publisher and fresh physical /scan delivery around10.01Hz. Earlier missing
   messages are not present in this check; their prior cause is not established.

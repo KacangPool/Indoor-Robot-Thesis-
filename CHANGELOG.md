@@ -4,6 +4,25 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-26
 
+### Registered-depth metadata and robot clock follow-up
+
+- Correctly spelled camera_info now returns640x480, depth optical frame, focal
+  lengths/distortion matching earlier RGB report but K/P principal points offset
+  5pixels horizontally/4vertically. Recorded in PROJECT_CONTEXT.md and v0.15 lab
+  notes. Registration remains unvalidated; no blind pixel-shift correction or
+  claim that the camera is broken. Next bounded checks inspect actual depth image
+  header/encoding and publisher before using RGB pixel coordinates for depth.
+- Robot date -u confirms15October2026, matching provided ROS epochs but differing
+  from client26October. This does not by itself break same-robot relative timing.
+  No clock, ROS parameter, transform, calibration or motion change performed.
+- Local v0.15 source snapshot af74c87 is complete, not installed on robot or
+  pushed to public GitHub. Planner's current high-level calibration/TF-pending
+  status remains accurate; latest numeric metadata stays in local project records,
+  not copied as raw terminal output to the private planner. No new milestone or
+  experiment completion is inferred from these incremental metadata observations.
+- Documentation-only follow-up; whitespace checked before local snapshot. Existing
+  offline v0.15 verification is historical to this follow-up, not rerun hardware.
+
 ### Sensor-first console v0.15 and fresh physical LiDAR evidence
 
 - User requests camera/LiDAR enlargement following an annotated sketch, corrected

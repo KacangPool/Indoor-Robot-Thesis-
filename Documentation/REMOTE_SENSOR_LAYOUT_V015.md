@@ -93,6 +93,18 @@ the final o), so its warning is not evidence that camera_info is unavailable.
 /use_sim_time is unset; robot date -u output and correctly spelled CameraInfo
 are still pending. No clock/parameter change is indicated by that alone.
 
+Corrected follow-up: registered-depth CameraInfo does publish, at640×480 in
+camera_depth_optical_frame. Its raw and rectified principal points are5 pixels
+left and4 pixels above the previously reported RGB values; focal lengths and
+distortion coefficients match those reports. This mismatch is a registration
+verification warning, not proof of a faulty camera or a justified manual pixel
+shift. Inspect the actual depth image header/encoding and publisher/driver path
+before assuming that its pixels align with RGB detections. Robot date -u confirms
+15October2026, consistent with its supplied message epochs but different from
+this client's26October date. Same-robot relative timing may still be coherent;
+host/robot timestamp comparison needs a documented common clock. Do not change
+time during an active experiment. No calibration/TF/time changes made.
+
 Next, in the sourced robot SSH terminal while stationary:
 
 ```bash
