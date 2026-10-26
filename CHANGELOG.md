@@ -2,6 +2,32 @@
 
 This file records material changes, research findings, decisions, and experiments so the project can continue reliably across different chats.
 
+## 2026-10-26
+
+### University-network testing paused; lab priorities reviewed
+
+- User explicitly asks not to proceed with university-network/eduroam access or
+  testing due to institutional-rule concerns. Record the pause, not a legal
+  conclusion; no network probing, configuration or credentials requested.
+  Continue using the established robot-hosted connection.
+- Updated PROJECT_CONTEXT.md and added a dated scope override to the historical
+  PROJECT_HANDOVER.md so its optional network step cannot be mistaken for current
+  approval. Reminder separates implemented/source-tested modular tools and eight
+  synthetic fusion cases from unverified live integration and installed versions.
+- Next lab: stationary startup/status, bounded read-only inventory, fresh /scan
+  delivery, then RGB/registered-depth/CameraInfo/TF/timing and measured mounting.
+  Real aligned recording/replay precedes a live read-only fusion adapter; map
+  labels remain separate from occupancy. No physical result reported this turn.
+- Private planner maintenance attempted through Sites after checking owner-only
+  access. The supported source-opening hidden-input operation hit an automatic
+  permission-review deadline; no Site source edit or publication is claimed.
+  The hosted planner therefore still has its older Wi-Fi wording; this local
+  decision overrides it. No bypass or credential exposure. Follow-up publication
+  remains pending; no personal data or experiment status was changed.
+- Documentation-only change; no robot code, speed limit, package or public GitHub
+  change. Whitespace check passed and all 18 handover file links resolve. Robot
+  suites not rerun for documentation-only edits; no new hardware test claimed.
+
 ## 2026-10-24
 
 ### Authorized public-source synchronization

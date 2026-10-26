@@ -11,6 +11,13 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- Network scope update2026-10-26: user explicitly pauses university/eduroam
+  connection and peer-connectivity testing due to concerns about institutional
+  permission/rules. Do not configure, probe or resume that path without renewed
+  user direction and appropriate permission clarification. Use the established
+  robot-hosted local connection instead. No finding about legality is asserted.
+  Today's lab focus is stationary inventory, fresh /scan delivery, camera/depth
+  and calibration/timing evidence; no new hardware result has yet been supplied.
 - Main fusion work resumed2026-10-23: primary software/paper review confirms
   existing2Dlaser/camera people-fusion approaches, but no inspected package is a
   verified drop-in for this Melodic/low-camera robot. Keep existing YOLO; no new

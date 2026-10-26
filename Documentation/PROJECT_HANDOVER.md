@@ -2,6 +2,8 @@
 
 Last reviewed: **24 October 2026**. This is a documentation snapshot, not a claim that the robot was tested on this date. Source baseline before this handover: local commit `00ffa9f99240dca3e7264e450673995bea2971bc`.
 
+**Scope update — 26 October:** university-network/eduroam configuration and connectivity testing are paused at the user's request pending permission clarification and renewed direction. Use the existing robot-hosted connection. This overrides the optional infrastructure-network test below; no new physical sensor result is implied.
+
 ## 1. Start here
 
 The camera, existing YOLO detector, remote viewing and manual driving have worked in user-reported lab sessions. A conservative camera–2D LiDAR fusion prototype now exists and passes offline tests, but it has **not** been validated on synchronized real sensor recordings or run as live fusion on the robot.
