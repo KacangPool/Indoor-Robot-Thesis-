@@ -33,7 +33,7 @@
 .scan-readout dd{margin:0;text-align:right}
 @media(max-width:600px){.lidar-content{grid-template-columns:1fr}}
 
-/* Recording cockpit: the centre is vision, left is telemetry, right is input. */
+/* Recording cockpit: large camera left, scan above controls, readings right. */
 .panel-details{margin:8px 16px;font-size:11px;color:var(--muted)}
 details summary{cursor:pointer;color:var(--mint);font-size:11px}
 .ramp-readout span{display:block;font-size:9px;margin-top:3px}
@@ -46,7 +46,7 @@ details summary{cursor:pointer;color:var(--mint);font-size:11px}
   .heading{margin-bottom:8px;min-height:30px}.heading h1{font-size:18px;margin:0}.heading .eyebrow{display:none}
   .mode-tag{padding:4px 9px;font-size:10px}
   .safety-banner{padding:7px 12px;margin-bottom:10px;font-size:11px;border-radius:6px}
-  .workspace{flex:1;min-height:0;gap:10px;padding:8px;border:1px solid var(--line);border-radius:14px;background:#0a1016;grid-template-columns:170px minmax(0,1fr) 245px;grid-template-rows:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:'readings camera controls' 'readings lidar controls'}
+  .workspace{flex:1;min-height:0;gap:10px;padding:8px;border:1px solid var(--line);border-radius:14px;background:#0a1016;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr) 165px;grid-template-rows:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:'camera lidar readings' 'camera controls readings'}
   .panel{min-height:0;border-radius:9px}
   .health-panel{grid-area:readings;overflow:auto}
   .camera-panel{grid-area:camera;display:flex;flex-direction:column}
@@ -54,11 +54,12 @@ details summary{cursor:pointer;color:var(--mint);font-size:11px}
   .control-panel{grid-area:controls;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
   .panel-head{padding:10px 14px;gap:7px}.panel-head h2{font-size:14px}.panel-head .eyebrow{font-size:9px}
   .camera-stage{flex:1;min-height:0;max-height:none;width:calc(100% - 20px);margin:0 10px;aspect-ratio:auto;border:1px solid #476170;border-radius:6px;overflow:hidden;box-shadow:0 0 0 3px #080e13}
+  .camera-stage img{object-fit:fill}
   .camera-footer{padding:7px 12px;font-size:9px;border:0}.camera-footer code{font-size:9px}
   .empty-state{padding:12px}.empty-state p{font-size:11px}.viewfinder{margin-bottom:10px}
   .camera-overlay{top:10px;left:10px;right:10px;font-size:10px}
   .lidar-content{display:block;flex:1;min-height:0;padding:0 10px 4px}
-  .lidar-content canvas{height:100%;object-fit:contain;background:#0e171e}
+  .lidar-content canvas{height:100%;background:#0e171e}
   .scan-colour-select select{padding:4px;font-size:10px;max-width:175px}
   .lidar-panel .panel-head{padding:8px 12px}.lidar-panel h2{font-size:12px}
   .lidar-panel>.footnote{margin:3px 12px;padding:0;font-size:9px;line-height:1.35}

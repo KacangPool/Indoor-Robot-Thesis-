@@ -4,6 +4,68 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-26
 
+### Sensor-first console v0.15 and fresh physical LiDAR evidence
+
+- User requests camera/LiDAR enlargement following an annotated sketch, corrected
+  car heading, RViz-like shading,0.50m/s maximum and guidance for lab tests.
+  Desktop grid now camera left spanning both rows, scan above controls, compact
+  readings right; camera fills without cropping through explicit preview-only
+  stretching. Metric scan buffer follows panel size without stretching axes.
+- sensor_models.py exports at most720 original-index finite valid rays plus
+  original angular width. sensor_view.js shades individual observed segments
+  within4m and range_min, provisional3cm endpoint margin; omitted/invalid/infinite
+  beams/gaps/background remain grey unknown. No interpolation, saved map, SLAM,
+  footprint clearance or obstacle avoidance. Existing distance colours and real
+  OccupancyGrid display remain separate; grey is not traversability.
+- Removed guessed body orientation at scan-only laser origin; labelled sensor
+  marker remains. Map car still requires existing fresh body TF; front arrow
+  marks local+X. Physical mount/direction still needs TF/reference verification,
+  not a hardcoded180degree flip. Motion modules/guards unchanged;0.50 request
+  not enabled because earlier feedback faults/stopping remain unverified.
+- Updated versions in settings.py/Hub agent.py, frontend/index/CSS, focused tests,
+  Hub/dashboard READMEs, context/handover and new REMOTE_SENSOR_LAYOUT_V015.md.
+  Same17file checksum runtime; no new dependencies, robot upload, service change
+  or public GitHub push. Current screenshot is runningv0.14, not deployment proof.
+- User pasted bounded topic checks: one /lsn10 publisher and /scan9.966–10.015Hz
+  (~10.01Hz overall), normal observed intervals around0.096–0.107s. /map has no
+  publisher. This resolves missing fresh delivery in this session only, not the
+  historical root cause, clock alignment or map/fusion validation. Next checks
+  read laser/body TF, CameraInfo and exact topic names while stationary.
+- Subsequent user output: base_footprint missing and visible TF tree camera-only;
+  no laser/body orientation established. RGB CameraInfo640x480/plumb_bob/nonzero
+  distortion; raw K differs from rectified P. Topic list includes registered
+  depth and rectified RGB, not evidence of delivery/registration. RGB epoch
+  converts to15October14:13:16UTC versus client26October; clock domains/mode need
+  read-only inspection before host/robot fusion timing, no time/TF changes made.
+- Registered-depth rate then supplied: around29.75Hz, not registration/accuracy
+  validation. The camera_inf command omitted the final o, so its no-publisher
+  warning does not diagnose the correctly named topic. /use_sim_time unset;
+  requested correct CameraInfo and omitted date -u output, no restart/time edits.
+- Verification: full offline run tmp/quality_reports/20261026_103831_86871948
+  passes97Tools,262dashboard,Hub53passes/one Windows symlink skip and all JS,
+  configuration, syntax/runtime checks. Focused24speed/scan tests and91frontend
+  checks pass; renderer checks cover gaps/stale/invalid/blind range/bounds/resize.
+  Initial run103704_b273a42a retained: sandbox temp/runtime permission failures
+  plus old layout assertion; corrected intentional layout contract and reran
+  with normal permissions, not exclusions or automatic HTTP-abort retries.
+  A focused invocation initially had an incorrect working-directory path.
+- Motor-free preview attempted in isolated localhost server on8876, never the
+  live8765 controller. Browser access timed out even after normal-permission
+  preview startup, so no screenshot/visual or phone QA success claimed. No
+  Jetson execution, calibration, speed/stopping test or live new-renderer claim.
+- Private planner: preserved fetched24October continuation f102b4b history, updated
+  source progress/26October partial roadmap and university-network pause without
+  personal data writes or falsely completing experiments. Initial calendar title
+  assertions failed after title change, then due valid ICS semicolon escaping;
+  updated the expected title fragment while retaining separate escaping/folding
+  tests. All25core tests,TypeScript and production build pass; plugin timing
+  warnings remain. No new production API/browser verification. Supported helper
+  pushed and packaged56da7b24ffe594019a76e059c951769a567e8fab; native owner-private
+  deployment succeeded26October. Earlier permission timeout is not current.
+  Root docs retain the latest depth-rate/typo/clock follow-up; planner summarizes
+  this session through initial TF/RGB metadata and still-pending calibration.
+  University-network pause unchanged; no personal/raw data/public GitHub upload.
+
 ### University-network testing paused; lab priorities reviewed
 
 - User explicitly asks not to proceed with university-network/eduroam access or

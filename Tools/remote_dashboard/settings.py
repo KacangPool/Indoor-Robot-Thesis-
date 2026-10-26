@@ -2,7 +2,7 @@
 
 No ROS imports, dynamic topic configuration or robot side effects.
 """
-VERSION = '0.14'
+VERSION = '0.15'
 
 ASSETS = {'/': ('index.html', 'text/html; charset=utf-8'),
           '/app.js': ('app.js', 'application/javascript; charset=utf-8'),

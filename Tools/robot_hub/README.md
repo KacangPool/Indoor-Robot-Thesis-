@@ -1,6 +1,17 @@
 # Fahad Robot Hub · Windows
 
-## Latest source v0.14 — diagnostics and quality foundations (2026-10-22)
+## Latest source v0.15 — sensor-first console (2026-10-26)
+
+Installs the same 17-file runtime contract with a large left camera, LiDAR above
+controls and compact right readings. Scan-only shading distinguishes unknown
+from individual observed beam sectors, not guaranteed clearance or saved SLAM.
+An unverified laser-frame car heading is no longer shown. See
+`Documentation/REMOTE_SENSOR_LAYOUT_V015.md`. Keep the sibling source folders
+together; Stop, confirm stationary and close old controllers/Hub before preparing
+the update. Speed remains 0.30 m/s and all motion guards are unchanged. New source
+is not proof of installation, physical direction or Jetson compatibility.
+
+## Previous source v0.14 — diagnostics and quality foundations (2026-10-22)
 
 The existing Save report button now writes a bounded allowlisted diagnostic
 snapshot with explicit age/demo evidence and sensor-stream issue codes. It does
@@ -125,7 +136,7 @@ unknown/changed identities. Existing Windows SSH use may already have saved it.
 
 - Reuses registered camera/YOLO, LiDAR and the expected isolated base when healthy.
 - Starts missing services with fixed launch commands, not arbitrary user commands.
-- Updates the **personal trial dashboard** to v0.14, with checksums and backups.
+- Updates the **personal trial dashboard** to v0.15, with checksums and backups.
 - Opens a private, laptop-loopback SSH tunnel and shows running version/speed.
 - Shows freshness/readiness separately from merely registered ROS nodes.
 - Offers service logs, status-report export, check-only and software Stop.

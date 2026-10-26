@@ -11,6 +11,32 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- Live sensor update2026-10-26: user terminal output confirms one /lsn10
+  publisher and fresh physical /scan delivery around10.01Hz. Earlier missing
+  messages are not present in this check; their prior cause is not established.
+  /map has no publisher. Sensor acquisition clock/frame calibration and live
+  camera-LiDAR association remain unverified; do not infer a map from fresh scans.
+- Follow-up TF check finds base_footprint absent; only camera_link and RGB/depth
+  optical chains visible. No confirmed laser/body transform. RGB CameraInfo
+  publishes640x480 plumb_bob/nonzero distortion, raw K distinct from rectified P;
+  calibration accuracy not verified. Registered-depth and rectified-RGB topics
+  are listed, not proven delivering/registered. Header epoch corresponds to
+  15October while client date26October; inspect ROS/robot clock domains before
+  mixing host acquisition records, not an authorization to change clocks/TF.
+- Registered-depth delivery subsequently confirmed around29.75Hz. Correctly
+  spelled depth_registered/camera_info and robot UTC date remain pending: the
+  user's camera_inf typo timed out and /use_sim_time is unset. Do not treat the
+  typo as a broken camera or delivery rate as depth/registration accuracy.
+- Source v0.15 follows the user's large-camera-left sketch: scan above controls,
+  compact right readings, desktop preview fills by stretching original image.
+  Scan-only grey unknown/pale individual finite-beam sectors are display evidence,
+  not saved occupancy or clearance. No unverified body heading at laser origin;
+  real map car retains fresh body TF and explicit +X front. Same17file bundle,
+  no robot installation/physical orientation verification or motor changes.
+  Requested0.50m/s is not enabled; existing0.30 request cap and feedback guards
+  preserved pending unresolved fault/stopping evidence. Details:
+  Documentation/REMOTE_SENSOR_LAYOUT_V015.md. Offline97Tools/262dashboard pass,
+  Hub53pass/one Windows symlink skip; browser localhost preview timed out.
 - Network scope update2026-10-26: user explicitly pauses university/eduroam
   connection and peer-connectivity testing due to concerns about institutional
   permission/rules. Do not configure, probe or resume that path without renewed
@@ -35,8 +61,9 @@ Develop and evaluate a camera-based machine-learning system for detecting living
   Existing raw-image YOLO versus rectified prototype inputs must be resolved by
   a validated later adapter, not assumed compatible. Contract/run guide:
   Documentation/FUSION_PROTOTYPE_V01.md. Existing motor/driver code unchanged.
-- Current private planner source 26af85d2655721409c40c1bc18e0382881626909 deployed
-  successfully24 October with a documentation-only handover status addition.
+- Current private planner source 56da7b24ffe594019a76e059c951769a567e8fab deployed
+  successfully26 October: source-tested v0.15, fresh LiDAR/TF findings and the
+  university-network pause, preserving the fetched24October continuation/history.
   Signed-in hosted read verification was23 October, not repeated24 October;
   physical fusion remains blocked, not completed by this planner update.
   Personal D1 records untouched. Shared-Wi-Fi testing remains a future lab task;

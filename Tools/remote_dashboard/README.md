@@ -1,6 +1,16 @@
 # Fahad robot dashboard — first version
 
-## Latest source v0.14 — validated ordinary settings (2026-10-22)
+## Latest source v0.15 — sensor-first layout and honest beam shading (2026-10-26)
+
+Large camera left; LiDAR above controls; compact readings right. Desktop preview
+stretches to fill without changing source pixels. Scan-only grey unknown cells
+and individual valid-beam sectors are not a saved occupancy map or driving
+clearance. No guessed car heading in laser coordinates; map car still requires
+fresh body TF. Same 17-file runtime, no new dependencies or motor changes; limit
+remains 0.30 m/s, not the requested 0.50. See
+`Documentation/REMOTE_SENSOR_LAYOUT_V015.md` for update steps, evidence and limits.
+
+## Previous source v0.14 — validated ordinary settings (2026-10-22)
 
 `dashboard_config.json` separates preview/robot JPEG refresh settings; a strict
 size/type/schema/key validator rejects invalid input before ROS/server startup.

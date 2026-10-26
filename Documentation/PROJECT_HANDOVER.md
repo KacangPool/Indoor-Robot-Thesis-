@@ -4,6 +4,8 @@ Last reviewed: **24 October 2026**. This is a documentation snapshot, not a clai
 
 **Scope update — 26 October:** university-network/eduroam configuration and connectivity testing are paused at the user's request pending permission clarification and renewed direction. Use the existing robot-hosted connection. This overrides the optional infrastructure-network test below; no new physical sensor result is implied.
 
+**Later evidence — 26 October:** user terminal checks now show fresh `/scan` from `/lsn10` at about 10.01 Hz; `/map` still has no publisher. The historical missing-scan blocker below is not current in this check, but its cause is unresolved. v0.15 sensor-layout/beam-shading source passes offline checks, not yet robot installation or calibrated live fusion. See [v0.15 notes](REMOTE_SENSOR_LAYOUT_V015.md).
+
 ## 1. Start here
 
 The camera, existing YOLO detector, remote viewing and manual driving have worked in user-reported lab sessions. A conservative camera–2D LiDAR fusion prototype now exists and passes offline tests, but it has **not** been validated on synchronized real sensor recordings or run as live fusion on the robot.

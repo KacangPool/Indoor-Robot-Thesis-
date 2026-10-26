@@ -418,12 +418,12 @@ async function main() {
     t.get('lastStatus.control.joystick_speed_request_m_s=.10');await rampTick(t);
     assert.equal(t.get('generation'),null);assert.match(t.node('drive-alert').textContent,/configuration mismatch/);
   });
-  await check('HUD preserves unique IDs and keeps telemetry left of framed vision',async()=>{
+  await check('HUD preserves unique IDs and follows camera/scan/controls/readings sketch',async()=>{
     const html=fs.readFileSync(__dirname+'/dist/index.html','utf8');const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
     assert.equal(ids.length,new Set(ids).size);
     for(const id of [...source.matchAll(/\bui\('([^']+)'\)/g)].map(m=>m[1]))assert(ids.includes(id),'Missing UI node '+id);
-    const css=fs.readFileSync(__dirname+'/dist/controls.css','utf8');assert(css.includes("'readings camera controls' 'readings lidar controls'"));
-    assert.match(css,/object-fit:contain/);assert.match(css,/@media\(max-width:1099px\)/);
+    const css=fs.readFileSync(__dirname+'/dist/controls.css','utf8');assert(css.includes("'camera lidar readings' 'camera controls readings'"));
+    assert.match(css,/object-fit:fill/);assert.match(css,/@media\(max-width:1099px\)/);
   });
   await check('disable reason stays beside Enable until deliberate reenable',async()=>{
     const t=await split();t.events.keydown(keyEvent(t,'KeyW'));await flush();t.events.blur();

@@ -14,7 +14,7 @@
 <body>
   <header class="topbar">
     <div class="brand"><span class="brand-mark" aria-hidden="true">F</span><div>FAHAD <span class="brand-sub">/ ROBOT CONSOLE</span><small>Indoor perception · WHEELTEC R PLUS</small></div></div>
-    <div class="top-status"><span id="connection" class="pill">Connecting…</span><span class="version">LOCAL · v0.14</span></div>
+    <div class="top-status"><span id="connection" class="pill">Connecting…</span><span class="version">LOCAL · v0.15</span></div>
   </header>
   <main>
     <section class="heading"><div><p class="eyebrow">OPERATOR WORKSPACE</p><h1>Perception & control</h1></div><div class="mode-tag" id="mode">Checking backend</div></section>
@@ -23,7 +23,7 @@
       <section class="panel camera-panel" aria-labelledby="camera-title">
         <div class="panel-head"><div><p class="eyebrow">01 / VISION</p><h2 id="camera-title">Camera preview</h2></div><label class="select-label">View <select id="source"><option value="rgb">Colour camera</option><option value="yolo">YOLO labels</option></select></label></div>
         <div class="camera-stage"><img id="camera" alt="Latest received robot camera image" hidden><div id="camera-empty" class="empty-state"><span class="viewfinder" aria-hidden="true"></span><strong id="camera-empty-title">Waiting for camera</strong><p id="camera-empty-note">Only recent messages will be shown.</p></div><div class="camera-overlay"><span id="image-state" class="pill">NO IMAGE</span><span id="image-age">—</span></div></div>
-        <div class="camera-footer"><code id="camera-topic">/camera/rgb/image_raw</code><span>Preview cap: 3 Hz by default</span></div>
+        <div class="camera-footer"><code id="camera-topic">/camera/rgb/image_raw</code><span>Desktop: stretched preview · original pixels unchanged · 3 Hz default</span></div>
         <details class="panel-details"><summary>Camera information</summary><p class="footnote">Preview refresh is not YOLO inference speed. Message arrival age is not measured camera latency. A delayed image is not safe driving feedback.</p></details>
       </section>
       <section class="panel control-panel" aria-labelledby="control-title">
@@ -65,7 +65,7 @@
         <div class="panel-head"><h2 id="lidar-title">Map + LiDAR</h2><span id="map-state" class="tiny-label">Checking /map</span><span id="scan-state" class="pill">NO SCAN</span></div>
         <div class="lidar-content"><canvas id="scan" width="640" height="360" aria-label="Two-dimensional laser returns in the sensor frame"></canvas></div>
         <p id="scan-colour-note" class="footnote">Point colour: laser distance, red 0 m → blue 4 m. Not object classes. Map cells, if supplied: grey unknown, white zero occupancy, black high occupancy.</p>
-        <details class="panel-details"><summary>Scan status, coordinates & limits</summary><p id="scan-note" class="footnote" role="status">Waiting for the dashboard's ROS subscriber. Connection alone does not prove scan data is arriving.</p><p class="footnote">Sensor coordinates only: +X up, +Y left. Not aligned to the camera or robot body. Dots are range measurements, not object labels or automatic obstacle avoidance.</p></details>
+        <details class="panel-details"><summary>Scan status, coordinates & limits</summary><p id="scan-note" class="footnote" role="status">Waiting for the dashboard's ROS subscriber. Connection alone does not prove scan data is arriving.</p><p class="footnote">Scan-only: +X laser up, +Y left; body heading is unknown, so no guessed car is drawn. Grey cells are unknown; pale sectors cover individual valid measured beams only, not safe driving clearance or a saved map. Body car/scan alignment requires TF. Dots are measurements, not object labels.</p></details>
       </section>
       <section class="panel health-panel" aria-labelledby="health-title"><div class="panel-head"><div><p class="eyebrow">TELEMETRY / READINESS</p><h2 id="health-title">Robot readings</h2></div></div><ul class="health-list"><li><span>Dashboard</span><strong id="backend-health">Checking</strong></li><li><span>Colour messages</span><strong id="rgb-health">Unknown</strong></li><li><span>YOLO images</span><strong id="yolo-health">Unknown</strong></li><li><span>Laser messages</span><strong id="scan-health">Unknown</strong></li><li><span>Motor output</span><strong id="motor-health" class="amber">Checking mode</strong></li></ul><div class="scan-readout"><span>Nearest valid laser return · any direction</span><strong id="scan-minimum">— <small>m</small></strong><dl><dt>ROS topic</dt><dd><code id="scan-topic">/scan</code></dd><dt>Connections</dt><dd id="scan-connections">—</dd><dt>Publisher</dt><dd id="scan-publisher">—</dd><dt>Arrival rate</dt><dd id="scan-rate">—</dd><dt>Arrival age</dt><dd id="scan-age">—</dd><dt>Messages</dt><dd id="scan-messages">—</dd><dt>Valid ranges</dt><dd id="scan-count">—</dd><dt>Frame</dt><dd id="scan-frame">—</dd><dt>Display radius</dt><dd>4 m</dd></dl></div><details class="panel-details"><summary>Service information</summary><p id="ros-note" class="footnote">No camera or motor drivers are started by this page.</p><p class="footnote">Automatic boot is not configured.</p><p id="next-step" class="next-step">Connect the existing robot services. No automatic navigation or obstacle avoidance.</p></details></section>
     </div>

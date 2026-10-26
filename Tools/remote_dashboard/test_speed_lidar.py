@@ -10,6 +10,13 @@ import test_session_drive as session_tests
 
 
 class SpeedTests(unittest.TestCase):
+    def test_observed_beams_preserve_invalid_gaps_and_limits(self):
+        message=LidarTests().message
+        result=server.scan_summary(message([1,float('inf'),2,float('nan'),0.01]))
+        self.assertEqual(len(result['observed_rays']),2)
+        self.assertEqual([ray[1] for ray in result['observed_rays']],[1,2])
+        self.assertAlmostEqual(result['observed_rays'][1][0]-result['observed_rays'][0][0],2*result['ray_width_rad'])
+        self.assertLessEqual(len(server.scan_summary(message([1.]*10000))['observed_rays']),720)
     def test_session_joystick_is_proportional_and_bounded(self):
         for power in (-1,-.8,-.5,-.2,0,.12,.25,.5,.8,1):
             for turn in (-1,-.5,0,.5,1):

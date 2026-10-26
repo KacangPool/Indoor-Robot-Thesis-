@@ -60,6 +60,10 @@ def scan_summary(message, maximum_points=240):
     values = []
     count = len(message.ranges)
     points = []
+    # Individual measured rays, not a polygon joining decimated points. Sampling
+    # preserves original beam width; omitted/invalid beams stay unknown in UI.
+    observed_rays = []
+    ray_stride = max(1, int(math.ceil(count / 720.0)))
     intensities = getattr(message, 'intensities', [])
     intensity_aligned = len(intensities) == count and count > 0
     point_intensities = []
@@ -69,6 +73,8 @@ def scan_summary(message, maximum_points=240):
         if not finite(distance) or not low <= distance <= high:
             continue
         values.append((index, distance))
+        if index % ray_stride == 0:
+            observed_rays.append([start + index * step, min(distance, 4.0)])
         if intensity_aligned:
             try:
                 intensity = float(intensities[index])
@@ -99,6 +105,7 @@ def scan_summary(message, maximum_points=240):
             'valid_samples': len(values), 'minimum_m': min(v for i, v in values) if values else None,
             'publisher': header.get('callerid'), 'stamp': stamp,
             'range_min_m': low, 'range_max_m': high, 'points': points,
+            'observed_rays': observed_rays, 'ray_width_rad': abs(step),
             'point_intensities': point_intensities,
             'intensity_state': 'available' if valid_intensities else 'unavailable',
             'intensity_min': min(valid_intensities) if valid_intensities else None,

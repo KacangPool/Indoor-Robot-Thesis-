@@ -5,6 +5,20 @@ function rangeColour(distance){
   return Number.isFinite(distance) && distance>=0?'hsl('+Math.round(Math.min(1,distance/4)*240)+',90%,65%)':'#8ad8bd';
 }
 
+// Pure display geometry. Angular sampling bins are a visibility sketch, NOT
+// measured optical beam footprints or proof of clearance between rays. No joins
+// across missing bins; infinite/no-return readings never imply empty space.
+function observedSectors(scan){
+  if(!scan || !scan.available || !Number.isFinite(scan.range_min_m) || scan.range_min_m<0 ||
+     !Number.isFinite(scan.ray_width_rad) || scan.ray_width_rad<=0 || scan.ray_width_rad>0.1)return [];
+  const inner=scan.range_min_m,half=scan.ray_width_rad/2;
+  return (Array.isArray(scan.observed_rays)?scan.observed_rays:[]).slice(0,720).flatMap(ray=>{
+    if(!Array.isArray(ray) || ray.length!==2 || !ray.every(Number.isFinite))return [];
+    const [angle,distance]=ray,outer=Math.min(4,distance)-0.03;
+    return distance>0 && outer>inner?[{angle,half,inner,outer}]:[];
+  });
+}
+
 function create(options){
   const {ui,pill,seconds,getMap,canUseMap,document:dom}=options;
   let mapRaster=null;
@@ -38,13 +52,36 @@ function renderScan(scan) {
   drawScan(scan);
 }
 function drawScan(scan) {
+  const canvas = ui('scan');
+  // Match the drawing buffer to the panel, rather than stretching a fixed
+  // 640x360 bitmap. Keep identical metric scale horizontally and vertically.
+  if(canvas.clientWidth>0 && canvas.clientHeight>0){
+    const width=Math.max(1,Math.min(1920,Math.round(canvas.clientWidth))),height=Math.max(1,Math.min(1080,Math.round(canvas.clientHeight)));
+    if(canvas.width!==width || canvas.height!==height){canvas.width=width;canvas.height=height;}
+  }
   const mapView=getMap();
   if(mapView && mapView.available && canUseMap()){drawOccupancy(mapView);return;}
-  const canvas = ui('scan'), ctx = canvas.getContext('2d'), cx = canvas.width/2, cy = canvas.height/2;
-  const scale = (canvas.height/2 - 24)/4;
+  const ctx = canvas.getContext('2d'), cx = canvas.width/2, cy = canvas.height/2;
+  const scale = Math.max(1,(Math.min(canvas.width,canvas.height)/2 - 24)/4);
   ctx.clearRect(0,0,canvas.width,canvas.height);
   if (scan && scan.available) {
-    ui('scan-colour-note').textContent='SCAN ONLY · /map unavailable. Point colour = distance from laser: red 0 m → blue 4 m. Blank = unknown, not clear floor. Not object classes.';
+    ui('scan-colour-note').textContent='SCAN ONLY · current beams, /map unavailable. Grey cells: unknown. Pale ray bins: finite-range visibility sketch, NOT guaranteed traversable or measured beam footprints. Point colour = distance from laser: red 0 m → blue 4 m. Not object classes. No saved room map.';
+    ctx.fillStyle='#66747e';ctx.fillRect(0,0,canvas.width,canvas.height);
+    // Subtle square unknown cells, not radar rings or invented occupancy data.
+    const cell=Math.max(8,scale*0.5);
+    ctx.fillStyle='#626f79';
+    for(let x=0;x<canvas.width;x+=cell)for(let y=0;y<canvas.height;y+=cell)
+      if((Math.floor(x/cell)+Math.floor(y/cell))%2===0)ctx.fillRect(x,y,cell,cell);
+    ctx.fillStyle='#d5dcdf';
+    for(const sector of observedSectors(scan)){
+      const a=-Math.PI/2-sector.angle,half=sector.half;
+      ctx.beginPath();
+      ctx.moveTo(cx+Math.cos(a-half)*sector.inner*scale,cy+Math.sin(a-half)*sector.inner*scale);
+      ctx.arc(cx,cy,sector.outer*scale,a-half,a+half);
+      ctx.lineTo(cx+Math.cos(a+half)*sector.inner*scale,cy+Math.sin(a+half)*sector.inner*scale);
+      if(sector.inner>0)ctx.arc(cx,cy,sector.inner*scale,a+half,a-half,true);
+      ctx.closePath();ctx.fill();
+    }
     for (let i=0;i<(scan.points || []).length;i++) {
       const [x,y]=scan.points[i];
       if (x*x+y*y > 16) continue;
@@ -53,14 +90,21 @@ function drawScan(scan) {
     }
     if (scan.valid_samples === 0) {ctx.fillStyle='#a5b6c3';ctx.textAlign='center';ctx.fillText('Receiving scans · no valid ranges',cx,cy+45);ctx.textAlign='start';}
   } else { ui('scan-colour-note').textContent='No current scan or occupancy map. No clear floor inferred.';ctx.fillStyle='#a5b6c3'; ctx.textAlign='center'; ctx.fillText('No recent laser message',cx,cy+45); ctx.textAlign='start'; }
-  drawVehicle(ctx,cx,cy,-Math.PI/2);
-  ctx.fillStyle='#a5b6c3';ctx.font='10px system-ui';ctx.fillText('Illustrative icon at laser origin · not footprint',12,canvas.height-8);
+  if(scan && scan.available){
+    ctx.fillStyle='#123e38';ctx.fillRect(cx-5,cy-5,10,10);
+    ctx.fillStyle='#d9fff0';ctx.font='11px system-ui';ctx.fillText('+X laser',cx+8,cy-12);
+    ctx.fillText('+Y',cx-37,cy+16);
+  }
+  ctx.fillStyle='#e0e7eb';ctx.font='10px system-ui';ctx.fillText('Laser origin only; car heading unverified without body TF',12,canvas.height-8);
 }
 function drawVehicle(ctx,x,y,angle){
   ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.fillStyle='#0a1116';
   for(const sx of [-10,7])for(const sy of [-12,8])ctx.fillRect(sx,sy,7,4);
   ctx.fillStyle='#8ad8bd';ctx.fillRect(-14,-8,28,16);ctx.fillStyle='#234f4b';ctx.fillRect(0,-6,8,12);
   ctx.fillStyle='#edf9f4';ctx.fillRect(12,-6,3,4);ctx.fillRect(12,2,3,4);ctx.restore();
+  // Front is explicitly local +X, transformed by the supplied body pose.
+  ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.fillStyle='#ffffff';
+  ctx.beginPath();ctx.moveTo(23,0);ctx.lineTo(17,-4);ctx.lineTo(17,4);ctx.closePath();ctx.fill();ctx.restore();
 }
 function drawOccupancy(map){
   const canvas=ui('scan'),ctx=canvas.getContext('2d'),w=map.width,h=map.height;
@@ -96,7 +140,7 @@ function drawOccupancy(map){
 
   return {renderScan,drawScan,drawOccupancy,reset:()=>{mapRaster=null;}};
 }
-const api={create,rangeColour};
+const api={create,rangeColour,observedSectors};
 if(typeof module!=='undefined' && module.exports)module.exports=api;
 if(root)root.FahadSensorView=api;
 })(typeof window!=='undefined'?window:null);
