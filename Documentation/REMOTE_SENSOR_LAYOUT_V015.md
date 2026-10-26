@@ -105,6 +105,24 @@ this client's26October date. Same-robot relative timing may still be coherent;
 host/robot timestamp comparison needs a documented common clock. Do not change
 time during an active experiment. No calibration/TF/time changes made.
 
+Actual image follow-up: depth_registered/image_raw reports32FC1 and
+camera_rgb_optical_frame, with camera_nodelet_manager as publisher. Its separate
+CameraInfo sample reports camera_depth_optical_frame. No subscribers after the
+short-lived echo/rate clients exit is not evidence of a failed publisher. These
+were separate snapshots, not an exact synchronized image/CameraInfo pair.
+
+Copied-source inspection provides a specific explanation candidate: in
+ros_astra_camera/src/astra_driver.cpp, the depth callback sets the image frame to
+RGB when depth_registration is enabled (around838), but still calls
+getDepthCameraInfo (845), which obtains IR/depth metadata and subtracts configured
+depth_ir_offset_x/y (1079–1089). cfg/Astra.cfg defaults those offsets to5/4 and
+registration to true. This matches the observed difference but does not prove the
+running binary/configuration is identical. Read the three runtime parameters;
+do not patch vendor code, force frame IDs or manually shift pixels. Registration
+still needs independent RGB/depth edge correspondence checks. The copied float
+conversion divides raw millimetres by1000 (1575), supporting expected metres for
+that implementation;32FC1 alone specifies representation, not accuracy/units.
+
 Next, in the sourced robot SSH terminal while stationary:
 
 ```bash

@@ -4,6 +4,24 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-26
 
+### Depth image versus CameraInfo: copied-driver explanation candidate
+
+- User reports actual registered depth image32FC1/RGB optical frame and a
+  nodelet-manager publisher, versus prior separate CameraInfo depth optical
+  frame. Short-lived clients unsubscribed normally; no-subscriber snapshot is
+  not a sensor fault. Samples are not a synchronized calibration-validation pair.
+- Inspected copied ros_astra_camera/src/astra_driver.cpp depth callback838–845,
+  IR/depth CameraInfo1079–1089, float conversion1549–1575 and cfg/Astra.cfg.
+  Registration changes image frame but retains depth CameraInfo path; default
+  configurable5/4 offsets match observed principal-point differences. Expected
+  float metres follow raw-mm/1000 conversion. This is copied-source evidence,
+  not proof of installed binary, runtime settings, registration or depth accuracy.
+- Updated context/v0.15 lab notes; next bounded read-only checks inspect runtime
+  depth_registration/depth_ir_offset_x/y. No vendor patch, frame override, pixel
+  shift, clock, motor change or public push. High-level planner calibration/TF
+  remains pending; detailed incremental diagnostics retained here. Documentation
+  whitespace check performed before local snapshot; code suites not rerun.
+
 ### Registered-depth metadata and robot clock follow-up
 
 - Correctly spelled camera_info now returns640x480, depth optical frame, focal

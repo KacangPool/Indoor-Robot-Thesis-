@@ -11,6 +11,14 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+- Depth image follow-up26October:32FC1, RGB optical frame, nodelet-manager
+  publisher; separate registered CameraInfo sample uses depth optical frame.
+  Copied Astra code changes image frame when depth_registration is enabled but
+  still obtains depth/IR CameraInfo and subtracts configurable offsets, default5/4.
+  This plausibly explains the metadata difference; actual binary/parameters not
+  yet confirmed. Copied float conversion divides raw mm by1000, expected metres
+  for that path, not independent accuracy proof. Next read registration and offset
+  parameters before any fix; no vendor/frame/pixel changes or live fusion.
 - Corrected metadata follow-up26October: depth_registered/camera_info publishes
   640x480 in camera_depth_optical_frame; principal points in K/P differ from RGB
   by5pixelsX/4pixelsY (same supplied focal lengths/distortion). This flags an
