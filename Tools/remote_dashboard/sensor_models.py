@@ -74,7 +74,7 @@ def scan_summary(message, maximum_points=240):
             continue
         values.append((index, distance))
         if index % ray_stride == 0:
-            observed_rays.append([start + index * step, min(distance, 4.0)])
+            observed_rays.append([start + index * step, min(distance, 16.0)])
         if intensity_aligned:
             try:
                 intensity = float(intensities[index])

@@ -185,7 +185,7 @@ class ControllerTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError,'external'):self.controller.prepare()
         self.assertEqual([c.args[0] for c in self.connection.rpc.call_args_list].count('start'),1)
     def test_source_bundle_changes_are_detected_not_just_version(self):
-        manifest=connection.local_manifest(SOURCE);self.assertEqual(manifest['version'],'0.15');self.assertEqual(len(manifest['files']),17)
+        manifest=connection.local_manifest(SOURCE);self.assertEqual(manifest['version'],'0.16');self.assertEqual(len(manifest['files']),22)
         changed=dict(manifest['files']);changed['server.py']='f'*64
         self.assertNotEqual(manifest['bundle_id'],agent.bundle_id(changed))
     def test_demo_never_creates_real_ssh_or_tunnel(self):
@@ -252,7 +252,7 @@ class ModularBundleTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             for name in agent.RUNTIME_FILES:
                 target=Path(folder)/name;target.parent.mkdir(parents=True,exist_ok=True)
-                shutil.copyfile(SOURCE/name,target)
+                shutil.copyfile(connection.source_file(SOURCE,name),target)
             code="import sys;sys.path.insert(0,sys.argv[1]);import server,settings,sensor_state,ros_reader;assert settings.VERSION==sys.argv[2];assert server.Dashboard is sensor_state.Dashboard;assert 'rospy' not in sys.modules;assert 'cv2' not in sys.modules;assert not server.Dashboard().status()['motor_output'];from pathlib import Path;assert all((Path(sys.argv[1])/'dist'/entry[0]).is_file() for entry in settings.ASSETS.values())"
             subprocess.run([sys.executable,'-I','-c',code,folder,agent.VERSION],check=True,capture_output=True)
         self.assertEqual(set(connection.local_manifest(SOURCE)['files']),set(agent.RUNTIME_FILES))

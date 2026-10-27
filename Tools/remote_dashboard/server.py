@@ -29,6 +29,12 @@ except ImportError:
 
 from control import RehearsalControl, monotonic_clock
 
+# Source checkout keeps the shared package beside remote_dashboard; the Hub
+# installs an allowlisted copy inside the isolated runtime. No services start.
+_shared_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if not os.path.isdir(os.path.join(os.path.dirname(__file__), 'fahad_core')) and os.path.isdir(os.path.join(_shared_root, 'fahad_core')):
+    sys.path.insert(0, _shared_root)
+
 
 from settings import ASSETS, TOPICS
 from sensor_models import finite, planar_pose, occupancy_summary, scan_summary

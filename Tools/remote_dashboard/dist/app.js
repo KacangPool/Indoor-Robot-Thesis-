@@ -218,6 +218,13 @@ function disconnected() {
   ui('image-age').textContent = '—'; ui('backend-health').textContent = 'Disconnected';
   ['rgb-health','yolo-health','scan-health'].forEach(id => { ui(id).textContent = 'Unknown'; });
   renderScan({state:'disconnected',available:false});
+  renderObservations(null);
+}
+function renderObservations(value){
+  const active=value&&value.available&&Array.isArray(value.records);
+  ui('observation-state').textContent=active?'Latest YOLO source observations · camera-only · position/height/clearance unknown · not saved':value&&value.error||'No fresh source detections. Positional fusion awaits calibrated TF and matching rectified inputs.';
+  const records=active?value.records.slice(0,100).filter(o=>o&&typeof o.class==='string'&&o.class.length<=80&&Number.isFinite(o.score)&&o.score>=0&&o.score<=1&&o.status==='camera_only'):[];
+  ui('observation-list').textContent=active?records.map(o=>o.class+' · '+(100*o.score).toFixed(0)+'% · camera_only · no associated laser position').join('\n')||'No objects in the latest source message.':'No live observations.';
 }
 function seconds(value) { return value === null || value === undefined ? '—' : value.toFixed(1) + ' s'; }
 function renderScan(scan){return sensorView.renderScan(scan);}
@@ -285,6 +292,7 @@ async function poll() {
       pill('image-state', preview ? 'PREVIEW ONLY' : 'NO RECENT IMAGE', preview ? '' : 'warn');
     } else { pill('image-state', imageReady ? 'RECENT MESSAGE' : 'LOADING IMAGE', imageReady ? 'ok' : ''); }
     renderScan(status.scan);
+    renderObservations(status.observations);
     // A poll sent before arm completed must not invalidate the new generation.
     if (generation && generation === polledGeneration && (!reportedControl.armed || reportedControl.owner !== owner)) stop(reportedControl.reason);
     if (generation && generation === polledGeneration) applySessionStatus(reportedControl);

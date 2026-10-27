@@ -71,3 +71,21 @@ def toy_grid():
             cells.append(value)
     return {'width': width, 'height': height, 'resolution': 0.1, 'origin': [0, 0], 'cells': cells,
             'evidence': 'hand_authored_synthetic_occupancy_grid'}
+
+
+def semantic_demo_snapshots():
+    """Toy monitor/table geometry: no inferred support or clearance relationship."""
+    raised = deepcopy(demo_snapshots()[1])
+    raised['name'] = 'Monitor above scan plane; table intersects laser'
+    raised['explanation'] = 'Synthetic monitor sample is above the laser plane and retained as camera-depth-only. Only the independently supported table cluster labels laser rays. This does not prove the monitor floats, is supported by the table or is safe to drive under.'
+    monitor = raised['snapshot']['detections']['boxes'][0]
+    monitor['class'] = 'tvmonitor'
+    table = deepcopy(monitor)
+    table.update({'class': 'diningtable', 'ymin': 200, 'ymax': 430})
+    table['object_depth']['v'] = 240
+    raised['snapshot']['detections']['boxes'].append(table)
+    unknown = deepcopy(raised)
+    unknown['name'] = 'Monitor without verified object depth stays position-unknown'
+    unknown['explanation'] = 'Camera label is kept, not attached to an unrelated laser return. Without verified depth the monitor height, position and clearance remain unknown.'
+    del unknown['snapshot']['detections']['boxes'][0]['object_depth']
+    return [raised, unknown]

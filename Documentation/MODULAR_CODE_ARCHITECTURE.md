@@ -1,5 +1,12 @@
 # Reusable project code — v0.13, 2026-10-22
 
+Latest source follow-up27October: v0.16 adds pure scene_geometry view projection,
+shared observations/semantic_scene modules and a read-only detection adapter.
+Hub22file runtime now includes4allowlisted shared modules through one validated
+source resolver; diagnostic bundle21source files. Historical counts below refer
+to earlier extraction versions. See SEMANTIC_VIEW_V016.md for current contracts,
+copy instructions, verification limits and pending real positional fusion.
+
 Current follow-up: v0.14 adds validated ordinary configuration, consolidated
 checks, local source history and allowlisted Hub diagnostics. The runtime now
 has 17 files; the 15-file references below describe the original v0.13 extraction.

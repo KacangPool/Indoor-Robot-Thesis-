@@ -29,7 +29,7 @@ except ImportError:
     from urllib2 import Request, urlopen
     from urlparse import urlsplit
 
-VERSION = '0.15'
+VERSION = '0.16'
 BASE = '/fahad_base_crawl_check'
 COMMAND = '/fahad/crawl_test/cmd_vel'
 RUNTIME_FILES = ('server.py', 'manual_drive.py', 'control.py', 'crawl_test.py',
@@ -38,6 +38,9 @@ RUNTIME_FILES = ('server.py', 'manual_drive.py', 'control.py', 'crawl_test.py',
 RUNTIME_FILES += ('settings.py', 'sensor_models.py', 'sensor_state.py',
                   'ros_reader.py', 'dist/sensor_view.js', 'configuration.py',
                   'dashboard_config.json')
+SHARED_RUNTIME_FILES = ('fahad_core/__init__.py', 'fahad_core/detections.py',
+                        'fahad_core/recording.py', 'fahad_core/observations.py')
+RUNTIME_FILES += ('dist/scene_geometry.js',) + SHARED_RUNTIME_FILES
 
 
 def runtime_summary(root):

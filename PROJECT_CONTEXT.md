@@ -11,6 +11,22 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+-27October v0.16 source: equal full-height camera/LiDAR panes, scrollable sidebar
+  halves, matching keyboard style and bounded view-only zoom/pan/orbit. The3D
+  orthographic display is still a planar scan, not volumetric LiDAR. Actual car
+  heading needs TF; headlights/tyres/front key do not invent a mounting transform.
+- User reports lecturer discussion: preserve camera-only/raised objects rather
+  than dropping them when LiDAR misses. New shared semantics retain labels and
+  independently verified camera-depth surface XYZ/sample-relative-plane height;
+  label only supported actual laser ray indices, with separate timed map layers.
+  No floating/table-support/clearance inference, occupancy update, persistent
+  per-run map saving or autonomy. Live list is100records/2s camera-only, not live
+  positional fusion. Real calibration/registration/rectification/TF/time still
+  block that. Ten explicit toy cases,22runtime files,21diagnostic source files.
+- Latest v0.16 checks:106Tools pass, dashboard263pass/one recurring Windows10053
+  HTTP error, Hub53pass/one skip, JS/static pass. No retries/exclusions. Computer
+  Use URL-policy stop blocks visual QA. No robot deployment or motor changes.
+  Design/run limits: Documentation/SEMANTIC_VIEW_V016.md.
 - Runtime camera parameters supplied26October: depth_registration=true,
   depth_ir_offset_x=5.0, depth_ir_offset_y=4.0. Consistent with copied-driver
   metadata explanation, not proof of binary identity/registration accuracy.
@@ -83,9 +99,10 @@ Develop and evaluate a camera-based machine-learning system for detecting living
   Existing raw-image YOLO versus rectified prototype inputs must be resolved by
   a validated later adapter, not assumed compatible. Contract/run guide:
   Documentation/FUSION_PROTOTYPE_V01.md. Existing motor/driver code unchanged.
-- Current private planner source 56da7b24ffe594019a76e059c951769a567e8fab deployed
-  successfully26 October: source-tested v0.15, fresh LiDAR/TF findings and the
-  university-network pause, preserving the fetched24October continuation/history.
+- Current private planner source 646bb89260f325b15a1d15632f1a849081d43abc deployed
+  successfully27 October: v0.16 source/semantic foundation, latest partial test
+  verification and pending lab checks.26October sensor evidence and university-
+  network pause retained; personal notes/goals untouched, no hardware completion.
   Signed-in hosted read verification was23 October, not repeated24 October;
   physical fusion remains blocked, not completed by this planner update.
   Personal D1 records untouched. Shared-Wi-Fi testing remains a future lab task;

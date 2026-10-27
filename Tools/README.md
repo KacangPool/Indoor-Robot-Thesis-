@@ -1,5 +1,12 @@
 # Project code: where to start
 
+Current console source is **v0.16**: equal camera/LiDAR panes, bounded view-only
+zoom/orbit/pan and camera-only observation snapshots. Shared semantic_scene builds
+offline supported laser labels and camera-depth-only surface observations; neither
+is a verified live fusion system. See
+[the v0.16 contract](../Documentation/SEMANTIC_VIEW_V016.md). Hub runtime22files;
+diagnostic bundle21source files. Keep sibling shared modules when copying source.
+
 Current quality foundations: **v0.14**, not yet deployed to the robot. Double-click
 `Tools/Check Project.cmd` for the consolidated offline checks. The Hub's existing
 Save report now creates an allowlisted diagnostic snapshot; the dashboard reads

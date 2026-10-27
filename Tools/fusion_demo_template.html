@@ -15,7 +15,7 @@ const report=JSON.parse(document.getElementById('report').textContent),select=do
 const ns='http://www.w3.org/2000/svg';
 function svgNode(parent,tag,attrs,text){const e=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,String(v));if(text!==undefined)e.textContent=text;parent.append(e);return e;}
 report.scenarios.forEach((scene,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=scene.name;select.append(o);});
-function draw(){const s=report.scenarios[Number(select.value)],r=s.result;
+function draw(){const s=report.scenarios[Number(select.value)],r=s.result,semantic=s.semantic;
  document.getElementById('explanation').textContent=s.explanation;
  document.getElementById('mode').textContent=r.mode==='synthetic'?'OFFLINE · SYNTHETIC TEST SCENES':'OFFLINE · RECORDED INPUT / NOT LIVE';
  document.getElementById('gate').textContent='Input gate: '+r.gate+' — '+r.reason+(r.mapping_issue?' · Mapping: '+r.mapping_issue:'');
@@ -29,9 +29,10 @@ function draw(){const s=report.scenarios[Number(select.value)],r=s.result;
  else svgNode(map,'text',{x:25,y:35,fill:'#afc3bb','font-size':16},'No occupancy grid: no invented free-space shading');
  const point=(p)=>[p[0]*100,500-p[1]*100];
  for(const p of s.map_scan_points){const [x,y]=point(p);svgNode(map,'circle',{cx:x,cy:y,r:3,fill:'#456c94'});}
- for(const m of r.map_markers){const [x,y]=point(m.surface_xyz_m);svgNode(map,'circle',{cx:x,cy:y,r:8,fill:'#277957',stroke:'#d8ffe4','stroke-width':2});svgNode(map,'text',{x:x+12,y:y-12,fill:'#17452d','font-size':15},m.class+' (surface)');}
- if(!r.map_markers.length)svgNode(map,'text',{x:30,y:475,fill:grid?'#172c22':'#c7d8ce','font-size':16},'No semantic marker emitted for this case');
- const rows=document.getElementById('results');rows.replaceChildren();for(const o of r.observations){const div=document.createElement('div');div.className='record '+(o.status==='depth_supported'?'good':o.status==='camera_only'||o.status==='unavailable'?'bad':'');const title=document.createElement('strong');title.textContent=o.class+' — '+o.status;const detail=document.createElement('span');detail.textContent=o.reason+' · candidate clusters: '+o.candidates.length+(o.object_depth_m?' · independently supported optical depth: '+o.object_depth_m.toFixed(2)+'m':'')+(o.map_point_m?' · map surface XYZ: '+o.map_point_m.map(v=>v.toFixed(2)).join(', ')+'m':'');div.append(title,detail);rows.append(div);}
+ for(const m of r.map_markers){const [x,y]=point(m.surface_xyz_m);svgNode(map,'circle',{cx:x,cy:y,r:8,fill:'#277957',stroke:'#d8ffe4','stroke-width':2});svgNode(map,'text',{x:x+12,y:y-12,fill:'#17452d','font-size':15},m.class+' (laser-supported surface)');}
+ for(const m of semantic.camera_depth_map_observations.filter(m=>m.evidence==='camera_depth_only')){const [x,y]=point(m.surface_xyz_m);svgNode(map,'rect',{x:x-7,y:y-7,width:14,height:14,fill:'#bf8026',stroke:'#ffe2aa'});svgNode(map,'text',{x:x+12,y:y+18,fill:'#50330d','font-size':14},m.class+' (camera-depth only, not LiDAR)');}
+ if(!r.map_markers.length&&!semantic.camera_depth_map_observations.some(m=>m.evidence==='camera_depth_only'))svgNode(map,'text',{x:30,y:475,fill:grid?'#172c22':'#c7d8ce','font-size':16},'No semantic marker emitted for this case');
+ const rows=document.getElementById('results');rows.replaceChildren();for(const o of semantic.observations){const div=document.createElement('div');div.className='record '+(o.status==='depth_supported'?'good':'');const title=document.createElement('strong');title.textContent=o.class+' — '+o.status;const detail=document.createElement('span');detail.textContent=o.reason+' · candidate clusters: '+o.candidates.length+' · sampled surface: '+o.sample_height_relation+' · clearance: '+o.clearance+(o.camera_surface?' · laser-frame sample XYZ: '+o.camera_surface.laser_xyz_m.map(v=>v.toFixed(2)).join(', ')+'m':' · position unknown')+' · support/floating relation unknown';div.append(title,detail);rows.append(div);}
  document.getElementById('footer').textContent=report.limits+' Input SHA-256: '+report.input_sha256+'. Thresholds are prototype settings, not measured sensor accuracy. A person label is not evidence of physiological life.';
 }
 select.addEventListener('change',draw);draw();

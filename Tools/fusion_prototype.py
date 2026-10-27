@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 
 from fahad_core.fusion import fuse_snapshot
+from fahad_core.semantic_scene import semantic_snapshot
 from fahad_core.fusion_geometry import rigid_transform, transform_point
 
 
@@ -13,7 +14,8 @@ def make_report(scenarios, grid=None):
     results = []
     for scenario in scenarios:
         snapshot = scenario['snapshot']
-        result = fuse_snapshot(snapshot)
+        semantic = semantic_snapshot(snapshot)
+        result = semantic['fusion']
         # Visualization coordinates use the same validated map transform as the core.
         visual_points = []
         if snapshot.get('laser_to_map') and not result['mapping_issue'] and result['gate'] == 'ready':
@@ -22,8 +24,8 @@ def make_report(scenarios, grid=None):
         results.append({'name': scenario.get('name', 'Recorded snapshot'),
                         'explanation': scenario.get('explanation', ''), 'result': result,
                         'image': {'width': snapshot['image']['width'], 'height': snapshot['image']['height']},
-                        'map_scan_points': visual_points})
-    return {'schema_version': 1, 'prototype': 'offline-fusion-v0.1', 'scenarios': results,
+                        'map_scan_points': visual_points, 'semantic': semantic})
+    return {'schema_version': 1, 'prototype': 'offline-semantic-fusion-v0.2', 'scenarios': results,
             'toy_map': grid, 'limits': 'No live camera, YOLO inference, LiDAR, SLAM, network or motor output.'}
 
 
@@ -38,8 +40,8 @@ def main(argv=None):
         parser.error('Output already exists; choose a new directory')
     try:
         if args.demo:
-            from fusion_fixtures import demo_snapshots, toy_grid
-            scenarios = demo_snapshots()
+            from fusion_fixtures import demo_snapshots, semantic_demo_snapshots, toy_grid
+            scenarios = demo_snapshots()+semantic_demo_snapshots()
             report = make_report(scenarios, toy_grid())
             source = json.dumps(scenarios, sort_keys=True, allow_nan=False).encode('utf8')
         else:

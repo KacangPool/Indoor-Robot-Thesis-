@@ -1,6 +1,27 @@
 # Fahad robot dashboard — first version
 
-## Latest source v0.15 — sensor-first layout and honest beam shading (2026-10-26)
+## Latest source v0.16 — equal sensor panels and semantic foundation (2026-10-27)
+
+Equal full-height camera/LiDAR columns; controls and readings are independently
+scrollable sidebar halves. Matching W/A/S/D styling. LiDAR has bounded wheel/button
+zoom, drag orbit/pan and Reset. Orthographic3D view of flat data is not3D LiDAR.
+Car glyph has headlights/tyres; actual pose still requires valid body TF. No
+guessed mounting orientation. Viewer inputs do not call the driving API.
+
+Optional read-only BoundingBoxes input retains100camera-only source observations
+for at most2seconds including their source age; no positional fusion is asserted
+live. Offline shared semantics retain unmatched/raised objects and independently
+supported camera-depth surface points, label only depth-supported laser indices,
+never infer floating/table/clearance from missing returns. No map saving/autonomy.
+See Documentation/SEMANTIC_VIEW_V016.md. Same motion limits/guards, no deployment.
+
+The Hub now has22fixed runtime files, including scene_geometry.js and four
+allowlisted fahad_core files. Keep Tools/robot_hub, remote_dashboard and fahad_core
+as siblings in the source checkout. Do not copy just server.py; the Hub packages
+the required shared files inside the personal robot runtime. Old Jetson execution
+and visual alignment still require lab checks. No new dependency installs.
+
+## Previous source v0.15 — sensor-first layout and honest beam shading (2026-10-26)
 
 Large camera left; LiDAR above controls; compact readings right. Desktop preview
 stretches to fill without changing source pixels. Scan-only grey unknown cells

@@ -18,6 +18,7 @@ class Dashboard(object):
         self.lock = threading.RLock()
         self.frames = {}
         self.source_errors = {}
+        self.observations, self.observation_received, self.observation_error = None, None, None
         self.scan = None
         self.scan_time = None
         self.last_scan_attempt = None
@@ -92,6 +93,13 @@ class Dashboard(object):
                     'uptime_s': max(0.0, now - self.started), 'cameras': cameras,
                     'scan': scan, 'ros_error': self.ros_error,
                     'motor_output': self.drive is not None}
+            observation_age = now-self.observation_received+self.observations.get('source_age_s',0) if self.observation_received is not None and self.observations else None
+            observation_available = self.mode != 'preview' and observation_age is not None and 0 <= observation_age < 2 and not self.observation_error
+            result['observations'] = {'available': observation_available, 'age_s': observation_age,
+                'records': self.observations['records'] if observation_available and self.observations else [],
+                'image_header': self.observations['image_header'] if observation_available and self.observations else None,
+                'error': self.observation_error, 'fusion': 'blocked_pending_calibration_tf_and_rectified_input',
+                'persistence': 'none_latest_snapshot_only'}
         # Never take a control lock under the image lock: a drive health check
         # takes them in the opposite order. Snapshot only after releasing it.
         result['control'] = self.control.snapshot()

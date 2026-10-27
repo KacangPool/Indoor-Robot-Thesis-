@@ -1,5 +1,13 @@
 # Project handover — indoor search-and-rescue robot
 
+**27 October source update:** v0.16 adds equal sensor panels, bounded view-only
+zoom/orbit/pan and camera-only observation snapshots. Shared offline semantics
+retain raised/unmatched camera-depth samples without falsely labelling laser
+points or inferring clearance/support. Persistent maps/autonomy remain deferred.
+Not installed or calibrated live fusion. Latest full check includes one recurring
+Windows10053 error; visual QA blocked by Computer Use URL verification. See
+[v0.16 contract](SEMANTIC_VIEW_V016.md) and the newest changelog entry.
+
 Last reviewed: **24 October 2026**. This is a documentation snapshot, not a claim that the robot was tested on this date. Source baseline before this handover: local commit `00ffa9f99240dca3e7264e450673995bea2971bc`.
 
 **Scope update — 26 October:** university-network/eduroam configuration and connectivity testing are paused at the user's request pending permission clarification and renewed direction. Use the existing robot-hosted connection. This overrides the optional infrastructure-network test below; no new physical sensor result is implied.

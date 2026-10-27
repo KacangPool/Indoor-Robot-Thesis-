@@ -8,13 +8,14 @@
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/controls.css">
   <script src="/joystick.js" defer></script>
+  <script src="/scene_geometry.js" defer></script>
   <script src="/sensor_view.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
 <body>
   <header class="topbar">
     <div class="brand"><span class="brand-mark" aria-hidden="true">F</span><div>FAHAD <span class="brand-sub">/ ROBOT CONSOLE</span><small>Indoor perception · WHEELTEC R PLUS</small></div></div>
-    <div class="top-status"><span id="connection" class="pill">Connecting…</span><span class="version">LOCAL · v0.15</span></div>
+    <div class="top-status"><span id="connection" class="pill">Connecting…</span><span class="version">LOCAL · v0.16</span></div>
   </header>
   <main>
     <section class="heading"><div><p class="eyebrow">OPERATOR WORKSPACE</p><h1>Perception & control</h1></div><div class="mode-tag" id="mode">Checking backend</div></section>
@@ -41,12 +42,12 @@
           <button class="direction" data-action="reverse_right" disabled aria-label="Reverse right arc"><span aria-hidden="true">↘</span><small>Reverse R</small></button>
         </div>
         <section id="joystick-panel" class="joystick-panel" hidden aria-label="Car-like joystick">
-          <div class="joystick-heading"><strong>Joystick</strong><span>HOLD · DRAG · RELEASE</span></div>
+          <div class="joystick-heading"><strong>Keyboard driving</strong><span>HOLD · RELEASE TO STOP</span></div>
           <label class="select-label joystick-layout" hidden>Layout <select id="joystick-mode"><option value="steering" selected>Keyboard · W A S D</option></select></label>
           <div class="keyboard-steering" aria-label="Keyboard steering indicators"><span id="steering-left"><kbd>A</kbd> LEFT</span><span id="steering-right"><kbd>D</kbd> RIGHT</span></div>
           <div id="pedal-controls" class="pedal-controls" hidden>
             <p class="ramp-readout">Ramp request <strong id="pedal-speed-value">0.000 m/s</strong><span>0.30 m/s ceiling · 5 s S-curve · not measured speed</span></p>
-            <div class="pedal-grid"><button id="pedal-forward" class="travel-pedal" type="button" disabled>Hold forward<small>W / ↑ · release to stop</small></button><button id="pedal-reverse" class="travel-pedal" type="button" disabled>Hold reverse<small>S / ↓ · release to stop</small></button><button id="pedal-brake" class="travel-brake" type="button" disabled>Brake<small>B · fresh press to travel again</small></button></div>
+            <div class="pedal-grid"><button id="pedal-forward" class="travel-pedal" type="button" disabled><kbd>W</kbd> Forward<small>↑ · release to stop</small></button><button id="pedal-reverse" class="travel-pedal" type="button" disabled><kbd>S</kbd> Reverse<small>↓ · release to stop</small></button><button id="pedal-brake" class="travel-brake" type="button" disabled>Brake<small>B · fresh press to travel again</small></button></div>
             <details><summary>Key behaviour</summary><p>W/S accelerate forward/reverse from rest. Press the opposite key while travelling to decelerate; both keys brake, not cruise. At zero, release and press afresh to reverse. B requests immediate zero. Release all travel to stop. Steering does not reduce the speed request.</p><p>When checked, healthy and stationary, a fresh travel press can enable without a separate click. A held key never resumes after a fault. Stop/Space/Escape locks this shortcut until explicit Enable or untick/re-tick. Keyboards do not measure pressure.</p></details>
           </div>
           <button type="button" id="joystick-pad" class="joystick-pad" disabled aria-label="Touch steering only. On a keyboard use A and D.">
@@ -63,12 +64,37 @@
       </section>
       <section class="panel lidar-panel" aria-labelledby="lidar-title">
         <div class="panel-head"><h2 id="lidar-title">Map + LiDAR</h2><span id="map-state" class="tiny-label">Checking /map</span><span id="scan-state" class="pill">NO SCAN</span></div>
+        <div class="scene-toolbar" role="group" aria-label="View only, never drives robot"><button id="scene-zoom-in" type="button" aria-label="Zoom LiDAR in">+</button><button id="scene-zoom-out" type="button" aria-label="Zoom LiDAR out">−</button><button id="scene-orbit" type="button">3D orbit</button><button id="scene-pan" type="button" aria-pressed="false">Pan</button><button id="scene-reset" type="button">Reset / top</button><output id="scene-zoom">1.00× · Top view</output></div>
         <div class="lidar-content"><canvas id="scan" width="640" height="360" aria-label="Two-dimensional laser returns in the sensor frame"></canvas></div>
+        <div class="vehicle-key"><canvas id="vehicle-key" width="76" height="54" aria-label="Illustrative car with wheels and headlights pointing right"></canvas><span>Headlights → front. Illustrative, not footprint.<br>Actual car pose requires body TF. Drag view to orbit; Pan to move view.</span></div>
         <p id="scan-colour-note" class="footnote">Point colour: laser distance, red 0 m → blue 4 m. Not object classes. Map cells, if supplied: grey unknown, white zero occupancy, black high occupancy.</p>
         <details class="panel-details"><summary>Scan status, coordinates & limits</summary><p id="scan-note" class="footnote" role="status">Waiting for the dashboard's ROS subscriber. Connection alone does not prove scan data is arriving.</p><p class="footnote">Scan-only: +X laser up, +Y left; body heading is unknown, so no guessed car is drawn. Grey cells are unknown; pale sectors cover individual valid measured beams only, not safe driving clearance or a saved map. Body car/scan alignment requires TF. Dots are measurements, not object labels.</p></details>
       </section>
-      <section class="panel health-panel" aria-labelledby="health-title"><div class="panel-head"><div><p class="eyebrow">TELEMETRY / READINESS</p><h2 id="health-title">Robot readings</h2></div></div><ul class="health-list"><li><span>Dashboard</span><strong id="backend-health">Checking</strong></li><li><span>Colour messages</span><strong id="rgb-health">Unknown</strong></li><li><span>YOLO images</span><strong id="yolo-health">Unknown</strong></li><li><span>Laser messages</span><strong id="scan-health">Unknown</strong></li><li><span>Motor output</span><strong id="motor-health" class="amber">Checking mode</strong></li></ul><div class="scan-readout"><span>Nearest valid laser return · any direction</span><strong id="scan-minimum">— <small>m</small></strong><dl><dt>ROS topic</dt><dd><code id="scan-topic">/scan</code></dd><dt>Connections</dt><dd id="scan-connections">—</dd><dt>Publisher</dt><dd id="scan-publisher">—</dd><dt>Arrival rate</dt><dd id="scan-rate">—</dd><dt>Arrival age</dt><dd id="scan-age">—</dd><dt>Messages</dt><dd id="scan-messages">—</dd><dt>Valid ranges</dt><dd id="scan-count">—</dd><dt>Frame</dt><dd id="scan-frame">—</dd><dt>Display radius</dt><dd>4 m</dd></dl></div><details class="panel-details"><summary>Service information</summary><p id="ros-note" class="footnote">No camera or motor drivers are started by this page.</p><p class="footnote">Automatic boot is not configured.</p><p id="next-step" class="next-step">Connect the existing robot services. No automatic navigation or obstacle avoidance.</p></details></section>
+      <section class="panel health-panel" aria-labelledby="health-title">
+        <div class="panel-head"><div><p class="eyebrow">TELEMETRY / READINESS</p><h2 id="health-title">Robot readings</h2></div></div>
+        <ul class="health-list">
+          <li><span>Dashboard</span><strong id="backend-health">Checking</strong></li>
+          <li><span>Colour messages</span><strong id="rgb-health">Unknown</strong></li>
+          <li><span>YOLO images</span><strong id="yolo-health">Unknown</strong></li>
+          <li><span>Laser messages</span><strong id="scan-health">Unknown</strong></li>
+          <li><span>Motor output</span><strong id="motor-health" class="amber">Checking mode</strong></li>
+        </ul>
+        <div class="scan-readout"><span>Nearest valid laser return · any direction</span><strong id="scan-minimum">— <small>m</small></strong>
+          <dl><dt>ROS topic</dt><dd><code id="scan-topic">/scan</code></dd>
+            <dt>Connections</dt><dd id="scan-connections">—</dd><dt>Publisher</dt><dd id="scan-publisher">—</dd>
+            <dt>Arrival rate</dt><dd id="scan-rate">—</dd><dt>Arrival age</dt><dd id="scan-age">—</dd>
+            <dt>Messages</dt><dd id="scan-messages">—</dd><dt>Valid ranges</dt><dd id="scan-count">—</dd>
+            <dt>Frame</dt><dd id="scan-frame">—</dd><dt>Scan data cap</dt><dd>16 m · view zoomable</dd>
+          </dl>
+        </div>
+        <details class="panel-details"><summary>Service information</summary>
+          <p id="ros-note" class="footnote">No camera or motor drivers are started by this page.</p>
+          <p class="footnote">Automatic boot is not configured.</p>
+          <p id="next-step" class="next-step">Connect the existing robot services. No automatic navigation or obstacle avoidance.</p>
+        </details>
+      </section>
     </div>
+    <section class="observation-strip" aria-labelledby="observations-title"><h2 id="observations-title">Camera observations · not fused positions</h2><p id="observation-state">Waiting for source detections. Nothing is saved.</p><pre id="observation-list">No live observations.</pre></section>
     <footer>LOCAL-FIRST · No cloud, external fonts or analytics. <span>Research prototype · not a safety system.</span></footer>
   </main>
 </body>

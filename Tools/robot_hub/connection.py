@@ -23,7 +23,7 @@ REMOTE = '/home/wheeltec/fahad'
 AGENT = REMOTE + '/robot_hub/agent.py'
 
 
-from runtime_bundle import local_manifest
+from runtime_bundle import local_manifest, source_file
 
 
 class RobotConnection:
@@ -143,7 +143,7 @@ class RobotConnection:
         with self.client.open_sftp() as sftp:
             sftp.get_channel().settimeout(10)
             for name in RUNTIME_FILES:
-                self._upload(sftp, (Path(source) / name).read_bytes(), stage + '/' + name)
+                self._upload(sftp, source_file(source, name).read_bytes(), stage + '/' + name)
             self._upload(sftp, json.dumps(manifest, sort_keys=True).encode('utf8'), stage + '/manifest.json')
         result = self.rpc('deploy', identity)
         if not result.get('verified'):

@@ -23,6 +23,12 @@ class RosReader(object):
         self.lock = threading.Lock()
         rospy.init_node('fahad_dashboard_reader', anonymous=True, disable_signals=True)
         self.subscribers = []
+        try:
+            from darknet_ros_msgs.msg import BoundingBoxes
+            self.subscribers.append(rospy.Subscriber(TOPICS['boxes'], BoundingBoxes,
+                                                     self.boxes_callback, queue_size=1))
+        except ImportError:
+            dashboard.observation_error = 'darknet_ros_msgs unavailable; camera-only labels disabled'
         for source in ('rgb', 'yolo'):
             self.subscribers.append(rospy.Subscriber(
                 TOPICS[source], Image, self.image_callback, callback_args=source,
@@ -50,6 +56,20 @@ class RosReader(object):
     def image_callback(self, message, source):
         with self.lock:
             self.pending[source] = (message, self.dashboard.clock())
+
+    def boxes_callback(self, message):
+        try:
+            from fahad_core.observations import camera_observations, source_age
+            observations = camera_observations(message)
+            observations['source_age_s'] = max(0, source_age(observations, self.rospy.Time.now().to_sec()))
+            with self.dashboard.lock:
+                self.dashboard.observations = observations
+                self.dashboard.observation_received = self.dashboard.clock()
+                self.dashboard.observation_error = None
+        except (ImportError, AttributeError, TypeError, ValueError, OverflowError, UnicodeError):
+            with self.dashboard.lock:
+                self.dashboard.observations = None
+                self.dashboard.observation_error = 'Invalid/stale source boxes or missing shared dependency'
 
     def map_callback(self, message):
         with self.lock:
@@ -113,6 +133,16 @@ class RosReader(object):
             self.dashboard.last_scan_attempt = now
         try:
             summary = scan_summary(message)
+            # Optional acquisition-timed body pose in the actual laser frame.
+            # Missing TF means no car pose; never assume sensor +X is car front.
+            buffer = getattr(self, 'tf_buffer', None)
+            if buffer and summary.get('stamp') and 0 <= self.rospy.Time.now().to_sec()-summary['stamp'] < .5:
+                try:
+                    transform = buffer.lookup_transform(summary['frame'], 'base_footprint',
+                        self.rospy.Time.from_sec(summary['stamp']), self.rospy.Duration(0))
+                    summary['robot_pose'] = planar_pose(transform.transform.translation, transform.transform.rotation)
+                except Exception:
+                    pass
             with self.dashboard.lock:
                 self.dashboard.scan = summary
                 self.dashboard.scan_time = now

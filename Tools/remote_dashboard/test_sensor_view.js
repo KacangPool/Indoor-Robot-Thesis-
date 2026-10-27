@@ -29,6 +29,7 @@ const sectors=view.observedSectors(rays);
 assert.equal(sectors.length,2);assert.equal(sectors[0].inner,0.1);
 assert.equal(sectors[0].outer,0.97);assert.equal(sectors[1].outer,3.97);
 assert.equal(sectors[0].half,0.005);assert.equal(sectors[1].angle,1); // no interpolation across gap
+assert.equal(view.observedSectors({...rays,observed_rays:[[0,100]]})[0].outer,15.97);
 for(const override of [{available:false},{range_min_m:-1},{range_min_m:NaN},{ray_width_rad:0},{ray_width_rad:1}])
   assert.deepEqual(view.observedSectors({...rays,...override}),[]);
 assert.equal(view.observedSectors({...rays,observed_rays:Array(2000).fill([0,1])}).length,720);
@@ -39,6 +40,27 @@ assert.equal(nodes.scan.width,900);assert.equal(nodes.scan.height,320);
 assert.match(ui('scan-colour-note').textContent,/NOT guaranteed traversable/);
 assert(drawn.some(s=>s.includes('car heading unverified')));
 const css=fs.readFileSync(__dirname+'/dist/controls.css','utf8');
-assert(css.includes("'camera lidar readings' 'camera controls readings'"));
+assert(css.includes("'camera lidar controls' 'camera lidar readings'"));
 assert(css.includes('.camera-stage img{object-fit:fill}'));
 console.log('Sensor-view checks passed: colours, map cache, bounded individual rays, stale/invalid rejection, blind zone, metric resize, layout and unverified heading.');
+const geometry=require('./dist/scene_geometry.js');let state=geometry.initial();
+assert.deepEqual(geometry.project(state,[25,40,0],640,480),[25,40]);
+for(let i=0;i<100;i++)state=geometry.update(state,'zoom',2);
+assert.equal(state.zoom,8);for(let i=0;i<100;i++)state=geometry.update(state,'zoom',.5);assert.equal(state.zoom,.25);
+state=geometry.update(geometry.initial(),'oblique');
+const low=geometry.project(state,[320,240,0],640,480),high=geometry.project(state,[320,240,10],640,480);
+assert(high[1]<low[1]);assert.deepEqual(geometry.update(state,'reset'),geometry.initial());
+assert.deepEqual(geometry.update(state,'pan',NaN,1),state);
+let tick=1000;const eventNodes={};
+const eventUI=id=>eventNodes[id]||=(Object.assign({listeners:{},width:640,height:360,textContent:'',
+  addEventListener(k,fn){this.listeners[k]=fn;},setPointerCapture(){},hasPointerCapture(){return false;},
+  getContext:()=>new Proxy({},{get:()=>()=>{}})}));
+const interactive=view.create({ui:eventUI,pill:()=>{},seconds:String,getMap:()=>null,canUseMap:()=>false,now:()=>tick});
+interactive.renderScan({available:true,age_s:0,points:[[1,0]],valid_samples:1});
+eventUI('scene-zoom-in').listeners.click();assert.equal(interactive.viewState().zoom,1.25);
+eventUI('scene-orbit').listeners.click();assert(interactive.viewState().pitch>0);
+eventUI('scan').listeners.pointerdown({pointerId:1,button:0,clientX:10,clientY:10,preventDefault(){}});
+eventUI('scan').listeners.pointermove({pointerId:1,clientX:30,clientY:30,preventDefault(){}});
+assert.notEqual(interactive.viewState().yaw,0);
+tick=4000;eventUI('scene-zoom-in').listeners.click();assert.match(eventUI('scan-colour-note').textContent,/No current scan/);
+console.log('Orthographic view bounds, reset, pointer orbit, input isolation and stale redraw checks passed.');

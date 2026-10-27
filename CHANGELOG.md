@@ -2,6 +2,65 @@
 
 This file records material changes, research findings, decisions, and experiments so the project can continue reliably across different chats.
 
+## 2026-10-27
+
+### v0.16 viewer and semantic-observation foundation
+
+- User (assistant nickname Agatha) requests source work before lab: equal large
+  camera/LiDAR panels, split scrollable controls/readings sidebar, consistent
+  W/A/S/D style, zoom/orbit/pan and clearer headlights/tyres. Persistent run maps
+  and autonomous driving remain deferred. Missing returns/successful movement
+  are not evidence of floating objects, tables, support or safe clearance.
+- Design recorded first in Documentation/SEMANTIC_VIEW_V016.md. Pure
+  scene_geometry.js provides bounded orthographic view matrices/state, zoom0.25–8x,
+  reset and pan/orbit. Existing renderer reuses the same planar coordinates and
+  map raster; view inputs have no drive/network API and stale redraw stays hidden.
+  Actual car pose needs acquisition-timed TF; prominent reference key is not pose.
+- Zoom-out data display cap extended4m→16m for finite valid points/ray bins only;
+  not a sensor range/accuracy claim. Colour still saturates blue at4m. Final
+  supported-ray records carry exact scan/image headers, synthetic flag and expiry.
+  These final provenance/display refinements passed focused checks after the full
+  run below; that full-run Windows error is retained, not retried into a pass.
+- Shared observations.py reuses detection/recording helpers; optional read-only
+  BoundingBoxes subscription retains100camera-only records with exact image
+  headers and2s total source/arrival expiry. Missing message dependencies degrade
+  without breaking camera display; bad/stale messages invalidate old records.
+  Browser labels are bounded textContent, never HTML. No persistent history.
+- semantic_scene.py reuses fuse_snapshot/depth_support: unmatched labels retained;
+  independently verified depth can yield optical and laser-frame surface XYZ and
+  provisional sampled height relative to scan plane, not object/floor height.
+  Camera-depth-only evidence is separate from labelled actual supported ray
+  indices and acquisition-timed map observations. Missing map TF never invents
+  positions; missing valid laser returns does not discard otherwise gated depth.
+  No clearance/support/floating classifier, occupancy update or live positional
+  fusion adapter. Raw/rectified calibration/TF/time gates remain prerequisites.
+- Offline demo now10synthetic cases, retaining the original8 and adding monitor
+  above supported table and monitor without verified depth. Report layers/types
+  distinguish camera-depth surfaces from laser labels. No YOLO inference or real
+  sensor result. Explicit report files are not on-robot/per-run map saving.
+- Hub22fixed runtime files, including scene geometry and4allowlisted core files;
+  hashing/upload/isolation tests share source_file resolver and path containment.
+  Diagnostic ZIP21source files. Updated entry points, manifests, dependency/copy
+  docs and tests together. No package/model/ROS/Python upgrades or vendor rewrite.
+- Initial full094848_d748ebdf passes105Tools/264dashboard/Hub53+one Windows symlink
+  skip. After final no-return/text tests, latest095454_ea39694e has106Tools pass,
+  dashboard263pass/one Windows10053 error in legacy request-guard test_web_crawl,
+  Hub53pass/one skip; JS/static/config/runtime checks pass. No retry/exclusion hides
+  that unresolved abort. Focused semantic9pass, frontend92pass, view tests pass.
+- Motor-free localhost8877 preview stopped after Computer Use could not verify
+  the Windows browser URL with policy confidence. No bypass or visual QA success.
+  No Jetson execution, robot upload, real subscription/alignment experiment, speed
+  increase or autonomy. Existing0.30m/s and every motion/security guard unchanged.
+- Source/docs/context/handover updated;20handover links resolve, whitespace check
+  passes, final explicit demo has10scenes and diagnostic ZIP21source files. No
+  public GitHub push, robot deployment or university-network test.
+- Private planner: source progress/27October roadmap updated without personal
+  data edits or hardware completion claims, including the latest attention-required
+  test result and visual-policy blocker.25core tests and TypeScript pass; production
+  build passes with plugin timing warnings. Supported helper preserves prior source
+  and publishes646bb89260f325b15a1d15632f1a849081d43abc; native owner-private
+  deployment succeeded27October. No new hosted-browser/API test or audience change.
+
 ## 2026-10-26
 
 ### Runtime registration defaults confirmed; next step is visual correspondence

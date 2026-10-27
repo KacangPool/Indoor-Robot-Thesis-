@@ -1,6 +1,7 @@
 /* Reusable read-only scan/map renderer. No fetch, timers, ROS or drive access. */
 (function(root){
   'use strict';
+const geometry=typeof module!=='undefined'&&module.exports?require('./scene_geometry.js'):root.FahadSceneGeometry;
 function rangeColour(distance){
   return Number.isFinite(distance) && distance>=0?'hsl('+Math.round(Math.min(1,distance/4)*240)+',90%,65%)':'#8ad8bd';
 }
@@ -14,15 +15,43 @@ function observedSectors(scan){
   const inner=scan.range_min_m,half=scan.ray_width_rad/2;
   return (Array.isArray(scan.observed_rays)?scan.observed_rays:[]).slice(0,720).flatMap(ray=>{
     if(!Array.isArray(ray) || ray.length!==2 || !ray.every(Number.isFinite))return [];
-    const [angle,distance]=ray,outer=Math.min(4,distance)-0.03;
+    const [angle,distance]=ray,outer=Math.min(16,distance)-0.03;
     return distance>0 && outer>inner?[{angle,half,inner,outer}]:[];
   });
 }
 
 function create(options){
   const {ui,pill,seconds,getMap,canUseMap,document:dom}=options;
-  let mapRaster=null;
+  const now=options.now||(()=>Date.now());
+  let mapRaster=null,view=geometry.initial(),lastScan=null,expiresAt=0,drag=null;
+  const zoomLabel=ui('scene-zoom');
+  function repaint(){drawScan(now()<expiresAt?lastScan:{available:false});}
+  function action(name,x,y){view=geometry.update(view,name,x,y);repaint();}
+  function listen(id,event,handler,opts){const node=ui(id);if(node&&typeof node.addEventListener==='function')node.addEventListener(event,handler,opts);}
+  for(const [id,operation,x] of [['scene-zoom-in','zoom',1.25],['scene-zoom-out','zoom',0.8],['scene-reset','reset',0],['scene-orbit','oblique',0]])
+    listen(id,'click',()=>action(operation,x,0));
+  listen('scene-pan','click',()=>action('tool',view.tool==='pan'?0:1,0));
+  listen('scan','wheel',event=>{if(!Number.isFinite(event.deltaY))return;event.preventDefault();action('zoom',Math.exp(-Math.max(-500,Math.min(500,event.deltaY))*0.002),0);},{passive:false});
+  listen('scan','pointerdown',event=>{
+    if(drag||event.isPrimary===false||(event.button!==undefined&&event.button!==0)||![event.clientX,event.clientY].every(Number.isFinite))return;
+    event.preventDefault();drag={id:event.pointerId,x:event.clientX,y:event.clientY};
+    try{ui('scan').setPointerCapture(event.pointerId);}catch(_){drag=null;}
+  });
+  listen('scan','pointermove',event=>{
+    if(!drag||drag.id!==event.pointerId||![event.clientX,event.clientY].every(Number.isFinite))return;
+    event.preventDefault();const dx=event.clientX-drag.x,dy=event.clientY-drag.y;drag.x=event.clientX;drag.y=event.clientY;
+    action(view.tool==='pan'?'pan':'orbit',view.tool==='pan'?dx:dx*.008,view.tool==='pan'?dy:dy*.008);
+  });
+  for(const name of ['pointerup','pointercancel','lostpointercapture'])listen('scan',name,event=>{
+    if(!drag||drag.id!==event.pointerId)return;drag=null;
+    if(name==='pointerup'&&ui('scan').hasPointerCapture&&ui('scan').hasPointerCapture(event.pointerId))ui('scan').releasePointerCapture(event.pointerId);
+  });
+  function viewLabel(){
+    if(zoomLabel)zoomLabel.textContent=view.zoom.toFixed(2)+'× · '+(view.pitch?'3D view / flat data':'Top view')+' · '+view.tool;
+    const pan=ui('scene-pan');if(pan&&typeof pan.setAttribute==='function')pan.setAttribute('aria-pressed',String(view.tool==='pan'));
+  }
 function renderScan(scan) {
+  lastScan=scan;expiresAt=scan&&scan.available?now()+Math.max(0,2-(scan.age_s||0))*1000:0;
   const descriptions = {
     preview:['PREVIEW ONLY','No robot connected. This is not simulated LiDAR data.'],
     waiting:['CHECKING ROS','Waiting for the /scan subscriber connection and first message.'],
@@ -60,10 +89,11 @@ function drawScan(scan) {
     if(canvas.width!==width || canvas.height!==height){canvas.width=width;canvas.height=height;}
   }
   const mapView=getMap();
-  if(mapView && mapView.available && canUseMap()){drawOccupancy(mapView);return;}
   const ctx = canvas.getContext('2d'), cx = canvas.width/2, cy = canvas.height/2;
   const scale = Math.max(1,(Math.min(canvas.width,canvas.height)/2 - 24)/4);
   ctx.clearRect(0,0,canvas.width,canvas.height);
+  viewLabel();ctx.save();ctx.transform(...geometry.matrix(view,canvas.width,canvas.height));
+  if(mapView && mapView.available && canUseMap()){drawOccupancy(mapView);ctx.restore();return;}
   if (scan && scan.available) {
     ui('scan-colour-note').textContent='SCAN ONLY · current beams, /map unavailable. Grey cells: unknown. Pale ray bins: finite-range visibility sketch, NOT guaranteed traversable or measured beam footprints. Point colour = distance from laser: red 0 m → blue 4 m. Not object classes. No saved room map.';
     ctx.fillStyle='#66747e';ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -84,7 +114,7 @@ function drawScan(scan) {
     }
     for (let i=0;i<(scan.points || []).length;i++) {
       const [x,y]=scan.points[i];
-      if (x*x+y*y > 16) continue;
+      if (x*x+y*y > 256) continue;
       ctx.fillStyle=rangeColour(Math.hypot(x,y));
       ctx.beginPath(); ctx.arc(cx-y*scale,cy-x*scale,2.4,0,Math.PI*2); ctx.fill();
     }
@@ -94,17 +124,22 @@ function drawScan(scan) {
     ctx.fillStyle='#123e38';ctx.fillRect(cx-5,cy-5,10,10);
     ctx.fillStyle='#d9fff0';ctx.font='11px system-ui';ctx.fillText('+X laser',cx+8,cy-12);
     ctx.fillText('+Y',cx-37,cy+16);
+    const robot=scan.robot_pose;
+    if(robot&&[robot.x,robot.y,robot.yaw].every(Number.isFinite))drawVehicle(ctx,cx-robot.y*scale,cy-robot.x*scale,-Math.PI/2-robot.yaw);
   }
-  ctx.fillStyle='#e0e7eb';ctx.font='10px system-ui';ctx.fillText('Laser origin only; car heading unverified without body TF',12,canvas.height-8);
+  ctx.restore();
+  const pose=scan&&scan.available&&scan.robot_pose;
+  const known=pose&&[pose.x,pose.y,pose.yaw].every(Number.isFinite);
+  ctx.fillStyle='#e0e7eb';ctx.font='10px system-ui';ctx.fillText(known?'Car: acquisition-time body TF; icon is not footprint':'Laser origin only; car heading unverified without body TF',12,canvas.height-8);
 }
 function drawVehicle(ctx,x,y,angle){
   ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.fillStyle='#0a1116';
-  for(const sx of [-10,7])for(const sy of [-12,8])ctx.fillRect(sx,sy,7,4);
-  ctx.fillStyle='#8ad8bd';ctx.fillRect(-14,-8,28,16);ctx.fillStyle='#234f4b';ctx.fillRect(0,-6,8,12);
-  ctx.fillStyle='#edf9f4';ctx.fillRect(12,-6,3,4);ctx.fillRect(12,2,3,4);ctx.restore();
+  for(const sx of [-17,10])for(const sy of [-18,12])ctx.fillRect(sx,sy,12,6);
+  ctx.fillStyle='#8ad8bd';ctx.fillRect(-22,-12,44,24);ctx.fillStyle='#234f4b';ctx.fillRect(1,-10,12,20);
+  ctx.fillStyle='#ffe598';ctx.fillRect(20,-10,4,6);ctx.fillRect(20,4,4,6);ctx.restore();
   // Front is explicitly local +X, transformed by the supplied body pose.
   ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.fillStyle='#ffffff';
-  ctx.beginPath();ctx.moveTo(23,0);ctx.lineTo(17,-4);ctx.lineTo(17,4);ctx.closePath();ctx.fill();ctx.restore();
+  ctx.beginPath();ctx.moveTo(34,0);ctx.lineTo(27,-5);ctx.lineTo(27,5);ctx.closePath();ctx.fill();ctx.restore();
 }
 function drawOccupancy(map){
   const canvas=ui('scan'),ctx=canvas.getContext('2d'),w=map.width,h=map.height;
@@ -138,7 +173,8 @@ function drawOccupancy(map){
   ui('scan-colour-note').textContent='MAP '+map.frame+' · white: zero occupancy · grey: unknown · black: high occupancy. Points: laser distance, red 0 m → blue 4+ m; mint if range unavailable. Not object classes. Not guaranteed drivable. '+(robot?'Car: fresh TF pose; icon not to scale.':'Car hidden: no fresh map→base_footprint TF.')+' Snapshot '+seconds(map.age_s)+' old.';
 }
 
-  return {renderScan,drawScan,drawOccupancy,reset:()=>{mapRaster=null;}};
+  const key=ui('vehicle-key');if(key&&typeof key.getContext==='function')drawVehicle(key.getContext('2d'),32,27,0);
+  return {renderScan,drawScan,drawOccupancy,action,viewState:()=>({...view}),reset:()=>{mapRaster=null;lastScan=null;expiresAt=0;drag=null;}};
 }
 const api={create,rangeColour,observedSectors};
 if(typeof module!=='undefined' && module.exports)module.exports=api;

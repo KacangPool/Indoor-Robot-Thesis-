@@ -1,6 +1,19 @@
 # Fahad Robot Hub · Windows
 
-## Latest source v0.15 — sensor-first console (2026-10-26)
+## Latest source v0.16 — view controls and shared observation dependency (2026-10-27)
+
+Fixed runtime now22files: equal camera/LiDAR panels, view-only zoom/pan/orbit,
+uniform keyboard control styling and bounded camera-only detection snapshots.
+Four allowlisted shared fahad_core files are read from the sibling source folder
+and installed inside the runtime. Keep Tools/robot_hub, remote_dashboard and
+fahad_core together; manifests/upload/import tests cover the new dependency path.
+No robot deployment, speed/guard change or autonomous function. Actual fused
+positions remain blocked by missing calibration/TF. Details and explicit limits:
+Documentation/SEMANTIC_VIEW_V016.md. Stop and confirm stationary before updating
+through the existing Hub; reopen it, Connect & prepare, verifyv0.16, reload one
+console. Runtime originals remain subject to the existing ownership/backup rules.
+
+## Previous source v0.15 — sensor-first console (2026-10-26)
 
 Installs the same 17-file runtime contract with a large left camera, LiDAR above
 controls and compact right readings. Scan-only shading distinguishes unknown
@@ -136,7 +149,7 @@ unknown/changed identities. Existing Windows SSH use may already have saved it.
 
 - Reuses registered camera/YOLO, LiDAR and the expected isolated base when healthy.
 - Starts missing services with fixed launch commands, not arbitrary user commands.
-- Updates the **personal trial dashboard** to v0.15, with checksums and backups.
+- Updates the **personal trial dashboard** to v0.16, with checksums and backups.
 - Opens a private, laptop-loopback SSH tunnel and shows running version/speed.
 - Shows freshness/readiness separately from merely registered ROS nodes.
 - Offers service logs, status-report export, check-only and software Stop.

@@ -165,6 +165,7 @@ def fuse_snapshot(snapshot, overrides=None):
             centre = [median(p['laser_xyz_m'][axis] for p in hits) for axis in range(3)]
             representative = min(hits, key=lambda p: sum((p['laser_xyz_m'][axis]-centre[axis])**2 for axis in range(3)))
             record['candidates'].append({'cluster_id': cluster_id, 'point_count': len(hits),
+                'ray_indices': [p['index'] for p in hits],
                 'camera_z_m': camera_z, 'laser_point_m': representative['laser_xyz_m'],
                 'laser_range_m': median(p['range_m'] for p in hits)})
         if not record['candidates']:
