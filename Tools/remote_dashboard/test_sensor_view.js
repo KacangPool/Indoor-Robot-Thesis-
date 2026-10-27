@@ -64,3 +64,61 @@ eventUI('scan').listeners.pointermove({pointerId:1,clientX:30,clientY:30,prevent
 assert.notEqual(interactive.viewState().yaw,0);
 tick=4000;eventUI('scene-zoom-in').listeners.click();assert.match(eventUI('scan-colour-note').textContent,/No current scan/);
 console.log('Orthographic view bounds, reset, pointer orbit, input isolation and stale redraw checks passed.');
+
+// Heading selection and follow are display-only: rotate the whole scene, never
+// rewrite scan points, guess velocity heading or manufacture a body transform.
+const close=(a,b)=>assert(Math.abs(a-b)<1e-9,`${a} != ${b}`);
+const angleClose=(a,b)=>{close(Math.sin(a-b),0);close(Math.cos(a-b),1);};
+for(const yaw of [0,Math.PI/2,Math.PI,-Math.PI/2,.37]){
+  const s=geometry.update(geometry.update(geometry.initial(),'orbit',.4,.5),'pan',30,-20);
+  const p=geometry.project(s,[320-Math.sin(yaw)*100,240-Math.cos(yaw)*100,0],640,480);
+  angleClose(geometry.headingFromPoint(s,p,640,480),yaw);
+  const anchor=[200,170],angle=-Math.PI/2-yaw,front=geometry.frontUp(s,anchor,angle,640,480);
+  const origin=geometry.project(front,anchor,640,480);
+  const nose=geometry.project(front,[anchor[0]+Math.cos(angle)*50,anchor[1]+Math.sin(angle)*50,0],640,480);
+  close(origin[0],320);close(origin[1],240);close(nose[0],320);assert(nose[1]<240);
+}
+assert.equal(geometry.headingFromPoint(geometry.initial(),[320,240],640,480),null);
+assert.equal(geometry.headingFromPoint(geometry.initial(),[NaN,0],640,480),null);
+assert.deepEqual(geometry.frontUp(geometry.initial(),[0,0],NaN,640,480),geometry.initial());
+
+let time=1000,currentMap=null;const frontNodes={},transforms=[],labels=[];
+const frontUI=id=>frontNodes[id]||={listeners:{},width:640,height:480,textContent:'',
+  addEventListener(k,fn){this.listeners[k]=fn;},setAttribute(){},
+  getBoundingClientRect:()=>({left:100,top:50,width:320,height:240}),
+  getContext:()=>new Proxy({transform:(...v)=>transforms.push(v),fillText:s=>labels.push(s)},{get:(o,k)=>o[k]||(()=>{})})};
+const frontView=view.create({ui:frontUI,pill(){},seconds:String,getMap:()=>currentMap,canUseMap:()=>!!currentMap,now:()=>time});
+const scan={available:true,age_s:0,frame:'laser',points:[[1,0]],valid_samples:1};
+const original=JSON.stringify(scan);
+frontView.renderScan(scan);assert.match(frontUI('scene-heading').textContent,/Front unknown/);
+const click=id=>frontUI(id).listeners.click();
+const mark=(x=260,y=230)=>{click('scene-mark-front');frontUI('scan').listeners.pointerdown({pointerId:9,button:0,clientX:x,clientY:y,preventDefault(){}});};
+mark(); // CSS-scaled click below centre => nose at laser -X, not +X.
+assert.equal(frontView.viewState().followFront,true);angleClose(frontView.viewState().manualFront.yaw,Math.PI);
+assert.match(frontUI('scene-heading').textContent,/operator mark/);assert(labels.some(s=>s.includes('manual front')));
+const south=transforms.at(-1);close(south[0],-1);close(south[3],-1);
+assert.equal(JSON.stringify(scan),original);assert.equal(scan.robot_pose,undefined);
+click('scene-zoom-in');close(frontView.viewState().zoom,1.25);assert(frontView.viewState().followFront);
+click('scene-orbit');assert.equal(frontView.viewState().followFront,false);
+click('scene-reset');assert(frontView.viewState().followFront);assert(frontView.viewState().manualFront);
+// Fresh TF overrides manual display mark; lateral offset is centred too.
+frontView.renderScan({...scan,robot_pose:{x:.1,y:.2,yaw:Math.PI/2},vx:-.1});
+assert.match(frontUI('scene-heading').textContent,/body \+X/);
+let matrix=transforms.at(-1);close(matrix[0],0);close(matrix[1],1);
+const bodyPixel=[320-.2*54,240-.1*54];
+close(matrix[0]*bodyPixel[0]+matrix[2]*bodyPixel[1]+matrix[4],320);
+close(matrix[1]*bodyPixel[0]+matrix[3]*bodyPixel[1]+matrix[5],240);
+frontView.renderScan({...scan,robot_pose:{x:.1,y:.2,yaw:Math.PI/2},vx:.1});
+assert.deepEqual(transforms.at(-1),matrix); // reverse does not flip the nose
+// A manual laser-frame mark cannot supply a missing map-frame body pose.
+currentMap={available:true,width:2,height:2,resolution:1,origin:{x:0,y:0,yaw:.3},cells:[-1,0,0,0],overlay:{},frame:'map',age_s:0};
+frontView.drawScan(scan);assert.match(frontUI('scene-heading').textContent,/Front unknown/);
+assert(frontUI('scene-mark-front').disabled);
+currentMap={...currentMap,overlay:{robot:{x:1,y:1,yaw:.8}}};frontView.drawScan(scan);
+matrix=transforms.at(-1);close(Math.atan2(matrix[1],matrix[0]),-.5*Math.PI+.8-.3);
+currentMap=null;frontView.renderScan({...scan,frame:'other_laser'});assert.equal(frontView.viewState().manualFront,null);
+frontView.renderScan(scan);mark();click('scene-clear-front');assert.equal(frontView.viewState().manualFront,null);
+mark();time=5000;click('scene-zoom-in');assert.match(frontUI('scene-heading').textContent,/Front unknown/);
+click('scene-mark-front');assert.equal(frontView.viewState().markingFront,false);
+frontView.reset();assert.equal(frontView.viewState().manualFront,null);
+console.log('Front-up checks passed: inverse click geometry, scaled canvas, TF precedence, reverse, map/scan frames, freshness, reset and no sensor mutation.');

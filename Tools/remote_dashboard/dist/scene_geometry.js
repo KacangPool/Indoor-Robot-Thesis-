@@ -23,7 +23,24 @@
     const m=matrix(s,width,height);
     return [m[0]*p[0]+m[2]*p[1]+m[4],m[1]*p[0]+m[3]*p[1]+m[5]-(p[2]||0)*s.zoom*Math.sin(s.pitch)];
   }
-  const api={initial,update,matrix,project};
+  // Inverse screen projection on z=0; no inferred body transform or ROS data.
+  function headingFromPoint(s,p,width,height){
+    if(!Array.isArray(p)||p.length!==2||!p.every(Number.isFinite))return null;
+    const m=matrix(s,width,height),det=m[0]*m[3]-m[1]*m[2];
+    const centre=project(s,[width/2,height/2,0],width,height);
+    if(!Number.isFinite(det)||Math.abs(det)<1e-8||Math.hypot(p[0]-centre[0],p[1]-centre[1])<24)return null;
+    const x=p[0]-m[4],y=p[1]-m[5];
+    const dx=(m[3]*x-m[2]*y)/det-width/2,dy=(-m[1]*x+m[0]*y)/det-height/2;
+    return Math.atan2(-dx,-dy); // scan pixels: right=-laser Y, up=laser X
+  }
+  function frontUp(s,anchor,angle,width,height){
+    if(!Array.isArray(anchor)||anchor.length!==2||!anchor.every(Number.isFinite)||!Number.isFinite(angle))return {...s};
+    const result={...s,yaw:-Math.PI/2-angle,pitch:0,panX:0,panY:0};
+    const p=project(result,anchor,width,height);
+    result.panX=width/2-p[0];result.panY=height/2-p[1];
+    return result;
+  }
+  const api={initial,update,matrix,project,headingFromPoint,frontUp};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   if(root)root.FahadSceneGeometry=api;
 })(typeof window!=='undefined'?window:null);

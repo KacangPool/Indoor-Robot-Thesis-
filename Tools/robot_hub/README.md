@@ -1,6 +1,15 @@
 # Fahad Robot Hub · Windows
 
-## Latest source v0.16 — view controls and shared observation dependency (2026-10-27)
+## Latest source v0.17 — front-up viewer (2026-10-27)
+
+Same22file runtime, unchanged motion limits/guards. Adds Front-up, an explicit
+FRONT arrow and a session-only Mark front tool when body TF is missing. Marking
+is a display convention, NOT mounting calibration or body position. Map follow
+requires body TF. See Documentation/FRONT_UP_VIEW_V017.md and the dashboard README.
+Stop, confirm stationary, close/reopen the Hub, Connect & prepare, verifyv0.17 and
+reload the console. No tools have installed this version on the robot.
+
+## Previous source v0.16 — view controls and shared observation dependency (2026-10-27)
 
 Fixed runtime now22files: equal camera/LiDAR panels, view-only zoom/pan/orbit,
 uniform keyboard control styling and bounded camera-only detection snapshots.

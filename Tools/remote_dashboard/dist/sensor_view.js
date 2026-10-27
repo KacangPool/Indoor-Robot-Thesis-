@@ -24,16 +24,38 @@ function create(options){
   const {ui,pill,seconds,getMap,canUseMap,document:dom}=options;
   const now=options.now||(()=>Date.now());
   let mapRaster=null,view=geometry.initial(),lastScan=null,expiresAt=0,drag=null;
+  let followFront=true,markingFront=false,manualFront=null;
+  let renderYaw=0;
   const zoomLabel=ui('scene-zoom');
   function repaint(){drawScan(now()<expiresAt?lastScan:{available:false});}
-  function action(name,x,y){view=geometry.update(view,name,x,y);repaint();}
+  function action(name,x,y){
+    if(['orbit','oblique','pan','tool'].includes(name)){followFront=false;markingFront=false;}
+    if(name==='reset'){followFront=true;markingFront=false;}
+    view=geometry.update(view,name,x,y);repaint();
+  }
   function listen(id,event,handler,opts){const node=ui(id);if(node&&typeof node.addEventListener==='function')node.addEventListener(event,handler,opts);}
   for(const [id,operation,x] of [['scene-zoom-in','zoom',1.25],['scene-zoom-out','zoom',0.8],['scene-reset','reset',0],['scene-orbit','oblique',0]])
     listen(id,'click',()=>action(operation,x,0));
   listen('scene-pan','click',()=>action('tool',view.tool==='pan'?0:1,0));
+  listen('scene-front','click',()=>{followFront=!followFront;markingFront=false;repaint();});
+  listen('scene-mark-front','click',()=>{
+    if(now()>=expiresAt||!lastScan||!lastScan.frame||canUseMap())return;
+    markingFront=!markingFront;followFront=false;drag=null;view=geometry.initial();repaint();
+  });
+  listen('scene-clear-front','click',()=>{manualFront=null;markingFront=false;repaint();});
   listen('scan','wheel',event=>{if(!Number.isFinite(event.deltaY))return;event.preventDefault();action('zoom',Math.exp(-Math.max(-500,Math.min(500,event.deltaY))*0.002),0);},{passive:false});
   listen('scan','pointerdown',event=>{
     if(drag||event.isPrimary===false||(event.button!==undefined&&event.button!==0)||![event.clientX,event.clientY].every(Number.isFinite))return;
+    if(markingFront){
+      event.preventDefault();
+      if(now()>=expiresAt||!lastScan||!lastScan.frame||canUseMap()){markingFront=false;repaint();return;}
+      const canvas=ui('scan'),r=canvas.getBoundingClientRect();
+      if(!(r.width>0&&r.height>0))return;
+      const point=[(event.clientX-r.left)*canvas.width/r.width,(event.clientY-r.top)*canvas.height/r.height];
+      const yaw=geometry.headingFromPoint(view,point,canvas.width,canvas.height);
+      if(yaw!==null){manualFront={frame:lastScan.frame,yaw};markingFront=false;followFront=true;}
+      repaint();return;
+    }
     event.preventDefault();drag={id:event.pointerId,x:event.clientX,y:event.clientY};
     try{ui('scan').setPointerCapture(event.pointerId);}catch(_){drag=null;}
   });
@@ -46,12 +68,20 @@ function create(options){
     if(!drag||drag.id!==event.pointerId)return;drag=null;
     if(name==='pointerup'&&ui('scan').hasPointerCapture&&ui('scan').hasPointerCapture(event.pointerId))ui('scan').releasePointerCapture(event.pointerId);
   });
-  function viewLabel(){
-    if(zoomLabel)zoomLabel.textContent=view.zoom.toFixed(2)+'× · '+(view.pitch?'3D view / flat data':'Top view')+' · '+view.tool;
+  function viewLabel(front){
+    if(zoomLabel)zoomLabel.textContent=view.zoom.toFixed(2)+'× · '+(followFront&&front?'FRONT UP · '+front.source:(view.pitch?'3D view / flat data':'Top view')+' · '+view.tool);
     const pan=ui('scene-pan');if(pan&&typeof pan.setAttribute==='function')pan.setAttribute('aria-pressed',String(view.tool==='pan'));
+    const button=ui('scene-front');if(button&&typeof button.setAttribute==='function')button.setAttribute('aria-pressed',String(followFront));
+    const mark=ui('scene-mark-front');if(mark){mark.textContent=markingFront?'Click towards the nose…':'Mark front';mark.disabled=now()>=expiresAt||!lastScan||!lastScan.frame||canUseMap();}
+    const clear=ui('scene-clear-front');if(clear)clear.disabled=!manualFront;
+    const note=ui('scene-heading');if(note)note.textContent=markingFront?'With driving disabled, click away from the centre towards the physical nose. Display only—not calibration.':
+      front?(front.source==='manual mark'?'FRONT = operator mark at laser origin, not a measured body pose.':'FRONT = body +X from fresh TF. Icon is not the footprint.')+(followFront?' Nose stays up, including in reverse.':' Free view; Front-up restores nose-up.'):
+      'Front unknown: use Mark front on a fresh scan, or supply verified body TF. No direction inferred from driving commands.';
   }
 function renderScan(scan) {
+  if(lastScan&&scan.frame!==lastScan.frame)markingFront=false;
   lastScan=scan;expiresAt=scan&&scan.available?now()+Math.max(0,2-(scan.age_s||0))*1000:0;
+  if(manualFront&&scan.frame!==manualFront.frame)manualFront=null;
   const descriptions = {
     preview:['PREVIEW ONLY','No robot connected. This is not simulated LiDAR data.'],
     waiting:['CHECKING ROS','Waiting for the /scan subscriber connection and first message.'],
@@ -92,7 +122,21 @@ function drawScan(scan) {
   const ctx = canvas.getContext('2d'), cx = canvas.width/2, cy = canvas.height/2;
   const scale = Math.max(1,(Math.min(canvas.width,canvas.height)/2 - 24)/4);
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  viewLabel();ctx.save();ctx.transform(...geometry.matrix(view,canvas.width,canvas.height));
+  const pose=scan&&scan.available&&scan.robot_pose;
+  const known=pose&&[pose.x,pose.y,pose.yaw].every(Number.isFinite);
+  const manual=scan&&scan.available&&manualFront&&scan.frame===manualFront.frame?manualFront:null;
+  const usingMap=mapView&&mapView.available&&canUseMap();
+  const mapRobot=usingMap&&mapView.overlay&&mapView.overlay.robot;
+  const validMapRobot=mapRobot&&[mapRobot.x,mapRobot.y,mapRobot.yaw].every(Number.isFinite);
+  const front=usingMap?(validMapRobot?{...mapRobot,source:'TF'}:null):known?{...pose,source:'TF'}:manual?{x:0,y:0,yaw:manual.yaw,source:'manual mark'}:null;
+  let displayView=view;
+  if(followFront&&front){
+    const anchor=usingMap?mapPixel(mapView,front.x,front.y,canvas):[cx-front.y*scale,cy-front.x*scale];
+    const angle=usingMap?-(front.yaw-mapView.origin.yaw):-Math.PI/2-front.yaw;
+    displayView=geometry.frontUp(view,anchor,angle,canvas.width,canvas.height);
+  }
+  renderYaw=displayView.yaw;
+  viewLabel(front);ctx.save();ctx.transform(...geometry.matrix(displayView,canvas.width,canvas.height));
   if(mapView && mapView.available && canUseMap()){drawOccupancy(mapView);ctx.restore();return;}
   if (scan && scan.available) {
     ui('scan-colour-note').textContent='SCAN ONLY · current beams, /map unavailable. Grey cells: unknown. Pale ray bins: finite-range visibility sketch, NOT guaranteed traversable or measured beam footprints. Point colour = distance from laser: red 0 m → blue 4 m. Not object classes. No saved room map.';
@@ -124,22 +168,31 @@ function drawScan(scan) {
     ctx.fillStyle='#123e38';ctx.fillRect(cx-5,cy-5,10,10);
     ctx.fillStyle='#d9fff0';ctx.font='11px system-ui';ctx.fillText('+X laser',cx+8,cy-12);
     ctx.fillText('+Y',cx-37,cy+16);
-    const robot=scan.robot_pose;
-    if(robot&&[robot.x,robot.y,robot.yaw].every(Number.isFinite))drawVehicle(ctx,cx-robot.y*scale,cy-robot.x*scale,-Math.PI/2-robot.yaw);
+    if(front)drawVehicle(ctx,cx-front.y*scale,cy-front.x*scale,-Math.PI/2-front.yaw,front.source==='manual mark');
   }
   ctx.restore();
-  const pose=scan&&scan.available&&scan.robot_pose;
-  const known=pose&&[pose.x,pose.y,pose.yaw].every(Number.isFinite);
-  ctx.fillStyle='#e0e7eb';ctx.font='10px system-ui';ctx.fillText(known?'Car: acquisition-time body TF; icon is not footprint':'Laser origin only; car heading unverified without body TF',12,canvas.height-8);
+  ctx.fillStyle='#e0e7eb';ctx.font='10px system-ui';ctx.fillText(known?'Car: acquisition-time body TF; icon is not footprint':manual?'Illustrative car: manual front at laser origin; NOT body TF':'Laser origin only; car heading unverified without body TF',12,canvas.height-8);
 }
-function drawVehicle(ctx,x,y,angle){
+function drawVehicle(ctx,x,y,angle,manual=false){
   ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.fillStyle='#0a1116';
   for(const sx of [-17,10])for(const sy of [-18,12])ctx.fillRect(sx,sy,12,6);
   ctx.fillStyle='#8ad8bd';ctx.fillRect(-22,-12,44,24);ctx.fillStyle='#234f4b';ctx.fillRect(1,-10,12,20);
-  ctx.fillStyle='#ffe598';ctx.fillRect(20,-10,4,6);ctx.fillRect(20,4,4,6);ctx.restore();
+  ctx.fillStyle='#ffe598';ctx.fillRect(20,-10,4,6);ctx.fillRect(20,4,4,6);
+  ctx.fillStyle='#ff7288';ctx.fillRect(-24,-10,3,6);ctx.fillRect(-24,4,3,6);
+  if(manual){ctx.strokeStyle='#ffe598';ctx.setLineDash([4,3]);ctx.strokeRect(-25,-15,50,30);}
+  ctx.restore();
   // Front is explicitly local +X, transformed by the supplied body pose.
   ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.fillStyle='#ffffff';
-  ctx.beginPath();ctx.moveTo(34,0);ctx.lineTo(27,-5);ctx.lineTo(27,5);ctx.closePath();ctx.fill();ctx.restore();
+  ctx.beginPath();ctx.moveTo(41,0);ctx.lineTo(29,-8);ctx.lineTo(29,8);ctx.closePath();ctx.fill();ctx.restore();
+  // Screen-readable label even when the view or vehicle is rotated.
+  ctx.save();ctx.translate(x+Math.cos(angle)*53,y+Math.sin(angle)*53);ctx.rotate(-renderYaw);
+  ctx.fillStyle='#10272c';ctx.fillRect(-23,-9,46,18);ctx.fillStyle='#ffffff';ctx.font='bold 10px system-ui';ctx.textAlign='center';ctx.fillText('FRONT',0,3);ctx.restore();
+}
+function mapPixel(map,x,y,canvas){
+  const w=map.width,h=map.height,scale=Math.min((canvas.width-28)/w,(canvas.height-26)/h);
+  const ox=(canvas.width-w*scale)/2,oy=(canvas.height-h*scale)/2;
+  const dx=x-map.origin.x,dy=y-map.origin.y,c=Math.cos(map.origin.yaw),s=Math.sin(map.origin.yaw);
+  return [ox+(c*dx+s*dy)/map.resolution*scale,oy+(h-(-s*dx+c*dy)/map.resolution)*scale];
 }
 function drawOccupancy(map){
   const canvas=ui('scan'),ctx=canvas.getContext('2d'),w=map.width,h=map.height;
@@ -162,8 +215,7 @@ function drawOccupancy(map){
     const v=map.cells[i];if(v<0)continue;const shade=v>=65?18:Math.round(242-v*2.7);
     ctx.fillStyle='rgb('+shade+','+shade+','+shade+')';ctx.fillRect(ox+(i%w)*scale,oy+(h-1-Math.floor(i/w))*scale,scale+.05,scale+.05);
   }
-  const origin=map.origin,c=Math.cos(origin.yaw),s=Math.sin(origin.yaw);
-  const pixel=(x,y)=>{const dx=x-origin.x,dy=y-origin.y;return [ox+(c*dx+s*dy)/map.resolution*scale,oy+(h-(-s*dx+c*dy)/map.resolution)*scale];};
+  const origin=map.origin,pixel=(x,y)=>mapPixel(map,x,y,canvas);
   ctx.save();ctx.beginPath();ctx.rect(ox,oy,w*scale,h*scale);ctx.clip();
   const points=map.overlay && map.overlay.scan || [],ranges=map.overlay && map.overlay.scan_ranges_m || [];
   for(let i=0;i<points.length;i++){const [x,y]=points[i],p=pixel(x,y);ctx.fillStyle=rangeColour(ranges.length===points.length?ranges[i]:NaN);ctx.beginPath();ctx.arc(p[0],p[1],2,0,Math.PI*2);ctx.fill();}
@@ -174,7 +226,7 @@ function drawOccupancy(map){
 }
 
   const key=ui('vehicle-key');if(key&&typeof key.getContext==='function')drawVehicle(key.getContext('2d'),32,27,0);
-  return {renderScan,drawScan,drawOccupancy,action,viewState:()=>({...view}),reset:()=>{mapRaster=null;lastScan=null;expiresAt=0;drag=null;}};
+  return {renderScan,drawScan,drawOccupancy,action,viewState:()=>({...view,followFront,markingFront,manualFront:manualFront&&{...manualFront}}),reset:()=>{mapRaster=null;lastScan=null;expiresAt=0;drag=null;manualFront=null;markingFront=false;followFront=true;}};
 }
 const api={create,rangeColour,observedSectors};
 if(typeof module!=='undefined' && module.exports)module.exports=api;

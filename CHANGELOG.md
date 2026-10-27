@@ -4,6 +4,44 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-27
 
+### v0.17 front-up display and user-observed v0.16 installation
+
+- User reports v0.16 installed in the lab, likes the HUD and observes the physical
+  nose towards screen bottom. Supplied screenshot has live scan-only returns,
+  no map and an origin marker rather than a measured body car. Do not treat the
+  observation as a numerical mounting calibration or a new synchronized dataset.
+- Added pure inverse scan-point selection and front-up display centring/rotation
+  in scene_geometry.js; sensor_view.js prefers existing fresh body TF or an
+  explicit tab-session/frame-bound operator mark in scan-only mode. All points,
+  rays/map/glyph rotate together. Reverse never flips the nose. Manual glyph is
+  dashed at laser origin, not measured body pose; no TF/fusion/steering changes.
+  Marks clear on disconnect/frame change, never orient a map. Free orbit/pan
+  exits follow; zoom preserves it; Reset/front returns to follow when possible.
+- Clear FRONT arrow, yellow headlights and red rear lights; toolbar/status/help
+  and wider legend updated. Runtime/Hub versions advance together to0.17; same
+  22file manifest/dependencies. No new package, robot deployment, motion/PID/guard
+  or velocity-limit change. README, PROJECT_CONTEXT, PROJECT_HANDOVER and modular
+  architecture updated; before-implementation contract FRONT_UP_VIEW_V017.md.
+- Verification: first focused frontend run caught an icon-position test now
+  sampling the separate FRONT-label translation; test now inspects body origin.
+  First full report20261027_124108_77c3c9fc caught two old0.16 version assertions;
+  corrected to0.17, no tests excluded. Full report20261027_124239_b2b44a74 passes:
+  Tools106, Dashboard264, Hub53pass/one Windows symlink skip, frontend92, renderer/
+  geometry/input isolation, JS/Python syntax/configuration and bundle checks.
+  Historical Windows10053 aborts remain unresolved; this run does not fix them.
+  Final strengthened angular-sign/centring assertions checked separately.
+- Physical front alignment/TF, actual v0.17 Jetson execution, browser appearance
+  and autonomy remain unverified. Next: stationary disabled-drive update, mark
+  nose (below origin in user's reported free top view), verify a known obstacle,
+  then continue real mounting/TF and RGB-depth registration checks. No public push.
+- Private Fieldnotes summary/roadmap updated from these evidence levels, preserving
+  personal data.25core tests, TypeScript and build pass; supported helper pushed
+  exact source57217af135ca1aea602a2e5a681414abeb4b54a5. Native owner-private
+  deploymentappgdep_6ae08f48e3c081919ad6686718b33090 succeeded at the existing
+  Fieldnotes URL. No personal database records rewritten. One focused test command
+  was initially invoked from the Site directory and could not resolve its root
+  Tools path; corrected root invocation passes, not a test result to conceal.
+
 ### v0.16 viewer and semantic-observation foundation
 
 - User (assistant nickname Agatha) requests source work before lab: equal large

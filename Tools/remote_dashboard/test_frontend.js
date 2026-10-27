@@ -597,10 +597,11 @@ async function main() {
     assert.match(t.node('scan-colour-note').textContent,/Car hidden/);assert.match(t.node('scan-colour-note').textContent,/Not guaranteed drivable/);
   });
   await check('map icon respects translated rotated grid origin and bottom-up rows',async()=>{
-    const t=await ready();let position=null;
-    t.node('scan').getContext=()=>new Proxy({translate:(x,y)=>position=[x,y]},{get:(obj,name)=>obj[name]||(()=>{})});
+    const t=await ready();const positions=[];
+    t.node('scan').getContext=()=>new Proxy({translate:(x,y)=>positions.push([x,y])},{get:(obj,name)=>obj[name]||(()=>{})});
     t.get('drawOccupancy({width:2,height:2,resolution:1,origin:{x:10,y:20,yaw:Math.PI/2},cells:[0,0,0,0],frame:"map",age_s:0,overlay:{robot:{x:10,y:21,yaw:Math.PI/2}}})');
-    assert(Math.abs(position[0]-320)<1e-9);assert(Math.abs(position[1]-347)<1e-9);
+    // Body, arrow and separate readable FRONT label now each translate; inspect body.
+    assert(Math.abs(positions[0][0]-320)<1e-9);assert(Math.abs(positions[0][1]-347)<1e-9);
   });
   await check('disconnect clears LiDAR telemetry and does not preserve a live badge',async()=>{
     const t=await ready();t.get('renderScan({state:"live",available:true,publisher_connections:1,arrival_rate_hz:10,minimum_m:1,valid_samples:1,samples:1,frame:"laser",points:[[1,1]]})');t.events.offline();

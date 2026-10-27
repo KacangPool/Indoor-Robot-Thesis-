@@ -1,5 +1,13 @@
 # Project handover — indoor search-and-rescue robot
 
+**27 October lab follow-up:** user installedv0.16 and likes the HUD. The supplied
+scan-only display has no measured body heading; physical nose is reported towards
+screen bottom. v0.17 adds front-up TF following and a scan-only operator heading
+mark, yellow headlights/FRONT arrow and red rear lights. A manual glyph is at the
+laser origin, not a body pose or mounting calibration. No sensor data/motion/guard
+changes; v0.17 robot installation and physical orientation check are pending.
+See [front-up contract](FRONT_UP_VIEW_V017.md) and latest changelog.
+
 **27 October source update:** v0.16 adds equal sensor panels, bounded view-only
 zoom/orbit/pan and camera-only observation snapshots. Shared offline semantics
 retain raised/unmatched camera-depth samples without falsely labelling laser

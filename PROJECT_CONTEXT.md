@@ -11,6 +11,16 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+-27October lab follow-up: user reports installingv0.16 and likes the HUD; supplied
+  scan-only screenshot shows live returns and no map/body pose, with physical
+  nose reportedly towards screen bottom. This is not a measured mounting yaw.
+  v0.17 source adds front-up display using fresh body TF, or an explicit scan-frame
+  tab-session operator mark at the laser origin (not body position/calibration).
+  Rotate the whole scene; reverse never flips the nose. Free orbit/pan exits
+  follow; reset/front restores it. Manual marks clear on disconnect/frame change,
+  cannot orient a map or feed TF/fusion/steering. Same22file runtime, unchanged
+  driving/PID/limits/guards. v0.17 deployment/physical orientation still pending.
+  Contract and installation steps: Documentation/FRONT_UP_VIEW_V017.md.
 -27October v0.16 source: equal full-height camera/LiDAR panes, scrollable sidebar
   halves, matching keyboard style and bounded view-only zoom/pan/orbit. The3D
   orthographic display is still a planar scan, not volumetric LiDAR. Actual car

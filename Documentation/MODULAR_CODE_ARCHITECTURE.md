@@ -1,5 +1,11 @@
 # Reusable project code — v0.13, 2026-10-22
 
+v0.17 follow-up: scene_geometry.js owns inverse display-point selection and
+front-up centring/rotation; sensor_view.js owns only the frame-bound tab-session
+operator mark and existing fresh TF preference. No new runtime dependency or
+server parameter. The mark never becomes body TF, sensor data or motion input.
+The Hub remains22fixed files. See FRONT_UP_VIEW_V017.md.
+
 Latest source follow-up27October: v0.16 adds pure scene_geometry view projection,
 shared observations/semantic_scene modules and a read-only detection adapter.
 Hub22file runtime now includes4allowlisted shared modules through one validated

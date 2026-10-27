@@ -1,6 +1,22 @@
 # Fahad robot dashboard — first version
 
-## Latest source v0.16 — equal sensor panels and semantic foundation (2026-10-27)
+## Latest source v0.17 — front-up display (2026-10-27)
+
+Front-up keeps the nose towards the screen top, including when reversing, using
+fresh body TF when available. Without TF, disable driving, choose Mark front and
+click towards the physical nose in the fresh scan-only top view. For the user's
+reported bottom-facing nose, click below the laser origin. The whole scene turns
+together. Yellow headlights/FRONT arrow and red rear lights distinguish ends.
+The dashed manually oriented glyph is at the laser origin, NOT measured body pose
+or mounting calibration. It cannot feed TF, mapping, fusion or steering; marks
+are tab/frame-local, clear on disconnect/frame change, and never orient a map.
+Free orbit/pan exits follow; Front-up or Reset restores it; zoom preserves it.
+No motion/PID/guard changes. Contract: Documentation/FRONT_UP_VIEW_V017.md.
+The fixed runtime remains22files. Close/reopen the existing Hub with the robot
+stationary, Connect & prepare, verifyv0.17 and reload the console. Do not copy only
+the HTML or server. Physical orientation still needs user checking after install.
+
+## Previous source v0.16 — equal sensor panels and semantic foundation (2026-10-27)
 
 Equal full-height camera/LiDAR columns; controls and readings are independently
 scrollable sidebar halves. Matching W/A/S/D styling. LiDAR has bounded wheel/button
