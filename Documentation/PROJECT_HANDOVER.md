@@ -1,5 +1,13 @@
 # Project handover — indoor search-and-rescue robot
 
+**27 October end-of-lab checkpoint:** user reports LiDAR operation restored after
+a LiDAR restart and ends the session. Earlier node RPC/serial-open/spinning checks
+passed while /scan had no messages. Copied-source receive-loop checksum exit is
+only a hypothesis; no installed-source/binary verification, new rate trace or
+permanent fix. v0.18 deployment/alignment remains unconfirmed. Next lab: fresh
+scans, central-car orientation, then odometry/TF and real SLAM prerequisites. No
+additional robot commands, vendor edits or motion changes were made by tools.
+
 **27 October v0.18 follow-up:** inspected v0.17 playback shows scan-only data,
 origin square and heading unknown. User wants a recognisable central car and a
 fixed growing map for later object labels. Sourcev0.18 adds a screen-sized car,

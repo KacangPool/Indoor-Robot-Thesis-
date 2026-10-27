@@ -4,6 +4,36 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-27
 
+### Lab checkpoint — LiDAR restarted; operation restored by user report
+
+- User reports restarting the LiDAR restored operation, then ended the lab
+  session. Treat as user-observed recovery, not a measured scan
+  rate, endurance test, root-cause diagnosis or a permanent fix. No new restart
+  command, robot access, driver edit or deployment was performed by tools.
+- Before restart, supplied terminal evidence showed one lsn10 process/publisher,
+  no received /scan messages during the bounded rate check, successful node RPC
+  replies and an open ttyUSB1 descriptor matching wheeltec_lidar. User confirmed
+  physical spinning. This proves neither decoded packets nor correct serial data.
+  Standard output/error were redirected to the personal Hub's lidar.log; the
+  node-specific ROS log path did not exist. Additional log/port-owner/source-path
+  checks were requested but results were not supplied before the restart.
+- Copied lsn10.cpp inspection found a failed packet-checksum branch using break
+  in recvThread, which could stop reception while ROS remains responsive. This is
+  a hypothesis only: installed source/binary identity and the failure trigger were
+  not verified. Do not patch vendor code or label this the confirmed cause.
+- Resume later: check fresh scans, then physically verify thev0.18 car/preset and
+  inspect odometry/body/laser TF plus installed SLAM configuration for the fixed,
+  growing map goal. v0.18 installation is still unconfirmed. No SLAM/map saving,
+  labelled room map, PID or motion-limit change. No more lab tasks today.
+- Documentation-only root changes: CHANGELOG, PROJECT_CONTEXT and handover;
+  private Fieldnotes progress/roadmap follows the same evidence. Check whitespace
+  and planner core/TypeScript/build; do not rerun unrelated robot HTTP tests to
+  turn the retained v0.18 Windows10053 failure into a pass. Whitespace, planner25
+  core tests, TypeScript and build pass. Supported helper pushed exact private
+  sourcea15f8aafcf4c5d18f902bc355e59a1b835691898; native owner-private deployment
+  appgdep_6ae10a5f2a5c8191b2d73bf478c09298 succeeded at the existing Fieldnotes
+  URL. No personal database records changed, public GitHub push or raw upload.
+
 ### v0.18 central car, explicit display preset and fixed-map preference
 
 - User supplies local v0.17 recording and wants the central origin square itself

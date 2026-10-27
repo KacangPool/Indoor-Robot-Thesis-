@@ -11,6 +11,13 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+-27October end-of-lab checkpoint: user reports restarting LiDAR restored operation;
+  no new rate/duration trace. Before restart node RPC and serial-open checks passed
+  but /scan delivered no messages. Copied-driver checksum/receive-loop exit is a
+  possible explanation, NOT verified in the installed binary or diagnosed cause.
+  Session ended; resume fresh-scan check, physicalv0.18 marker/preset verification
+  (installation unconfirmed), then odometry/body/laser TF and SLAM prerequisites.
+  No vendor/driver/PID/motion/network change or permanent-fix claim.
 -27October v0.17 recording follow-up: observed scan-only viewer still says front
   unknown and displays the origin square; no selected heading in inspected playback.
   User confirms the goal is a fixed, growing, later-saveable room map for object
