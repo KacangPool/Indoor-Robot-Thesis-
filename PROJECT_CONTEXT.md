@@ -11,6 +11,20 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+-27October home-development scope: user requests the interactive offline fusion
+  workbench, recording/replay preparation, persistent historical object layer and
+  future autonomous simulation preparation. Separate laptop simulation approved;
+  WSL not installed, gz/ros2 not found. No large OS/ROS installation this step and
+  no Jetson upgrade. New loopback-only Home Lab reuses the existing fusion core;
+  normalized JSON replay/save/hash checks and provisional static groups retain
+  evidence/unknown positions and never make people permanent occupancy. Passive
+  ROS1 bag adapter is offline by default; actual Jetson execution and raw-bag
+  normalization/calibration remain unverified. Toy Ackermann route/world generator
+  is source-tested, not Gazebo/Nav2/SLAM execution or hardware autonomy. Candidate
+  separate pair: ROS2 Jazzy/Gazebo Harmonic; future known-route → known-map feasible
+  navigation → sensor-limited exploration/SLAM → saved semantic-map evaluation.
+  Gazebo is no longer wholly deferred: preparation is approved, installation and
+  real simulator/hardware integration remain later work. Contract AT_HOME_LAB.md.
 -27October end-of-lab checkpoint: user reports restarting LiDAR restored operation;
   no new rate/duration trace. Before restart node RPC and serial-open checks passed
   but /scan delivered no messages. Copied-driver checksum/receive-loop exit is a

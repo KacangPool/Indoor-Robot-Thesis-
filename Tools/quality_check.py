@@ -87,7 +87,7 @@ def static_checks():
         text = path.read_text(encoding='utf8')
         robot = (path.parent.name in ('remote_dashboard', 'fahad_core') and not path.name.startswith('test')) or path.name in (
             'agent.py', 'robot_inventory.py', 'fusion_prototype.py', 'fusion_fixtures.py', 'box_depth_viewer.py', 'camera_diagnostics_ros1.py', 'person_detection_filter.py',
-            'record_detection_test.py', 'ros_message_sample.py')
+            'record_detection_test.py', 'record_fusion_session.py', 'ros_message_sample.py')
         if robot:
             ast.parse(text, filename=str(path), feature_version=(3, 6))
         else:

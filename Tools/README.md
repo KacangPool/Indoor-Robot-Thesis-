@@ -121,3 +121,15 @@ node Tools/test_annotation_review_core.js
 These are local checks, not evidence of physical robot operation. HTTP/fake SSH
 tests use localhost; bundle tests use temporary folders. See the architecture
 guide for the observed Windows HTTP-test error and the Python-version limits.
+
+## At-home fusion lab and isolated simulation preparation (27 October 2026)
+
+Double-click **Start Home Lab.cmd**, then open http://127.0.0.1:8878/. This is
+loopback-only, has no ROS/motor adapter, and uses existing NumPy Python. Interactive
+synthetic scenes reuse the fusion core. Normalized saved-session replay and
+historical object-layer export are available; raw ROS bags are NOT automatically
+converted into calibrated fusion inputs. `record_fusion_session.py` is plan-only
+unless deliberately invoked with --record in the existing robot ROS1 environment.
+`prepare_simulation.py` generates generic Gazebo/route files without running Gazebo.
+See [the complete contract and usage](../Documentation/AT_HOME_LAB.md). Diagnostic
+source bundle now30files; dashboard/Hubv0.18 runtime remains22files, unchanged.

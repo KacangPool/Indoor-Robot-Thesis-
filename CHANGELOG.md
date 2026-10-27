@@ -2,7 +2,81 @@
 
 This file records material changes, research findings, decisions, and experiments so the project can continue reliably across different chats.
 
+## 2026-10-28
+
+### At-home toolkit handoff and private planner publication
+
+- Completed the source-only home-toolkit work begun27October. Final full offline
+  report20261027_235756_ec49022e passes: Tools128, Dashboard264, Hub53pass/one
+  Windows symlink skip; browser synthetic raised-object, missing-calibration,
+  three-frame import/replay and historical-layer download checked. Owned Home Lab
+  preview processes stopped. Start Home Lab.cmd reopens the loopback app.
+- Private Fieldnotes core25/TypeScript/build checks pass after retaining the
+  unchanged university-network policy wording. Supported helper pushed exact
+  source020689f46644503d7b8e856d97b21b5a4be26ca6; native owner-private deployment
+  appgdep_6ae12ce0d9908191b40236d9534722ea succeeded at the existing Fieldnotes
+  URL. Personal notes/goals and database records preserved; no raw sensor upload.
+- Main source remains local-only, no public GitHub push or robot deployment.
+  ROS1/Jetson capture, calibrated raw-bag conversion and Gazebo/Nav2/SLAM/hardware
+  autonomy remain explicitly unverified/unimplemented as detailed in AT_HOME_LAB.
+
 ## 2026-10-27
+
+### At-home fusion/replay/object layer and isolated simulation preparation
+
+- User requests all proposed home coding plus future autonomy preparation; approves
+  a separate laptop simulation environment later. No large installation now.
+  Read-only WSL check reports not installed; gz/ros2 not found. Research primary
+  Gazebo/ROS integration, Harmonic Ackermann/sensors and Nav2 Smac docs; supported
+  candidate pair ROS2 Jazzy/Gazebo Harmonic, not a Jetson Melodic upgrade. Gazebo
+  Classic EOL January2025. Citations/contracts: Documentation/AT_HOME_LAB.md.
+- home_lab.py/HTML provide loopback-only interactive existing10cases and adjustable
+  synthetic height/distance/background, strict normalized-session import/replay and
+  historical-layer download. Reuses semantic_snapshot, projection/depth helpers,
+  existing fixtures and recording IO. Bad/stale UI results clear and cannot be
+  downloaded as current; labels use textContent, not HTML. No RGB pixels/inference,
+  ROS/motor adapter, arbitrary file-serving or live positional fusion implied.
+- experiment.py enforces input/work limits, exact run/map/calibration/mode identity,
+  new-directory saves, fixed-file hash/provenance verification and capture-time
+  offline replay. semantic_memory.py retains unknown positions and source evidence;
+  exact duplicates deduplicate, conflicts reject, nearby static samples group only
+  provisionally; people remain historical observations, not permanent occupancy.
+- capture.py + record_fusion_session.py implement explicit bounded fixed-topic ROS1
+  bag preparation, offline-plan default, no motion subscriptions/Publisher/launch/
+  serial access. Reuses existing wall_time helper, reports missing topics/partial
+  writes/caps and keeps raw images private. Fake-ROS tests only; raw bag conversion
+  into validated normalized snapshots still needs an offline converter and real
+  calibration/registration/time proof. No clock or robot configuration changed.
+- simulation.py + prepare_simulation.py provide ideal bicycle/pure-pursuit known
+  route and seeded generic Ackermann SDFs (known-route/unknown/mapping), scoped
+  bridge template and separate evaluator truth. Route reaches toy endpoint, not
+  Gazebo/physics/unknown-world navigation or SLAM proof. Approximate dimensions,
+  inertias and sensors are explicitly synthetic, not a measured Wheeltec model.
+  No installation, simulator execution, hardware adapter or autonomy deployment.
+- Dependencies/bundles/docs aligned: full diagnostic ZIP now30source files;
+  unchanged Hub/dashboardv0.18/22file runtime. New Windows Start Home Lab.cmd uses
+  existing NumPy Python. Modular architecture, context, handover, usage and staged
+  autonomy/mapping/evaluation checklist updated. No unrelated/vendor file edits.
+- Verification: initial20focused tests exposed XML tag helper name collision;
+  fixed;22focused tests now pass. Full runs20261027_234326_28380091 and final
+  20261027_234724_838bad9b pass: Tools128, Dashboard264, Hub53pass/one Windows symlink
+  skip, frontend92 and all JS/static/configuration checks. No retry/exclusion hides
+  historical HTTP10053; passing does not diagnose it. Minor documentation whitespace
+  corrected separately. Own demo save/replay3events/1group, seeded SDF XML/route,
+  bundle hashes/import boundaries tested. Browser raised-monitor and missing-
+  calibration states verified; synthetic screenshot saved locally. Preview first
+  timed out and sandbox HTTP/CIM checks failed10013/access-denied; normal approved
+  loopback permissions resolved preview. No security settings changed.
+- Private Fieldnotes plan/evidence maintenance follows; source-tested versus
+  unrun Gazebo/ROS/hardware/calibration stages remain separate. No public push,
+  robot deployment, firmware/PID/motion-limit changes or raw report upload.
+- Release check after privacy-safe recorder error handling/test: full report
+  20261027_235756_ec49022e passes with the same128/264/53pass+one skip counts.
+  Browser own-file import, frame3/3 selection and downloaded historical layer
+  verified (3events/1group); regenerated30file release ZIP. Owned previews stopped.
+  Planner first caught an exact university-network policy wording assertion;
+  restored the unchanged policy text, then25core/TypeScript/build pass. Supported
+  private publication result recorded below after native verification.
 
 ### Lab checkpoint — LiDAR restarted; operation restored by user report
 

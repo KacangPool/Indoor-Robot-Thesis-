@@ -1,5 +1,14 @@
 # Reusable project code — v0.13, 2026-10-22
 
+At-home follow-up27October: experiment.py owns bounded normalized replay/IO;
+semantic_memory.py owns historical object evidence; capture.py owns topic/size/time
+policy; simulation.py owns ideal car kinematics/seeded scenes. They start no ROS,
+network or model. home_lab.py/HTML, record_fusion_session.py and prepare_simulation.py
+are explicit UI/ROS/file adapters. Existing semantic_snapshot/projection/depth/
+recording helpers and fixture builders are reused. The recorder reuses existing
+record_detection_test.wall_time; no motion clock/control refactor. Full diagnostic
+ZIP now30source files; unchanged22file Hub/runtime. See AT_HOME_LAB.md.
+
 v0.18: pure projected-marker geometry keeps glyph screen size independent of
 zoom/pitch. The same shaped-car renderer serves scan/map/key; fixed-map preference
 and the reported-direction display preset remain browser-local and isolated from

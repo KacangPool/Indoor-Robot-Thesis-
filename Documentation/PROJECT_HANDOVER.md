@@ -1,5 +1,14 @@
 # Project handover — indoor search-and-rescue robot
 
+**27 October home-development scope:** interactive offline Home Lab, normalized
+session replay/save, historical semantic object layer, passive ROS1 capture
+preparation and isolated generic Ackermann/Gazebo world preparation are now in
+source. See [AT_HOME_LAB.md](AT_HOME_LAB.md) for launch commands, contracts and
+explicit gaps. WSL/Gazebo are not installed/running. Raw bags do not automatically
+become validated fusion inputs; real registration/TF/time/data remain prerequisites.
+No robot/runtime/motor code was changed or deployed. Diagnostic bundle30files;
+Hub/dashboard runtime staysv0.18/22files. All simulation results are synthetic.
+
 **27 October end-of-lab checkpoint:** user reports LiDAR operation restored after
 a LiDAR restart and ends the session. Earlier node RPC/serial-open/spinning checks
 passed while /scan had no messages. Copied-source receive-loop checksum exit is
