@@ -4,6 +4,49 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-27
 
+### v0.18 central car, explicit display preset and fixed-map preference
+
+- User supplies local v0.17 recording and wants the central origin square itself
+  to be a recognisable car; forward should be screen-up. Inspected playback with
+  Computer Use/Media Player shows scan-only data and heading unknown, no selected
+  front mark. The v0.17 manual-mark prerequisite was not intuitive. Playback was
+  partially inspected, not analysed as synchronized motion/odometry evidence.
+  No recording/raw data is published. Media decoding libraries were unavailable;
+  native local playback used instead; one minimized-window capture recovered,
+  later user-interference warning was not bypassed with stale input.
+- User clarifies fixed, growing and eventually saveable room map for later object
+  labels. Added Fixed map preference using actual existing /map in fixed grid
+  orientation (no robot-follow rotation/centring). Missing map explicitly falls
+  back to current scan; no fake accumulation, SLAM, map saving or autonomous pose.
+- Default `laser` display preset uses the user's reported south-facing nose,
+  explicitly unverified and NOT a mounting transform. Fresh body TF wins, then
+  session mark, then preset. Other frames remain unknown; preset cannot orient
+  a map. Optional Flip front/Mark front remain view-only. Current scan keeps the
+  nose up; approaching static obstacles moving down is correct for a centred view.
+- Shared pure marker projection and one shaped-car renderer now show four tyres,
+  bonnet/cabin/windscreen, yellow lamps/beams, red rear lights and FRONT arrow in
+  scan/map/key. Glyph size stays screen-readable independently of zoom/pitch;
+  no second origin square under the car. No new runtime file/package dependency.
+  settings/Hub/HTML advance to0.18; same22file runtime. Motion/PID/limits/guards,
+  vendor files and actual robot runtime unchanged by tools. README, context,
+  handover, architecture and before-implementation CAR_MARKER_V018.md updated.
+- Verification: focused tests initially exposed outdated unknown-heading/arc
+  expectations and a strict negative-zero comparison; corrected assertions retain
+  their geometry/staleness guarantees. Frontend92 and renderer tests pass, including
+  TF precedence, unknown frames, preset/flip, no mutation, fixed-map orientation,
+  reverse, freshness/reset and marker sizing. Synthetic native-canvas rendering
+  with existing bundled @napi-rs/canvas was viewed locally (ignored tmp fixture,
+  not robot data or browser/hardware proof). No dependency was installed.
+- Full report20261027_130622_8824ec82 is ATTENTION_REQUIRED: Tools106pass,
+  Dashboard263pass/one existing Windows10053 in request-guard HTTP test, Hub53pass/
+  one Windows symlink skip; JS/static/configuration/bundle checks pass. No retry
+  or exclusion hides the HTTP error. Physical v0.18 heading and SLAM unverified.
+- Private Fieldnotes source summary/roadmap updated, preserving personal notes/
+  goals.25core tests, TypeScript and build pass; supported helper pushed exact
+  source4918a455639f3d0451cf394bd460a5f20b1177dc and native owner-private
+  deploymentappgdep_6ae094c94a108191841a60d1eeea5684 succeeded at the existing
+  Fieldnotes URL. No personal database records rewritten or public GitHub push.
+
 ### v0.17 front-up display and user-observed v0.16 installation
 
 - User reports v0.16 installed in the lab, likes the HUD and observes the physical

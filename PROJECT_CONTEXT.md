@@ -11,6 +11,17 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+-27October v0.17 recording follow-up: observed scan-only viewer still says front
+  unknown and displays the origin square; no selected heading in inspected playback.
+  User confirms the goal is a fixed, growing, later-saveable room map for object
+  labels. v0.18 adds a screen-sized shaped central car, an explicitly unverified
+  operator-reported front display preset only forframe laser, optional Flip front,
+  and fixed-map preference for existing /map. Without /map the live scan fallback
+  is explicit; no SLAM, saving, calibrated body pose or labelled map is created.
+  Actual TF wins over preset/session marks. No motion/PID/guard changes. Latest
+  full run has recurring Windows10053 HTTP error (not hidden); focused renderer/
+  frontend and synthetic native-canvas checks pass. Physical v0.18 pending.
+  Contract: Documentation/CAR_MARKER_V018.md.
 -27October lab follow-up: user reports installingv0.16 and likes the HUD; supplied
   scan-only screenshot shows live returns and no map/body pose, with physical
   nose reportedly towards screen bottom. This is not a measured mounting yaw.

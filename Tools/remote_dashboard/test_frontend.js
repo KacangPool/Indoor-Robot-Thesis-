@@ -536,7 +536,7 @@ async function main() {
   });
   await check('LiDAR old points are not drawn when data is unavailable',async()=>{
     const t=await ready();let arcs=0;
-    t.node('scan').getContext=()=>new Proxy({arc:()=>arcs++},{get:(object,name)=>object[name]||(()=>{})});
+    t.node('scan').getContext=()=>new Proxy({arc:(x,y,r)=>{if(r===2.4)arcs++;}},{get:(object,name)=>object[name]||(()=>{})});
     t.get('drawScan({available:true,points:[[1,1]],valid_samples:1})');assert.equal(arcs,1);arcs=0;
     t.get('drawScan({available:false,points:[[1,1]]})');assert.equal(arcs,0);
   });

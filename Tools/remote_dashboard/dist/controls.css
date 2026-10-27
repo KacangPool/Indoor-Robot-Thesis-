@@ -87,7 +87,7 @@ details summary{cursor:pointer;color:var(--mint);font-size:11px}
 .scene-toolbar output{color:var(--mint);margin-left:auto}
 #scan{touch-action:none;cursor:grab;aspect-ratio:4/3}#scan:active{cursor:grabbing}
 .vehicle-key{display:flex;align-items:center;gap:6px;padding:0 10px;font-size:9px;color:var(--muted)}
-.vehicle-key canvas{flex:0 0 120px;width:120px;height:54px;border:0;background:transparent}
+.vehicle-key canvas{flex:0 0 144px;width:144px;height:54px;border:0;background:transparent}
 .scene-toolbar button:disabled{opacity:.45;cursor:default}
 .keyboard-steering span,.travel-pedal{font:600 11px system-ui;background:#20303d;border:1px solid #476170;border-radius:7px;color:var(--text);min-height:42px}
 .keyboard-steering kbd,.travel-pedal kbd{display:inline-grid;place-items:center;min-width:24px;height:24px;border:1px solid #789aab;background:#14222e;border-radius:4px;color:var(--mint);font:700 12px ui-monospace,monospace;margin-right:5px}

@@ -1,5 +1,14 @@
 # Project handover — indoor search-and-rescue robot
 
+**27 October v0.18 follow-up:** inspected v0.17 playback shows scan-only data,
+origin square and heading unknown. User wants a recognisable central car and a
+fixed growing map for later object labels. Sourcev0.18 adds a screen-sized car,
+reported-direction display preset/Flip front and fixed-map preference using real
+/map, with explicit current-scan fallback when absent. Preset is NOT mounting TF.
+No SLAM, saveable map, motion/PID/guard change or tool-side robot deployment.
+Latest full checker has the recurring HTTP10053 error; focused renderer/frontend
+and synthetic native-canvas output pass. See [v0.18 contract](CAR_MARKER_V018.md).
+
 **27 October lab follow-up:** user installedv0.16 and likes the HUD. The supplied
 scan-only display has no measured body heading; physical nose is reported towards
 screen bottom. v0.17 adds front-up TF following and a scan-only operator heading

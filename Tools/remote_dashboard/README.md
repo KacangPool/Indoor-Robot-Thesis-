@@ -1,6 +1,27 @@
 # Fahad robot dashboard — first version
 
-## Latest source v0.17 — front-up display (2026-10-27)
+## Latest source v0.18 — central car and fixed-map preference (2026-10-27)
+
+The central marker is a shaped top-down car with tyres, windscreen, yellow front
+lamps, red rear lamps and FRONT arrow, kept screen-sized through zoom/orbit.
+For frame `laser` without body TF, the user's reported south-facing nose supplies
+an explicitly unverified display preset. Front-up now works without first marking
+the nose. Flip front corrects an opposite preset; Mark front remains optional.
+TF takes priority; no preset can become body calibration or steer the robot.
+
+Fixed map is preferred: existing fresh /map cells retain fixed grid orientation
+while the car follows fresh map body TF. This does NOT start SLAM or save a map.
+Without /map, the panel explicitly falls back to the current robot-centred scan;
+approaching walls moving down is physically correct in that centred view. A
+growing/later-saveable map for spatial object labels is the agreed next stage,
+pending verified SLAM inputs/TF. See Documentation/CAR_MARKER_V018.md.
+
+With driving disabled and stationary, reopen the Hub, Connect & prepare and reload
+the console to verifyv0.18. Check physical nose and a known obstacle; use Flip
+front if the preset is reversed. Same22file runtime, no motor/PID/limit changes.
+Source checks/synthetic rendering are not physical orientation validation.
+
+## Previous source v0.17 — front-up display (2026-10-27)
 
 Front-up keeps the nose towards the screen top, including when reversing, using
 fresh body TF when available. Without TF, disable driving, choose Mark front and

@@ -1,5 +1,10 @@
 # Reusable project code — v0.13, 2026-10-22
 
+v0.18: pure projected-marker geometry keeps glyph screen size independent of
+zoom/pitch. The same shaped-car renderer serves scan/map/key; fixed-map preference
+and the reported-direction display preset remain browser-local and isolated from
+TF/fusion/motion. No added runtime files/packages. See CAR_MARKER_V018.md.
+
 v0.17 follow-up: scene_geometry.js owns inverse display-point selection and
 front-up centring/rotation; sensor_view.js owns only the frame-bound tab-session
 operator mark and existing fresh TF preference. No new runtime dependency or

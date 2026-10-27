@@ -40,7 +40,13 @@
     result.panX=width/2-p[0];result.panY=height/2-p[1];
     return result;
   }
-  const api={initial,update,matrix,project,headingFromPoint,frontUp};
+  // Project anchor and heading, not glyph dimensions: keep the car screen-sized.
+  function marker(s,anchor,angle,width,height){
+    const p=project(s,anchor,width,height);
+    const nose=project(s,[anchor[0]+Math.cos(angle),anchor[1]+Math.sin(angle),0],width,height);
+    return {x:p[0],y:p[1],angle:Math.atan2(nose[1]-p[1],nose[0]-p[0])};
+  }
+  const api={initial,update,matrix,project,headingFromPoint,frontUp,marker};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   if(root)root.FahadSceneGeometry=api;
 })(typeof window!=='undefined'?window:null);

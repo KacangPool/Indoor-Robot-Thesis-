@@ -82,20 +82,26 @@ assert.equal(geometry.headingFromPoint(geometry.initial(),[320,240],640,480),nul
 assert.equal(geometry.headingFromPoint(geometry.initial(),[NaN,0],640,480),null);
 assert.deepEqual(geometry.frontUp(geometry.initial(),[0,0],NaN,640,480),geometry.initial());
 
-let time=1000,currentMap=null;const frontNodes={},transforms=[],labels=[];
+let time=1000,currentMap=null;const frontNodes={},transforms=[],labels=[],shapes=[],resets=[];
 const frontUI=id=>frontNodes[id]||={listeners:{},width:640,height:480,textContent:'',
   addEventListener(k,fn){this.listeners[k]=fn;},setAttribute(){},
   getBoundingClientRect:()=>({left:100,top:50,width:320,height:240}),
-  getContext:()=>new Proxy({transform:(...v)=>transforms.push(v),fillText:s=>labels.push(s)},{get:(o,k)=>o[k]||(()=>{})})};
+  getContext:()=>new Proxy({transform:(...v)=>transforms.push(v),fillText:s=>labels.push(s),fillRect:(...v)=>shapes.push(v),setTransform:(...v)=>resets.push(v)},{get:(o,k)=>o[k]||(()=>{})})};
 const frontView=view.create({ui:frontUI,pill(){},seconds:String,getMap:()=>currentMap,canUseMap:()=>!!currentMap,now:()=>time});
 const scan={available:true,age_s:0,frame:'laser',points:[[1,0]],valid_samples:1};
 const original=JSON.stringify(scan);
-frontView.renderScan(scan);assert.match(frontUI('scene-heading').textContent,/Front unknown/);
+frontView.renderScan(scan);assert.match(frontUI('scene-heading').textContent,/reported-direction display preset/);
+close(transforms.at(-1)[0],-1);close(transforms.at(-1)[3],-1);
+assert(labels.includes('FRONT'));assert(resets.some(m=>m.join(',')==='1,0,0,1,0,0'));
+assert(shapes.some(r=>r.join(',')==='-23,-24,14,8')); // four-tyre car path, not origin square
+assert(!shapes.some(r=>r.join(',')==='315,235,10,10'));
 const click=id=>frontUI(id).listeners.click();
 const mark=(x=260,y=230)=>{click('scene-mark-front');frontUI('scan').listeners.pointerdown({pointerId:9,button:0,clientX:x,clientY:y,preventDefault(){}});};
+click('scene-flip-front');close(transforms.at(-1)[0],1);close(transforms.at(-1)[3],1);
+click('scene-clear-front');close(transforms.at(-1)[0],-1);close(transforms.at(-1)[3],-1);
 mark(); // CSS-scaled click below centre => nose at laser -X, not +X.
 assert.equal(frontView.viewState().followFront,true);angleClose(frontView.viewState().manualFront.yaw,Math.PI);
-assert.match(frontUI('scene-heading').textContent,/operator mark/);assert(labels.some(s=>s.includes('manual front')));
+assert.match(frontUI('scene-heading').textContent,/operator mark/);assert(labels.some(s=>s.includes('manual mark')));
 const south=transforms.at(-1);close(south[0],-1);close(south[3],-1);
 assert.equal(JSON.stringify(scan),original);assert.equal(scan.robot_pose,undefined);
 click('scene-zoom-in');close(frontView.viewState().zoom,1.25);assert(frontView.viewState().followFront);
@@ -104,6 +110,7 @@ click('scene-reset');assert(frontView.viewState().followFront);assert(frontView.
 // Fresh TF overrides manual display mark; lateral offset is centred too.
 frontView.renderScan({...scan,robot_pose:{x:.1,y:.2,yaw:Math.PI/2},vx:-.1});
 assert.match(frontUI('scene-heading').textContent,/body \+X/);
+assert(frontUI('scene-flip-front').disabled);
 let matrix=transforms.at(-1);close(matrix[0],0);close(matrix[1],1);
 const bodyPixel=[320-.2*54,240-.1*54];
 close(matrix[0]*bodyPixel[0]+matrix[2]*bodyPixel[1]+matrix[4],320);
@@ -116,9 +123,18 @@ frontView.drawScan(scan);assert.match(frontUI('scene-heading').textContent,/Fron
 assert(frontUI('scene-mark-front').disabled);
 currentMap={...currentMap,overlay:{robot:{x:1,y:1,yaw:.8}}};frontView.drawScan(scan);
 matrix=transforms.at(-1);close(Math.atan2(matrix[1],matrix[0]),-.5*Math.PI+.8-.3);
+click('scene-map');assert(frontView.viewState().fixedMap);assert.match(frontUI('scene-zoom').textContent,/FIXED MAP/);
+[1,0,0,1,0,0].forEach((v,i)=>close(transforms.at(-1)[i],v)); // no moving robot-centred camera
+currentMap={...currentMap,overlay:{robot:{x:.5,y:1.5,yaw:1.2}}};frontView.drawScan(scan);
+[1,0,0,1,0,0].forEach((v,i)=>close(transforms.at(-1)[i],v)); // rotating car cannot rotate the room
 currentMap=null;frontView.renderScan({...scan,frame:'other_laser'});assert.equal(frontView.viewState().manualFront,null);
+assert.match(frontUI('scene-heading').textContent,/Front unknown/);
 frontView.renderScan(scan);mark();click('scene-clear-front');assert.equal(frontView.viewState().manualFront,null);
 mark();time=5000;click('scene-zoom-in');assert.match(frontUI('scene-heading').textContent,/Front unknown/);
 click('scene-mark-front');assert.equal(frontView.viewState().markingFront,false);
 frontView.reset();assert.equal(frontView.viewState().manualFront,null);
+for(const zoom of [.25,1,8]){
+  const m=geometry.marker({...geometry.initial(),zoom,pitch:.65},[320,240],-Math.PI/2,640,480);
+  close(m.x,320);close(m.y,240);angleClose(m.angle,-Math.PI/2);
+}
 console.log('Front-up checks passed: inverse click geometry, scaled canvas, TF precedence, reverse, map/scan frames, freshness, reset and no sensor mutation.');

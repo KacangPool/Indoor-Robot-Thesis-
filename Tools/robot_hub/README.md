@@ -1,6 +1,16 @@
 # Fahad Robot Hub · Windows
 
-## Latest source v0.17 — front-up viewer (2026-10-27)
+## Latest source v0.18 — visible central car / fixed-map preference (2026-10-27)
+
+Same22file runtime and unchanged motion guards/limits. A shaped car replaces the
+central square for the currentlaser frame using an explicitly unverified reported
+front display preset, with Flip front correction. Fixed-map mode displays real
+/map when available; otherwise the current-scan fallback is explicit. No SLAM,
+map-saving, fake pose or motor/PID change. Contract: CAR_MARKER_V018.md. Stationary
+with driving disabled: reopen Hub, Connect & prepare, verifyv0.18 and reload.
+No tool-side robot update occurred; validate physical orientation after install.
+
+## Previous source v0.17 — front-up viewer (2026-10-27)
 
 Same22file runtime, unchanged motion limits/guards. Adds Front-up, an explicit
 FRONT arrow and a session-only Mark front tool when body TF is missing. Marking

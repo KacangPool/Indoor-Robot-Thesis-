@@ -29,7 +29,7 @@ except ImportError:
     from urllib2 import Request, urlopen
     from urlparse import urlsplit
 
-VERSION = '0.17'
+VERSION = '0.18'
 BASE = '/fahad_base_crawl_check'
 COMMAND = '/fahad/crawl_test/cmd_vel'
 RUNTIME_FILES = ('server.py', 'manual_drive.py', 'control.py', 'crawl_test.py',
