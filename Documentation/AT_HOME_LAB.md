@@ -143,6 +143,27 @@ against the physical robot. No real synchronized dataset has been validated yet.
 
 ## Gazebo preparation, not installation
 
+### Transfer to the separate PC (28 October)
+
+Reviewed source is available at https://github.com/KacangPool/Indoor-Robot-Thesis- .
+On the PC, clone it into a new folder, or pull main in an existing clean checkout.
+Preserve any PC-local edits rather than overwriting them. Generated tmp files are
+intentionally not tracked; regenerate them from the project root with Python3.11+
+and the documented dependencies available:
+
+```text
+git clone https://github.com/KacangPool/Indoor-Robot-Thesis-.git
+cd Indoor-Robot-Thesis-
+python Tools/prepare_simulation.py --output tmp/pc_simulation --seed 7
+```
+
+Choose a different new output directory if that one already exists. This creates
+the worlds; it does not install/start Gazebo or a ROS2 navigation system. The
+laptop-bundled Python path in Start Home Lab.cmd is not a portable PC dependency.
+Gazebo runtime/graphics and the ROS2 integration need separate PC setup and actual
+execution checks. The prepared target remains Harmonic/Jazzy; no OS choice is
+forced by cloning the repository. No connection to the physical robot is needed.
+
 The generator writes known_route.sdf, seeded_unknown.sdf, mapping.sdf, a scoped
 ROS2/Gazebo bridge JSON (valid YAML subset), evaluator_truth.json, ideal_route.json
 and simulation_manifest.json. All are synthetic. Changing seed reproducibly

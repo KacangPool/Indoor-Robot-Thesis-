@@ -11,6 +11,11 @@ Develop and evaluate a camera-based machine-learning system for detecting living
 
 ## Agreed implementation direction (2026-10-14)
 
+-28October: user prefers the more powerful separate PC for Gazebo work and
+  authorizes publishing the pending public-safe source. GitHub main verified at
+  02d228f9206f36f6f250df0ce54cd9d9e9adbcc6 after non-force push. This is source
+  availability, not a simulator install/run or robot deployment. PC OS/graphics
+  compatibility still needs checking; the Jetson remains unchanged.
 -27October home-development scope: user requests the interactive offline fusion
   workbench, recording/replay preparation, persistent historical object layer and
   future autonomous simulation preparation. Separate laptop simulation approved;

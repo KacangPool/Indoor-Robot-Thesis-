@@ -4,6 +4,23 @@ This file records material changes, research findings, decisions, and experiment
 
 ## 2026-10-28
 
+### Audited GitHub publication for the separate simulation PC
+
+- User explicitly authorizes publishing the pending public-safe source so it can
+  be used on a more powerful PC. Clean worktree; fetch confirmed no remote-only
+  commits. Publication audit checked26commits/337unique blobs: no unresolved
+  findings; the existing exact synthetic redaction-test waiver remains reviewed.
+- Pushed10pending commits without force. GitHub main independently verified as
+  02d228f9206f36f6f250df0ce54cd9d9e9adbcc6. Source/docs only: no raw recordings,
+  private Fieldnotes source, vendor archives or generated tmp worlds uploaded.
+- PC handoff instructions added to AT_HOME_LAB; stable context records separate
+  PC preference. Worlds can be regenerated from versioned source. Existing full
+  offline report20261027_235756_ec49022e applies to unchanged code; no fresh CI,
+  Gazebo installation/execution, robot deployment or hardware success claimed.
+- Private planner maintenance follows the same verified publication checkpoint;
+  simulation setup/physics/navigation remain pending. This documentation follow-up
+  is audited separately before its own authorized non-force source push.
+
 ### At-home toolkit handoff and private planner publication
 
 - Completed the source-only home-toolkit work begun27October. Final full offline
